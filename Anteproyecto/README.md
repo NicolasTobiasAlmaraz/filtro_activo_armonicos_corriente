@@ -36,7 +36,8 @@ _Tabla 1: Comparación de puntajes ponderados de los posibles_
 En cuanto a tiempo de implementación gana ampliamente la resolución parcial.
 Esto se debe principalmente a que el hardware correspondiente a la etapa de salida del proyecto completo aún está en desarrollo.
 Entonces debido a esta limitación de hardware creo que lo ideal es trabajar sobre un proyecto parcial que será una base muy completa para futuro ser escalado.
-Como conlcusión, el proyecto 1 es más conveniente de realizar como trabajo práctico final
+
+Como conlcusión, el proyecto más conveniente de realizar es el "Filtro Activo de Armónicos de Corriente - Fase 1/2" como trabajo práctico final
 
 ## Descripción de ambos proyectos 
 ### Objetivo a largo plazo
