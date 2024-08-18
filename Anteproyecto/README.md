@@ -13,8 +13,10 @@ Nicolás Almaraz - nnico.almaraz@gmail.com
 
 En este caso se analiza la posibilidad de que el "Trabajo Práctico Final del Curso de Sistemas Embebidos" resuelva el sistema embebido requerido para desarrollar el "Trabajo Práctico Integrador de Electrónica de Potencia" dictado en el curso de Electrónica de Potencia en la carrera de Ing. Electrónica en UTN FRBA.
 Este último consiste en hacer un "Filtro Activo de Armónicos de Corriente". Ahora bien, dado que el tiempo disponible es limitado voy a analizar la posibilidad de resolver la problemática completa vs resolverla parcialmente:
-* Proyecto 1: Filtro activo de armónicos de corriente (Resolución parcial: Fase 1/2)
-* Proyecto 1: Filtro activo de armónicos de corriente (Resolución completa)
+* Proyecto 1: Filtro activo de armónicos de corriente (Resolución parcial)
+* Proyecto 2: Filtro activo de armónicos de corriente (Resolución completa)
+
+A continuación analizaré la viabilidad de estas dos opciones más adelante analizaremos los detalles de funcionamiento de las dos opciones.
 
 Los aspectos a analizar a la hora de elegir entre los dos proyectos son:
 * Tiempo de implementación
@@ -40,8 +42,9 @@ Entonces debido a esta limitación de hardware creo que lo ideal es trabajar sob
 Como conlcusión, el proyecto más conveniente de realizar es el "Filtro Activo de Armónicos de Corriente - Fase 1/2" como trabajo práctico final
 
 ## Descripción de ambos proyectos 
-### Objetivo a largo plazo
+### Objetivo para el proyecto completo
 El proyecto total consiste en un sistema que mide la forma de onda de corriente de una línea eléctrica a tensión reducida de 24VAC.
+
 La idea de funcionamiento sería la siguiente:
 - Se lee la fomra de onda de la corriente mediante un sensor de efecto Hall
 - Se procesa la señal para determinar la cantidad de armónicos 
