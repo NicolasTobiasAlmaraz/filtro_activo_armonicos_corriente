@@ -88,8 +88,7 @@ La Tabla 2 se presentan los requerimientos del proyecto.
 | Procesamiento           | 4.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                                             |
 | Procesamiento           | 4.4            | La entrada y salida deben estar sincronizadas en fase mediante el detector de ciclos                                                            |
 | Display                 | 5.1            | En el display de caracteres LCD se mostrará THD y valor eficaz de la señal de entrada                                                           |
-| Testeo                  | 6.1            | Para dar por válido el funcionamiento se debe cumplir que señal_50Hz(t) = muestreo(t) - señal_correctora(t)                                     |
-|                         |                | Para validar esto se usa la operación math del osciloscopio                                                                                     |
+| Testeo                  | 6.1            | Para dar por válido el funcionamiento se debe cumplir que señal_50Hz(t) = muestreo(t) - señal_correctora(t). Para validar esto se usa la operación math del osciloscopio|
 
 _Tabla 2: Requerimientos del sistema_
 
