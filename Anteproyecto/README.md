@@ -94,19 +94,19 @@ _Tabla 2: Requerimientos del sistema_
 * El tiempo de establecimiento no es algo significante dado que el objetivo es corregir en régumen permanente
 
 ### Hardware
-Nucleo F429ZI
-Filtro RC antialias
-Filtro RC para suavizar salida del DAC
-Sensor de corriente por efecto Hall
-Detector de cruce por 0V optoacoplado
+- Nucleo F429ZI
+- Filtro RC antialias
+- Filtro RC para suavizar salida del DAC
+- Sensor de corriente por efecto Hall
+- Detector de cruce por 0V optoacoplado
 
 ### Periféricos
-GPIO IN: Cruce por 0v
-I2C: Display
-ADC: Señal de corriente
-DAC: Señal de salida
+- GPIO IN: Cruce por 0v
+- I2C: Display
+- ADC: Señal de corriente
+- DAC: Señal de salida
 
 #### Desarrollos a futuro
 - El lazo de control para que quede un sistema realimentado
-- Cambiar la salida DAC por una salida PWM que controle el driver de la salida puente para la inyección de corriente
-- Agregar un pulsador para elegir cuando corrige y cuando no
+- Cambiar la salida DAC por una salida PWM que controle el driver de una salida puente transistorizada para la inyección de corriente
+- Agregar un pulsador como habilitación para activar o desactivar la corrección
