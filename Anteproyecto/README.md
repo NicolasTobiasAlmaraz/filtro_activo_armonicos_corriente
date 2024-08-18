@@ -71,6 +71,13 @@ Para ello voy a tener un diagrama en bloques como el siguiente para la conexión
 Y para testear al correcto funcionamiento se plantea el siguiente diagrama:
 ![alt text](<img/test.jpg>)
 
+## Hardware
+- Nucleo F429ZI
+- Filtro RC antialias
+- Filtro RC para suavizar salida del DAC
+- Sensor de corriente por efecto Hall
+- Detector de ciclos de la línea optoacoplado (3.3V semiciclo (+) y 0v semiciclo (-)) 
+
 ### Elicitación de requisitos y casos de uso
 
 #### Requerimientos
@@ -80,33 +87,26 @@ La Tabla 2 se presentan los requerimientos del proyecto.
 | Grupo de Requerimiento  | Requerimiento  | Descripción                                                                                                                                     |
 |-------------------------|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
 | Aislación               | 1.0            | La lógica en todo momento debe estar aislada de la línea de 24VAC                                                                               |
-| Sensado de corriente    | 2.1            | El sistema deberá tener un filtro anialias a la entrada (w0 = 5kHz).                                                                            |
-| Sensado de corriente    | 2.2            | El ADC tomará muestras de corriente de línea con fs=20kHz (Ts=50 us) por una ventana de 50 ciclos                                               |
-| Salida analógica        | 3.1            | La salida para mostrar la señal correctora será vía DAC                                                                                         |
-| Procesamiento           | 4.1            | Se deberá calcular la componente fundamental de corriente                                                                                       |
-| Procesamiento           | 4.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal muestrada                                     |
-| Procesamiento           | 4.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                                             |
-| Procesamiento           | 4.4            | La entrada y salida deben estar sincronizadas en fase mediante el detector de ciclos                                                            |
-| Display                 | 5.1            | En el display de caracteres LCD se mostrará THD y valor eficaz de la señal de entrada                                                           |
-| Testeo                  | 6.1            | Para dar por válido el funcionamiento se debe cumplir que señal_50Hz(t) = muestreo(t) - señal_correctora(t). Para validar esto se usa la operación math del osciloscopio|
+| Deteccion de ciclos     | 2.0            | El sistema se sincroniza con la linea mediante un detector de ciclos                                                                            |
+| Sensado de corriente    | 3.1            | El sistema deberá tener un filtro anialias a la entrada (f0 = 5kHz).                                                                            |
+| Sensado de corriente    | 3.2            | El ADC tomará muestras de corriente de línea con fs=20kHz (Ts=50 us) por una ventana de 50 ciclos                                               |
+| Salida analógica        | 4.1            | La salida para mostrar la señal correctora será vía DAC                                                                                         |
+| Sistema de buffers      | 5.1            | Se tendrá un esquema double-buffering tanto para tomar muestras como para sacarlas (voy a ver si uso DMA para esto)                             |
+| Procesamiento           | 6.1            | Se deberá calcular la componente fundamental de corriente                                                                                       |
+| Procesamiento           | 6.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal muestrada                                     |
+| Procesamiento           | 6.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                                             |
+| Display                 | 6.1            | En el display de caracteres LCD se mostrará THD y valor eficaz de la señal de entrada                                                           |
+| Testeo                  | 7.1            | Para dar por válido el funcionamiento se debe cumplir que señal_50Hz(t) = muestreo(t) - señal_correctora(t). Para validar esto se usa la operación math del osciloscopio|
 
 _Tabla 2: Requerimientos del sistema_
 
 #### Casos de uso
-##### Muestreo
+##### Procesamiento
 
-##### Muestreo
+##### Adquisicion y salida
 
-##### Muestreo
+##### Display
 
-##### Muestreo
-
-### Hardware
-- Nucleo F429ZI
-- Filtro RC antialias
-- Filtro RC para suavizar salida del DAC
-- Sensor de corriente por efecto Hall
-- Detector de cruce por 0V optoacoplado
 
 ### Periféricos
 - GPIO IN: Cruce por 0v
