@@ -78,6 +78,30 @@ Y para testear al correcto funcionamiento se plantea el siguiente diagrama:
 - Sensor de corriente por efecto Hall
 - Detector de ciclos de la línea optoacoplado (3.3V semiciclo (+) y 0v semiciclo (-)) 
 
+##### Double buffering en la entrada y la salida
+Tanto la entrada como la salida tendrán un esquema de ping pong buffering, es decir, existirán los punteros
+- ptr_DMA_in
+- ptr_procesador_in
+- ptr_procesador_out
+- ptr_DMA_out
+La idea es que simultáneamente:
+- El ADC cargue ptr_DMA_in
+- El procesador procese los datos ptr_procesador_in
+- El procesador escriba los datos de salida en ptr_procesador_out
+- El DAC saque los datos de ptr_DMA_out
+
+Idealmente:
+- el procesador debe terminar antes que los DMA de entrada y salida
+- los DMA de entrada y salida deben terminar simultáneamente
+
+Una vez que terminaron los DMA, se hace un trueque de buffers:
+ptr_procesador --> Pasa a ser el del DMA
+ptr_DMA        --> Pasa a ser el del procesador
+
+Se repite el ciclo.
+Trabajar con DMA hará que el procesador no esté demasiado cargado.
+Más información: https://es.wikipedia.org/wiki/Buffer_m%C3%BAltiple
+
 ### Elicitación de requisitos y casos de uso
 
 #### Requerimientos
@@ -91,7 +115,7 @@ La Tabla 2 se presentan los requerimientos del proyecto.
 | Sensado de corriente    | 3.1            | El sistema deberá tener un filtro anialias a la entrada (f0 = 5kHz).                                                                            |
 | Sensado de corriente    | 3.2            | El ADC tomará muestras de corriente de línea con fs=20kHz (Ts=50 us) por una ventana de 50 ciclos                                               |
 | Salida analógica        | 4.1            | La salida para mostrar la señal correctora será vía DAC                                                                                         |
-| Sistema de buffers      | 5.1            | Se tendrá un esquema double-buffering tanto para tomar muestras como para sacarlas (voy a ver si uso DMA para esto)                             |
+| Sistema de buffers      | 5.1            | Se tendrá un esquema double-buffering tanto para tomar muestras como para sacarlas                                                              |
 | Procesamiento           | 6.1            | Se deberá calcular la componente fundamental de corriente                                                                                       |
 | Procesamiento           | 6.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal muestrada                                     |
 | Procesamiento           | 6.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                                             |
@@ -101,15 +125,38 @@ La Tabla 2 se presentan los requerimientos del proyecto.
 _Tabla 2: Requerimientos del sistema_
 
 #### Casos de uso
-##### Procesamiento
 
-##### Adquisicion y salida
+_Disparador_
+Llegaron 50 ciclos
+
+_Precondicion_
+Se haya previamente el timer_sinc()
+
+_Flujo basico_
+- Calculo FFT de la señal muestreada a la entrada
+- Calculo 
+
+_Flujo alternativo_
+
+##### Procesamiento
+El procesador debe estar funcionando siempre que haya datos sin procesar.
+El objetivo es lograr procesar todos los datos antes de que terminen con la adquisición y salida de datos.
+
+_Disparador_
+Hay datos que procesar
+_Precondicion_
+
+_Disparador_
+
+_Flujo basico_
+
+_Flujo alternativo_
 
 ##### Display
 
 
 ### Periféricos
-- GPIO IN: Cruce por 0v
+- GPIO IN: Detector de ciclos
 - I2C: Display
 - ADC: Señal de corriente
 - DAC: Señal de salida
