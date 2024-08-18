@@ -79,23 +79,28 @@ La Tabla 2 se presentan los requerimientos del proyecto.
 
 | Grupo de Requerimiento  | Requerimiento  | Descripción                                                                                                                                     |
 |-------------------------|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| Sensado de corriente    | 1.1            | El sistema deberá tener un filtro anialias a la entrada (w0=10kHz).                                                                             |
-| Sensado de corriente    | 1.2            | El ADC será configurado por DMA en modo continuo con una frecuencia de muestreo de 10kHz                                                        |
-| Aislación               | 1.3            | La lógica en todo momento debe estar aislada de la línea                                                                                        |
-| Salida analógica        | 2.1            | La salida para mostrar la señal correctora será vía DAC                                                                                         |
-| Procesamiento           | 3.1            | Se deberá calcular el primer armónico de corriente mediante FFT                                                                                 |
-| Procesamiento           | 3.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la forma de onda de la línea                           |
-| Procesamiento           | 3.3            | El sistema debe corregir en régimen permanente (no transitorios)                                                                                |
-| Procesamiento           | 3.4            | La entrada y salida deben estar sincronizadas en fase mediante el detector de cruce por 0V                                                      |
-| Display                 | 4.1            | En el display de caracteres LCD se mostrará THD y valor eficaz de la señal de entrada                                                           |
-| Testeo                  | 5.1            | Para verificar el correcto funcionamiento se debe restar la señal de corriente de línea con la señal generada por el DAC y obtener una senoidal |
+| Aislación               | 1.0            | La lógica en todo momento debe estar aislada de la línea de 24VAC                                                                               |
+| Sensado de corriente    | 2.1            | El sistema deberá tener un filtro anialias a la entrada (w0 = 5kHz).                                                                            |
+| Sensado de corriente    | 2.2            | El ADC tomará muestras de corriente de línea con fs=20kHz (Ts=50 us) por una ventana de 50 ciclos                                               |
+| Salida analógica        | 3.1            | La salida para mostrar la señal correctora será vía DAC                                                                                         |
+| Procesamiento           | 4.1            | Se deberá calcular la componente fundamental de corriente                                                                                       |
+| Procesamiento           | 4.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal muestrada                                     |
+| Procesamiento           | 4.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                                             |
+| Procesamiento           | 4.4            | La entrada y salida deben estar sincronizadas en fase mediante el detector de ciclos                                                            |
+| Display                 | 5.1            | En el display de caracteres LCD se mostrará THD y valor eficaz de la señal de entrada                                                           |
+| Testeo                  | 6.1            | Para dar por válido el funcionamiento se debe cumplir que señal_50Hz(t) = muestreo(t) - señal_correctora(t)                                     |
+|                         |                | Para validar esto se usa la operación math del osciloscopio                                                                                     |
 
 _Tabla 2: Requerimientos del sistema_
 
 #### Casos de uso
-* El sistema corregirá armónicos de corriente para una carga fija (Rectificador + RC), por lo que si el usuario cambia la carga, el sistema tendrá un tiempo de establecimiento considerable hasta que vuelva a sincronizarse
+##### Muestreo
 
-* El tiempo de establecimiento no es algo significante dado que el objetivo es corregir en régumen permanente
+##### Muestreo
+
+##### Muestreo
+
+##### Muestreo
 
 ### Hardware
 - Nucleo F429ZI
