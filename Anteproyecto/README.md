@@ -84,6 +84,11 @@ La idea sería que teniendo la forma de onda de la línea y le sumamos la señal
 - Sensor de corriente por efecto Hall
 - Detector de ciclos de la línea optoacoplado (3.3V semiciclo (+) y 0v semiciclo (-)) 
 
+### Señal de entrada y salida del detector de ciclos
+La salida está aislada de la entrada mediante un optoacoplador
+
+![alt text](<img/det_ciclos.jpg>)
+
 ### Double buffering en la entrada y la salida
 Tanto la entrada como la salida tendrán un esquema de ping pong buffering, es decir, existirán los punteros
 - ptr_DMA_in
