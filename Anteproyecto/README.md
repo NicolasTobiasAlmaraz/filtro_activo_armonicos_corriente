@@ -135,17 +135,14 @@ _Tabla 2: Requerimientos del sistema_
 
 #### Casos de uso
 
-##### Procesamiento
-_Disparador_
-
+##### Caso de uso Procesamiento
+###### Disparador
 Llegaron 50 ciclos (idealmente 1seg con F=50Hz)
 
-_Precondicion_
-
+###### Precondicion
 Se haya previamente iniciado el timer de sincronizacion: timer_sinc_start()
 
-_Flujo basico_
-
+###### Flujo basico
 - Switch buffers
 - tiempo_muestreo = timer_sinc_start()    (idealmente 1seg)
 - muestras = tiempo_muestreo * fs         (idealmente 20 mil con fs=20kHz)
@@ -157,25 +154,20 @@ _Flujo basico_
 - Calculo sig_correctora(t) = sig_linea(t) - fundamental(t)
 - actualizo display
 
-_Flujo alternativo_
-
+###### Flujo alternativo
 Me quedo esperando
 
-##### Display
-_Disparador_
+##### Caso de usoDisplay
+###### Disparador
+Llamen a la funcion updateDisplay()
 
-Pidieron actualizar display
-
-_Precondicion_
-
+###### Precondicion
 Hayan inicializado el display
 
-_Flujo basico_
-
+###### Flujo basico
 Actualiza valor de THD mostrado
 
-_Flujo alternativo_
-
+###### Flujo alternativo
 No cambia lo mostrado en pantalla
 
 ### Periféricos Utilizados
