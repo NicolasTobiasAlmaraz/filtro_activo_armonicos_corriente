@@ -50,7 +50,10 @@ La idea de funcionamiento sería la siguiente:
 - Se procesa la señal para determinar la cantidad de armónicos 
 - Se inycta a la salida los armónicos en contrafase (a excepción de la fundamental)
 
-De esta manera se consigue que la carga consuma la forma de onda natural para su funcionamiento pero la línea eléctrica consume una senoidal lo más puro posible
+De esta manera se consigue que:
+- La carga consuma la forma de onda que necesite (con todos los armónicos que sean necesarios) 
+- El filtro activo consume en contrafase los armónicos
+- La línea verá un consumo de corriente total senoidal (sin distorsión armónica)
 
 #### Ejemplo
 Si tenemos un circuito como este de carga en la línea:
