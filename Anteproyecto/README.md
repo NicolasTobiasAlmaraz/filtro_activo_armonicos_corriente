@@ -54,9 +54,11 @@ De esta manera se consigue que la carga consuma la forma de onda natural para su
 
 #### Ejemplo
 Si tenemos un circuito como este de carga en la línea:
+
 ![alt text](<img/ej1.jpg>)
 
 La manera de quitar los armónicos de la línea será inyectando armónicos de corriente en contrafase:
+
 ![alt text](<img/ej2.jpg>)
 
 ## Objetivo para el trabajo práctico del Curso de Sistemas Embebidos
@@ -66,11 +68,13 @@ Para ello la idea sería dejar listas las etapas de medición de entrada y proce
 Dado que la etapa de potencia aún está en desarrollo.
 
 Para ello voy a tener un diagrama en bloques como el siguiente para la conexión de hardware:
+
 ![alt text](<img/diag_bloq.jpg>)
  
 Y para testear al correcto funcionamiento se plantea el siguiente diagrama.
 
 La idea sería que teniendo la forma de onda de la línea y le sumamos la señal generada por el controlador obtenemos como resultado la senoidal fundamental
+
 ![alt text](<img/test.jpg>)
 
 ### Hardware
