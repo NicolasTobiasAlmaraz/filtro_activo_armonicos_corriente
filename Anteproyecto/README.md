@@ -68,7 +68,9 @@ Dado que la etapa de potencia aún está en desarrollo.
 Para ello voy a tener un diagrama en bloques como el siguiente para la conexión de hardware:
 ![alt text](<img/diag_bloq.jpg>)
  
-Y para testear al correcto funcionamiento se plantea el siguiente diagrama:
+Y para testear al correcto funcionamiento se plantea el siguiente diagrama.
+
+La idea sería que teniendo la forma de onda de la línea y le sumamos la señal generada por el controlador obtenemos como resultado la senoidal fundamental
 ![alt text](<img/test.jpg>)
 
 ### Hardware
@@ -156,12 +158,12 @@ _Precondicion_
 Hayan inicializado el display
 
 _Flujo basico_
-Actualiza THD
+Actualiza valor de THD mostrado
 
 _Flujo alternativo_
 No cambia lo mostrado en pantalla
 
-### Periféricos
+### Periféricos Utilizados
 - GPIO IN: Detector de ciclos
 - I2C: Display
 - ADC: Señal de corriente
