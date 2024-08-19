@@ -137,12 +137,15 @@ _Tabla 2: Requerimientos del sistema_
 
 ##### Procesamiento
 _Disparador_
+
 Llegaron 50 ciclos (idealmente 1seg con F=50Hz)
 
 _Precondicion_
+
 Se haya previamente iniciado el timer de sincronizacion: timer_sinc_start()
 
 _Flujo basico_
+
 - Switch buffers
 - tiempo_muestreo = timer_sinc_start()    (idealmente 1seg)
 - muestras = tiempo_muestreo * fs         (idealmente 20 mil con fs=20kHz)
@@ -155,19 +158,24 @@ _Flujo basico_
 - actualizo display
 
 _Flujo alternativo_
+
 Me quedo esperando
 
 ##### Display
 _Disparador_
+
 Pidieron actualizar display
 
 _Precondicion_
+
 Hayan inicializado el display
 
 _Flujo basico_
+
 Actualiza valor de THD mostrado
 
 _Flujo alternativo_
+
 No cambia lo mostrado en pantalla
 
 ### Periféricos Utilizados
