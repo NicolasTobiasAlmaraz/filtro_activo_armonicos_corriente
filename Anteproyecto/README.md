@@ -13,10 +13,10 @@ Nicolás Almaraz - nnico.almaraz@gmail.com
 
 En este caso se analiza la posibilidad de que el "Trabajo Práctico Final del Curso de Sistemas Embebidos" resuelva el sistema embebido requerido para desarrollar el "Trabajo Práctico Integrador de Electrónica de Potencia" dictado en el curso de Electrónica de Potencia en la carrera de Ing. Electrónica en UTN FRBA.
 Este último consiste en hacer un "Filtro Activo de Armónicos de Corriente". Ahora bien, dado que el tiempo disponible es limitado voy a analizar la posibilidad de resolver la problemática completa vs resolverla parcialmente:
-* Proyecto 1: Filtro activo de armónicos de corriente  - Fase 1/2
-* Proyecto 2: Filtro activo de armónicos de corriente (Resolución completa)
+* Proyecto 1: Filtro activo de armónicos de corriente (Solución parcial)
+* Proyecto 2: Filtro activo de armónicos de corriente (Solución completa)
 
-A continuación analizaré la viabilidad de estas dos opciones más adelante analizaremos los detalles de funcionamiento de las dos opciones.
+A continuación analizaré la viabilidad de estas dos opciones y más adelante se darán detalles de funcionamiento (tanto de la solución global como de la parcial)
 
 Los aspectos a analizar a la hora de elegir entre los dos proyectos son:
 * Tiempo de implementación
@@ -39,7 +39,7 @@ En cuanto a tiempo de implementación gana ampliamente la resolución parcial.
 Esto se debe principalmente a que el hardware correspondiente a la etapa de salida del proyecto completo aún está en desarrollo.
 Entonces debido a esta limitación de hardware creo que lo ideal es trabajar sobre un proyecto parcial que será una base muy completa para futuro ser escalado.
 
-Como conlcusión, el proyecto más conveniente de realizar es el "Filtro Activo de Armónicos de Corriente - Fase 1/2" como trabajo práctico final
+Como conlcusión, el proyecto más conveniente de realizar es el "Filtro Activo de Armónicos de Corriente (Solución parcial)" como trabajo práctico final
 
 ## Descripción de ambos proyectos 
 ### Objetivo para el proyecto completo
