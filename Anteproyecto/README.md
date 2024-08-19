@@ -13,7 +13,7 @@ Nicolás Almaraz - nnico.almaraz@gmail.com
 
 En este caso se analiza la posibilidad de que el "Trabajo Práctico Final del Curso de Sistemas Embebidos" resuelva el sistema embebido requerido para desarrollar el "Trabajo Práctico Integrador de Electrónica de Potencia" dictado en el curso de Electrónica de Potencia en la carrera de Ing. Electrónica en UTN FRBA.
 Este último consiste en hacer un "Filtro Activo de Armónicos de Corriente". Ahora bien, dado que el tiempo disponible es limitado voy a analizar la posibilidad de resolver la problemática completa vs resolverla parcialmente:
-* Proyecto 1: Filtro activo de armónicos de corriente (Resolución parcial)
+* Proyecto 1: Filtro activo de armónicos de corriente  - Fase 1/2
 * Proyecto 2: Filtro activo de armónicos de corriente (Resolución completa)
 
 A continuación analizaré la viabilidad de estas dos opciones más adelante analizaremos los detalles de funcionamiento de las dos opciones.
@@ -71,14 +71,14 @@ Para ello voy a tener un diagrama en bloques como el siguiente para la conexión
 Y para testear al correcto funcionamiento se plantea el siguiente diagrama:
 ![alt text](<img/test.jpg>)
 
-## Hardware
+### Hardware
 - Nucleo F429ZI
 - Filtro RC antialias
 - Filtro RC para suavizar salida del DAC
 - Sensor de corriente por efecto Hall
 - Detector de ciclos de la línea optoacoplado (3.3V semiciclo (+) y 0v semiciclo (-)) 
 
-##### Double buffering en la entrada y la salida
+### Double buffering en la entrada y la salida
 Tanto la entrada como la salida tendrán un esquema de ping pong buffering, es decir, existirán los punteros
 - ptr_DMA_in
 - ptr_procesador_in
@@ -119,41 +119,47 @@ La Tabla 2 se presentan los requerimientos del proyecto.
 | Procesamiento           | 6.1            | Se deberá calcular la componente fundamental de corriente                                                                                       |
 | Procesamiento           | 6.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal muestrada                                     |
 | Procesamiento           | 6.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                                             |
-| Display                 | 6.1            | En el display de caracteres LCD se mostrará THD y valor eficaz de la señal de entrada                                                           |
+| Display                 | 6.1            | En el display de caracteres LCD se mostrará THD de la señal de entrada                                                                          |
 | Testeo                  | 7.1            | Para dar por válido el funcionamiento se debe cumplir que señal_50Hz(t) = muestreo(t) - señal_correctora(t). Para validar esto se usa la operación math del osciloscopio|
 
 _Tabla 2: Requerimientos del sistema_
 
 #### Casos de uso
 
-_Disparador_
-Llegaron 50 ciclos
-
-_Precondicion_
-Se haya previamente el timer_sinc()
-
-_Flujo basico_
-- Calculo FFT de la señal muestreada a la entrada
-- Calculo 
-
-_Flujo alternativo_
-
 ##### Procesamiento
-El procesador debe estar funcionando siempre que haya datos sin procesar.
-El objetivo es lograr procesar todos los datos antes de que terminen con la adquisición y salida de datos.
-
 _Disparador_
-Hay datos que procesar
+Llegaron 50 ciclos (idealmente 1seg con F=50Hz)
+
 _Precondicion_
-
-_Disparador_
+Se haya previamente iniciado el timer de sincronizacion: timer_sinc_start()
 
 _Flujo basico_
+- Switch buffers
+- tiempo_muestreo = timer_sinc_start()    (idealmente 1seg)
+- muestras = tiempo_muestreo * fs         (idealmente 20 mil con fs=20kHz)
+- Calculo FFT de la señal muestreada a la entrada
+- Identifico modulo y fase de la fundamental
+- Identifico modulo de las armonicas
+- Calculo THD
+- Completo el vector uint32_t fundamental[muestras]; con la señal fundamental repetira múltiples veces
+- Calculo sig_correctora(t) = sig_linea(t) - fundamental(t)
+- actualizo display
 
 _Flujo alternativo_
+Me quedo esperando
 
 ##### Display
+_Disparador_
+Pidieron actualizar display
 
+_Precondicion_
+Hayan inicializado el display
+
+_Flujo basico_
+Actualiza THD
+
+_Flujo alternativo_
+No cambia lo mostrado en pantalla
 
 ### Periféricos
 - GPIO IN: Detector de ciclos
