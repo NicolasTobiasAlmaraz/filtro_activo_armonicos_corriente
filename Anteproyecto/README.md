@@ -181,7 +181,7 @@ No cambia lo mostrado en pantalla
 - ADC: Señal de corriente
 - DAC: Señal de salida
 
-#### Desarrollos a futuro
+### Desarrollos a futuro
 - El lazo de control para que quede un sistema realimentado
 - Cambiar la salida DAC por una salida PWM que controle el driver de una salida puente transistorizada para la inyección de corriente
 - Agregar un pulsador como habilitación para activar o desactivar la corrección
