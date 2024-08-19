@@ -86,6 +86,7 @@ Tanto la entrada como la salida tendrán un esquema de ping pong buffering, es d
 - ptr_procesador_in
 - ptr_procesador_out
 - ptr_DMA_out
+
 La idea es que simultáneamente:
 - El ADC cargue ptr_DMA_in
 - El procesador procese los datos ptr_procesador_in
@@ -97,11 +98,13 @@ Idealmente:
 - los DMA de entrada y salida deben terminar simultáneamente
 
 Una vez que terminaron los DMA, se hace un trueque de buffers:
-ptr_procesador --> Pasa a ser el del DMA
-ptr_DMA        --> Pasa a ser el del procesador
+- ptr_procesador --> Pasa a ser el del DMA
+- ptr_DMA        --> Pasa a ser el del procesador
 
 Se repite el ciclo.
+
 Trabajar con DMA hará que el procesador no esté demasiado cargado.
+
 Más información: https://es.wikipedia.org/wiki/Buffer_m%C3%BAltiple
 
 ### Elicitación de requisitos y casos de uso
