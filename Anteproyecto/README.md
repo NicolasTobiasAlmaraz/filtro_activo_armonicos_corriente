@@ -142,25 +142,28 @@ _Tabla 2: Requerimientos del sistema_
 
 ##### Caso de uso Procesamiento
 ###### Disparador
-Llegaron 50 ciclos (idealmente 1seg con F=50Hz)
+Llegaron 50 ciclos // idealmente 1seg para freq de linea de 50Hz
 
 ###### Precondicion
 Se haya previamente iniciado el timer de sincronizacion: timer_sinc_start()
 
 ###### Flujo basico
-- Switch buffers
-- tiempo_muestreo = timer_sinc_start()    (idealmente 1seg)
-- muestras = tiempo_muestreo * fs         (idealmente 20 mil con fs=20kHz)
+- Detengo DMA
+- tiempo_muestreo = timer_sinc_stop()      //idealmente 1seg
+- tiempo_muestreo = timer_sinc_start()     //Inicializo timer
+- Switcheo buffers                         //Switcheo buffers del double buffering                  
+- Inicializo DMA disparo único (ADC y DAC)
+- muestras = tiempo_muestreo * fs // idealmente 20 mil con fs=20kHz
 - Calculo FFT de la señal muestreada a la entrada
 - Identifico modulo y fase de la fundamental
 - Identifico modulo de las armonicas
 - Calculo THD
-- Completo el vector uint32_t fundamental[muestras]; con la señal fundamental repetira múltiples veces
+- Completo el vector uint32_t fundamental[muestras] con la señal fundamental (Repetida múltiples veces)
 - Calculo sig_correctora(t) = sig_linea(t) - fundamental(t)
 - actualizo display
 
 ###### Flujo alternativo
-Me quedo esperando
+Me quedo esperando a que se termine la ventana de 50 ciclos
 
 ##### Caso de usoDisplay
 ###### Disparador
