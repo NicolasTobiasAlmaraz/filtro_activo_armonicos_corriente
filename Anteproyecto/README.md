@@ -94,13 +94,15 @@ IC(t) = fundamental(t) - IL(t)
 
 Ahora que ya se conoce la corriente necesaria, el microcontrolador debe generar las señales necesarias para controlar a la etapa de salida, generando así la corriente IC(t). En este punto es muy importante conocer la función transferencia que vincula la tensión generada por el microcontrolador con la corriente consumida en la línea.
 
-En la *Imagen 2* se muestra únicamente el espectro en módulo de las corrientes y no hay que perder de vista que también está el espectro de fase. Es por eso que matemáticamente es incorrecto restar "armónico por armónico" como se hace en el gráfico (no existen módulos negativos). Es decir, lo correcto es sumarle a los armónicos indeseados, una corriente de igual módulo y desfasado 180°. Sin embargo, me tomé la licencia de representarlo de esa manera a modo didáctico.
+En la *Imagen 2* se muestra únicamente el espectro en módulo de las corrientes y no hay que perder de vista que también está el espectro de fase. Es por eso que matemáticamente es incorrecto restar "armónico por armónico" como se hace en el gráfico (no existen módulos negativos). Sin embargo, me tomé la licencia de representarlo de esa manera a modo didáctico. Ahora bien, lo correcto en realidad es sumarle a los armónicos indeseados, una corriente de igual módulo y desfasado 180°.
+
+Esto último que se menciona es de suma importancia porque es el efecto similar a lo que ocurre cuando la potencia reactiva de un capacitor suple al consumo de potencia reactiva de un inductor (en el "triángulo de potencias" decimos que se anulan porque la energía de ambos componentes está desfasada 180°). Por lo tanto, lo esperable sería que el filtro no consuma potenica activa para corregir.
 
 *4 - Sincronización*
 
 En el punto anterior es muy importante que la corriente hay que "empezar a consumirla" en el momento adecuado, es decir, la inyección de corriente debe estar sincronizada con la tensión de línea. De lo contrario, el resultado no será el esperado. 
 
-En nuestro caso la metodología de sincronización la hacemos con un detector de cruce por 0V (modificado). Este circuito se encarga de detectar ciclos. Entrega 3.3 V cuando la tensión de línea está en el semi-ciclo positivo y 0V cuando.
+En nuestro caso la metodología de sincronización la hacemos con un detector de ciclos. Este circuito se encarga de detectar ciclos. Entrega 3.3 V cuando la tensión de línea está en el semi-ciclo positivo y 0V cuando.
 
 La lógica consiste en samplear una cantidad entera de ciclos (delimitados por el circuito anterior). Cuando se calcula la componente fundamental por fourier se obtiene una función como la siguiente:
 
@@ -111,6 +113,8 @@ El ángulo "θ" nos dice que existe un desfasaje entre la detección del inicio 
 IC(t) = fundamental(t) - I(t)
 
 Se obtiene directamente el vector a inyectar en la línea referido al inicio del ciclo.
+
+Un dato interesante es que cambiando el valor de θ, forzándolo a gusto podemos cambiar la naturaleza con la que la línea ve al sistema (capacitivo, resistivo o inductivo). La gran consideración que hay que tener es que si hacemos esto, la etapa de potencia debe suministrar toda la energía, entonces el filtro dejaría de consumir potencia reactiva exclusivamente. 
 
 ## Descripción del Trabajo Práctico Final del Curso de Sistemas Embebidos
 La finalidad de este trabajo práctico final es asentar las bases para conseguir lo descrito en la sección anterior, "Descripción del Trabajo Final de Electrónica de Potencia".
@@ -248,18 +252,18 @@ Trabajar con DMA hará que el procesador no esté demasiado cargado y se crea un
 La Tabla 2 se presentan los requerimientos del proyecto.
 
 | Grupo de Requerimiento  | Requerimiento  | Descripción                                                                                                                                     |
-|-------------------------|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| Aislamiento               | 1.0            | La lógica en todo momento debe estar aislada de la línea de 24 VCA                                                                               |
-| Detección de ciclos     | 2.0            | El sistema se sincroniza con la linea mediante un detector de ciclos                                                                            |
-| Sensado de corriente    | 3.1            | El sistema deberá tener un filtro anti-alias a la entrada (f0 = 5 kHz).                                                                            |
-| Sensado de corriente    | 3.2            | El ADC tomará muestras de corriente de línea con fs = 10 kHz (Ts = 50 us) por una ventana de 50 ciclos                                               |
-| Salida analógica        | 4.1            | La salida para mostrar la señal correctora será vía DAC                                                                                         |
-| Sistema de buffers      | 5.1            | Se tendrá un esquema double-buffering tanto para tomar muestras como para sacarlas                                                              |
-| Procesamiento           | 6.1            | Se deberá calcular la componente fundamental de corriente                                                                                       |
-| Procesamiento           | 6.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal muestreada                                     |
-| Procesamiento           | 6.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                                             |
-| Display                 | 6.1            | En el display de caracteres LCD se mostrará THD de la señal de entrada                                                                          |
-| Testeo                  | 7.1            | Para verificar el funcionamiento usar el método de la sección "Testeo" |
+|-------------------------|----------------|---------------------------------------------------------------------------------------------------------------------|
+| Aislamiento             | 1.0            | La lógica en todo momento debe estar aislada de la línea de 24 VCA                                                  |
+| Sincronización          | 2.0            | El sistema se sincroniza con la linea mediante un detector de ciclos                                                |
+| Sensado de corriente    | 3.1            | El sistema deberá tener un filtro anti-alias a la entrada (f0 = 5 kHz).                                             |
+| Sensado de corriente    | 3.2            | El ADC tomará muestras de corriente de línea con fs = 10 kHz (Ts = 50 us) por una ventana de 50 ciclos              |
+| Salida analógica        | 4.1            | La salida para mostrar la señal correctora será vía DAC                                                             |
+| Sistema de buffers      | 5.1            | Se tendrá un esquema double-buffering tanto para tomar muestras como para sacarlas                                  |
+| Procesamiento           | 6.1            | Se deberá calcular la componente fundamental de corriente                                                           |
+| Procesamiento           | 6.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal muestreada        |
+| Procesamiento           | 6.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                 |
+| Display                 | 6.1            | En el display de caracteres LCD se mostrará THD de la señal de entrada                                              |
+| Testeo                  | 7.1            | Para verificar el funcionamiento usar el método de la sección "Testeo"                                              |
 
 _Tabla 2: Requerimientos del sistema_
 
