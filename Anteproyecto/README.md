@@ -104,7 +104,7 @@ En el punto anterior es muy importante que la corriente hay que "empezar a consu
 
 En nuestro caso la metodología de sincronización la hacemos con un detector de ciclos. Este circuito se encarga de detectar ciclos. Entrega 3.3 V cuando la tensión de línea está en el semi-ciclo positivo y 0 V cuando.
 
-La lógica consiste en samplear una cantidad entera de ciclos (delimitados por el circuito anterior). Cuando se calcula la componente fundamental por fourier se obtiene una función como la siguiente:
+La lógica consiste en samplear una cantidad entera de ciclos (delimitados por el circuito anterior). Cuando se calcula la componente fundamental por Fourier se obtiene una función como la siguiente:
 
 fundamental(t) = A0 * cos(w0 * t + θ)
 
