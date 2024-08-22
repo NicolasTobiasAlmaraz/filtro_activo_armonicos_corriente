@@ -183,11 +183,11 @@ En la *Imagen 8* e *Imagen 9* se pueden ver las simulaciones en tiempo y en frec
 Este circuito entrega 3.3 V cuando llega cuando la tensión de línea está en el semi-ciclo positivo y 0 V cuando está en el negativo. En la *Imagen 10* se ve el circuito y en la *Imagen 11* las señales de entrada (línea) y salida (tensión lógica).
 Cabe destacar que la lógica está aislada de la línea mediante un opto-acoplador.
 
-![alt text](<img/det_ciclos.png>)
+![alt text](<img/detect_ciclos.png>)
 
 *Imagen 10: Circuito de detección de ciclos*
 
-![alt text](<img/det_ciclos_t.png>)
+![alt text](<img/detect_ciclos_t.png>)
 
 *Imagen 11: Formas de onda de entrada (tensión de línea) y salida (tensión lógica)*
 
