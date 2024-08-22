@@ -208,7 +208,7 @@ Para el DAC simplemente voy a utilizar un circuito RC para suavizar las altas fr
 Cabe destacar que esta salida es provisoria. En el proyecto final la salida no será DAC sino que será PWM y controlarán a la etapa de potencia que se encarga de transformar la señal PWM a corriente consumida en la línea.
 
 ### Adquisición de datos
-Para adquirir los datos de manera eficiente propongo la implementación de la técnica de "double buffering en la entrada y la salida" [6]
+Para adquirir los datos de manera eficiente propongo la implementación de la técnica de "double buffering en la entrada y la salida"<sup>[6]</sup>.
 Para el procesamiento en tiempo real es una buena estrategia para hacer uso eficiente del procesador. La idea es que el procesador no use demasiados recursos en samplear, queremos que se aproveche lo máximo posible para resolver las operaciones matemáticas requeridas en el procesamiento.
 
 Entonces la técnica de double buffering (también llamado ping pong buffering) tiene un esquema de funcionamiento como el siguiente:
