@@ -96,7 +96,7 @@ Ahora que ya se conoce la corriente necesaria, el microcontrolador debe generar 
 
 En la *Imagen 2* se muestra únicamente el espectro en módulo de las corrientes y no hay que perder de vista que también está el espectro de fase. Es por eso que matemáticamente es incorrecto restar "armónico por armónico" como se hace en el gráfico (no existen módulos negativos). Sin embargo, me tomé la licencia de representarlo de esa manera a modo didáctico. Ahora bien, lo correcto en realidad es sumarle a los armónicos indeseados, una corriente de igual módulo y desfasado 180°.
 
-Esto último que se menciona es de suma importancia porque es el efecto similar a lo que ocurre cuando la potencia reactiva de un capacitor suple al consumo de potencia reactiva de un inductor (en el "triángulo de potencias" decimos que se anulan porque la energía de ambos componentes está desfasada 180°). Por lo tanto, lo esperable sería que el filtro no consuma potenica activa para corregir.
+Esto último que se menciona es de suma importancia porque es el efecto similar a lo que ocurre cuando la potencia reactiva de un capacitor suple al consumo de potencia reactiva de un inductor (en el "triángulo de potencias" decimos que se anulan porque la energía de ambos componentes está desfasada 180°). Entonces, en nuestro caso utilizaremos el mismo principio físico para eliminar armónicos.
 
 *4 - Sincronización*
 
@@ -114,7 +114,7 @@ IC(t) = fundamental(t) - I(t)
 
 Se obtiene directamente el vector a inyectar en la línea referido al inicio del ciclo.
 
-Un dato interesante es que cambiando el valor de θ, forzándolo a gusto podemos cambiar la naturaleza con la que la línea ve al sistema (capacitivo, resistivo o inductivo). La gran consideración que hay que tener es que si hacemos esto, la etapa de potencia debe suministrar toda la energía.
+Un dato interesante es que cambiando el valor de θ, forzándolo a gusto podemos cambiar la naturaleza con la que la línea ve al sistema (capacitivo, resistivo o inductivo). Es decir, además de conseguir THD = 0 % podríamos conseguir que FP = 1. La gran consideración que hay que tener es que si hacemos esto, la etapa de potencia debe suministrar una cantidad de energía considerable.
 
 ## Descripción del Trabajo Práctico Final del Curso de Sistemas Embebidos
 La finalidad de este trabajo práctico final es asentar las bases para conseguir lo descrito en la sección anterior, "Descripción del Trabajo Final de Electrónica de Potencia".
@@ -331,4 +331,4 @@ No cambia lo mostrado en pantalla
 [6] [Double Buffering](https://es.wikipedia.org/wiki/Buffer_m%C3%BAltiple)
 
 ## Extra
-Ejemplo de filtro activo industrial de la marca Circutor: [Link](https://circutor.com/articulos/funcionamiento-real-de-un-filtro-de-armonicos-activo/)
+Ejemplo de filtro activo industrial de la empresa española Circutor: [Link](https://circutor.com/articulos/funcionamiento-real-de-un-filtro-de-armonicos-activo/)
