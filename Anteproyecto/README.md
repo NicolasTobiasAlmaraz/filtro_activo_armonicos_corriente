@@ -331,4 +331,4 @@ No cambia lo mostrado en pantalla
 [6] [Double Buffering](https://es.wikipedia.org/wiki/Buffer_m%C3%BAltiple)
 
 ## Extra
-Ejemplo de filtro activo industrial de la marca Circutor: [6] [Link](https://circutor.com/articulos/funcionamiento-real-de-un-filtro-de-armonicos-activo/)
+Ejemplo de filtro activo industrial de la marca Circutor: [Link](https://circutor.com/articulos/funcionamiento-real-de-un-filtro-de-armonicos-activo/)
