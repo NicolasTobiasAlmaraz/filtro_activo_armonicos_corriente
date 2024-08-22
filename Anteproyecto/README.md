@@ -114,7 +114,7 @@ IC(t) = fundamental(t) - I(t)
 
 Se obtiene directamente el vector a inyectar en la línea referido al inicio del ciclo.
 
-Un dato interesante es que cambiando el valor de θ, forzándolo a gusto podemos cambiar la naturaleza con la que la línea ve al sistema (capacitivo, resistivo o inductivo). La gran consideración que hay que tener es que si hacemos esto, la etapa de potencia debe suministrar toda la energía, entonces el filtro dejaría de consumir potencia reactiva exclusivamente. 
+Un dato interesante es que cambiando el valor de θ, forzándolo a gusto podemos cambiar la naturaleza con la que la línea ve al sistema (capacitivo, resistivo o inductivo). La gran consideración que hay que tener es que si hacemos esto, la etapa de potencia debe suministrar toda la energía.
 
 ## Descripción del Trabajo Práctico Final del Curso de Sistemas Embebidos
 La finalidad de este trabajo práctico final es asentar las bases para conseguir lo descrito en la sección anterior, "Descripción del Trabajo Final de Electrónica de Potencia".
@@ -329,3 +329,6 @@ No cambia lo mostrado en pantalla
 [5] [FFT](https://es.wikipedia.org/wiki/Transformada_r%C3%A1pida_de_Fourier)
 
 [6] [Double Buffering](https://es.wikipedia.org/wiki/Buffer_m%C3%BAltiple)
+
+## Extra
+Ejemplo de filtro activo industrial de la marca Circutor: [6] [Link](https://circutor.com/articulos/funcionamiento-real-de-un-filtro-de-armonicos-activo/)
