@@ -102,7 +102,7 @@ Esto último que se menciona es de suma importancia porque es el efecto similar 
 
 En el punto anterior es muy importante que la corriente hay que "empezar a consumirla" en el momento adecuado, es decir, la inyección de corriente debe estar sincronizada con la tensión de línea. De lo contrario, el resultado no será el esperado. 
 
-En nuestro caso la metodología de sincronización la hacemos con un detector de ciclos. Este circuito se encarga de detectar ciclos. Entrega 3.3 V cuando la tensión de línea está en el semi-ciclo positivo y 0V cuando.
+En nuestro caso la metodología de sincronización la hacemos con un detector de ciclos. Este circuito se encarga de detectar ciclos. Entrega 3.3 V cuando la tensión de línea está en el semi-ciclo positivo y 0 V cuando.
 
 La lógica consiste en samplear una cantidad entera de ciclos (delimitados por el circuito anterior). Cuando se calcula la componente fundamental por fourier se obtiene una función como la siguiente:
 
@@ -119,13 +119,15 @@ Un dato interesante es que cambiando el valor de θ, forzándolo a gusto podemos
 ## Descripción del Trabajo Práctico Final del Curso de Sistemas Embebidos
 La finalidad de este trabajo práctico final es asentar las bases para conseguir lo descrito en la sección anterior, "Descripción del Trabajo Final de Electrónica de Potencia".
 
-Para ello la propuesta es desarrollar las etapas de medición y procesamiento, dado que la etapa de potencia aún está en desarrollo. 
+Para ello la propuesta es desarrollar las etapas de medición y procesamiento. La etapa de potencia aún está en desarrollo y por eso no se incluye en el presente trabajo práctico. 
 
-El diagrama en bloques de hardware es el que se muestra en la *Imagen 3*:
+Sin embargo, el objetivo será entonces, medir la señal de corriente de línea, calcular la corriente IC(t) y mostrar dicho cálculo en la salida DAC. Por otro lado, también se debe procesar la señal de corriente de línea y calcular el THD para mostrarlo en el display.
+
+En la *Imagen 3* podemos ver de manera simplificada las señales de entrada y salida del sistema:
 
 ![alt text](<img/diag_bloq.jpg>)
 
-*Imagen 3: Diagrama en bloques de hardware*
+*Imagen 3: Diagrama de señales de entrada y salida*
 
 Entradas:
 - Circuito detector de ciclos
@@ -271,7 +273,7 @@ _Tabla 2: Requerimientos del sistema_
 
 ##### Caso de uso Procesamiento
 ###### Disparador
-Llegaron 50 ciclos // idealmente 1seg para freq de linea de 50Hz
+Llegaron 50 ciclos // idealmente 1seg para freq de linea de 50 Hz
 
 ###### Precondición
 Se haya previamente iniciado el timer de sincronización: timer_sinc_start()
