@@ -97,6 +97,7 @@ Ahora que ya se conoce la corriente necesaria, el microcontrolador debe generar 
 En la *Imagen 2* se muestra únicamente el espectro en módulo de las corrientes y no hay que perder de vista que también está el espectro de fase. Es por eso que matemáticamente es incorrecto restar "armónico por armónico" como se hace en el gráfico (no existen módulos negativos). Es decir, lo correcto es sumarle a los armónicos indeseados, una corriente de igual módulo y desfasado 180°. Sin embargo, me tomé la licencia de representarlo de esa manera a modo didáctico.
 
 *4 - Sincronización*
+
 En el punto anterior es muy importante que la corriente hay que "empezar a consumirla" en el momento adecuado, es decir, la inyección de corriente debe estar sincronizada con la tensión de línea. De lo contrario, el resultado no será el esperado. 
 
 En nuestro caso la metodología de sincronización la hacemos con un detector de cruce por 0V (modificado). Este circuito se encarga de detectar ciclos. Entrega 3.3 V cuando la tensión de línea está en el semi-ciclo positivo y 0V cuando.
