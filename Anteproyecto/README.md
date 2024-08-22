@@ -43,7 +43,7 @@ En resumen, el proyecto más conveniente de realizar es el "Filtro Activo de Arm
 ## Descripción del Trabajo Práctico Final de Electrónica de Potencia
 Para comenzar, antes de describir el proyecto a realizar en el "TP3 del Curso de Sistemas Embebidos", se dará una introducción al proyecto al que apunto a largo plazo. Por lo tanto, es importante tener en cuenta estos aspectos a la hora de plantear requerimientos y casos de uso para la solución parcial desarrollada en el Curso de Sistemas Embebidos.
 
-El proyecto de Electrónica de Potencia consiste en un filtro activo de armónicos de corriente [1]. Es decir, es un sistema que se encarga de medir la forma de onda de corriente de una línea eléctrica (En nuestro caso a tensión reducida de 24 VCA) y eventualmente si corresponde corrige la distorsión armónica [2]. En otras palabras, busca que la corriente consumida por la línea sea senoidal pura. La metodología para corregir la distorsión armónica es consumir en contrafase los armónicos indeseados. Cabe destacar que la carga va a seguir consumiendo una corriente distorsionada. Lo que estamos solucionando con el filtro es que la corriente de la línea sea senoidal pura.
+El proyecto de Electrónica de Potencia consiste en un filtro activo de armónicos de corriente <sup>[1]</sup>. Es decir, es un sistema que se encarga de medir la forma de onda de corriente de una línea eléctrica (En nuestro caso a tensión reducida de 24 VCA) y eventualmente si corresponde corrige la distorsión armónica<sup>[2]</sup>. En otras palabras, busca que la corriente consumida por la línea sea senoidal pura. La metodología para corregir la distorsión armónica es consumir en contrafase los armónicos indeseados. Cabe destacar que la carga va a seguir consumiendo una corriente distorsionada. Lo que estamos solucionando con el filtro es que la corriente de la línea sea senoidal pura.
 
 #### Caso de uso y marco teórico
 En la *Imagen 1* se puede observar un ejemplo de carga que no es SLIT (Sistema Lineal e Invariante en el Tiempo). En este caso el rectificador es una carga que es alimentada con una tensión senoidal pero la corriente que consume no lo es (sistema no lineal).
@@ -66,12 +66,12 @@ Para solucionar todos estos problemas detallados en la sección anterior se util
 
 *1 - Medición de corriente*
 
-Se mide la corriente de línea. En nuestro caso utilizamos un sensor de efecto Hall<sup>3</sup> ACS712^[4]^. Entonces de esta manera conseguimos una medición de corriente aislando la lógica de la línea.
+Se mide la corriente de línea. En nuestro caso utilizamos un sensor de efecto Hall<sup>[3]</sup> ACS712<sup>[4]</sup>. Entonces de esta manera conseguimos una medición de corriente aislando la lógica de la línea.
 
 *2 - Procesamiento*
 
 Basándonos en la medición anterior podemos identificar a la componente fundamental.
-Cabe destacar que en equipos profesionales, lo correcto sería utilizar un DSP más poderoso debido a que debería corregir transitorios. Sin embargo, en nuestro caso solamente nos vamos a limitar a corregir en régimen permanente. En consecuencia, tanto el procesamiento como las mediciones pueden demorarse. Entonces, esto nos habilita a usar algoritmos lentos, por ejemplo, una FFT^[5]^.
+Cabe destacar que en equipos profesionales, lo correcto sería utilizar un DSP más poderoso debido a que debería corregir transitorios. Sin embargo, en nuestro caso solamente nos vamos a limitar a corregir en régimen permanente. En consecuencia, tanto el procesamiento como las mediciones pueden demorarse. Entonces, esto nos habilita a usar algoritmos lentos, por ejemplo, una FFT<sup>[5]</sup>.
 
 Una vez que tenemos la fundamental podemos aplicar la ley de Kirchhoff para determinar la corriente a inyectar:
 
@@ -314,8 +314,13 @@ No cambia lo mostrado en pantalla
 
 ## Referencias
 [1] [Simulación de un filtro activo de armónicos de corriente con el software de simulación Plecs](https://www.plexim.com/sites/default/files/demo_models_categorized/plecs/single_phase_active_filter.pdf)
+
 [2] [Tasa de Distorsión Armónica Total (THD)](https://es.wikipedia.org/wiki/Distorsi%C3%B3n_arm%C3%B3nica)
+
 [3] [Efecto Hall](https://es.wikipedia.org/wiki/Efecto_Hall)
+
 [4] [Sensor ACS712](https://www.allegromicro.com/en/products/sense/current-sensor-ics/zero-to-fifty-amp-integrated-conductor-sensor-ics/acs712)
+
 [5] [FFT](https://es.wikipedia.org/wiki/Transformada_r%C3%A1pida_de_Fourier)
+
 [6] [Double Buffering](https://es.wikipedia.org/wiki/Buffer_m%C3%BAltiple)
