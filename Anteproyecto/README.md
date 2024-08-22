@@ -66,7 +66,7 @@ Para solucionar todos estos problemas detallados en la sección anterior se util
 
 *1 - Medición de corriente*
 
-Se mide la corriente de línea. En nuestro caso utilizamos un sensor de efecto Hall^[3]^ ACS712^[4]^. Entonces de esta manera conseguimos una medición de corriente aislando la lógica de la línea.
+Se mide la corriente de línea. En nuestro caso utilizamos un sensor de efecto Hall<sup>3</sup> ACS712^[4]^. Entonces de esta manera conseguimos una medición de corriente aislando la lógica de la línea.
 
 *2 - Procesamiento*
 
