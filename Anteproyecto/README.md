@@ -43,10 +43,10 @@ En resumen, el proyecto más conveniente de realizar es el "Filtro Activo de Arm
 ## Descripción del Trabajo Práctico Final de Electrónica de Potencia
 Para comenzar, antes de describir el proyecto a realizar en el "TP3 del Curso de Sistemas Embebidos", se dará una introducción al proyecto al que apunto a largo plazo. Por lo tanto, es importante tener en cuenta estos aspectos a la hora de plantear requerimientos y casos de uso para la solución parcial desarrollada en el Curso de Sistemas Embebidos.
 
-El proyecto de Electrónica de Potencia consiste en un filtro activo de armónicos de corriente <sup>[1]</sup>. Es decir, es un sistema que se encarga de medir la forma de onda de corriente de una línea eléctrica (En nuestro caso a tensión reducida de 24 VCA) y eventualmente si corresponde corrige la distorsión armónica<sup>[2]</sup>. En otras palabras, busca que la corriente consumida por la línea sea senoidal pura. La metodología para corregir la distorsión armónica es consumir en contrafase los armónicos indeseados. Cabe destacar que la carga va a seguir consumiendo una corriente distorsionada. Lo que estamos solucionando con el filtro es que la corriente de la línea sea senoidal pura.
+El proyecto de Electrónica de Potencia consiste en un filtro activo de armónicos de corriente <sup>[1]</sup>. Es decir, es un sistema que se encarga de medir la forma de onda de corriente de una línea eléctrica (En nuestro caso a tensión reducida de 24 VCA) y eventualmente si corresponde corrige la distorsión armónica<sup>[2]</sup>. En otras palabras, busca que la corriente consumida por la línea sea senoidal pura. La metodología para corregir la distorsión armónica es consumir en contra-fase los armónicos indeseados. Cabe destacar que la carga va a seguir consumiendo una corriente distorsionada. Lo que estamos solucionando con el filtro es que la corriente de la línea sea senoidal pura.
 
 #### Caso de uso y marco teórico
-En la *Imagen 1* se puede observar un ejemplo de carga que no es SLIT (Sistema Lineal e Invariante en el Tiempo). En este caso el rectificador es una carga que es alimentada con una tensión senoidal pero la corriente que consume no lo es (sistema no lineal).
+En la *Imagen 1* se puede observar un ejemplo de carga que no es un sistema LTI (Sistema Lineal e Invariante en el Tiempo). En este caso el rectificador es una carga que es alimentada con una tensión senoidal pero la corriente que consume no lo es (sistema no lineal).
 
 Este fenómeno trae múltiples desventajas técnicas desde el punto de vista de la instalación eléctrica. En primer lugar, genera ruido eléctrico que puede interferir en otras cargas de la misma línea. Por otro lado, el transformador encargado de suministrar energía a la red está preparado para trabajar linealmente en la frecuencia adecuada (50 Hz en Argentina) y no en todo el espectro. Por último, tener cargas no lineales implica componentes de potencia significativa en armónicos, esto se resume en que tengamos alta potencia de deformación (D) y en consecuencia bajo factor de potencia (FP). 
 
@@ -94,34 +94,34 @@ IC(t) = fundamental(t) - IL(t)
 
 Ahora que ya se conoce la corriente necesaria, el microcontrolador debe generar las señales necesarias para controlar a la etapa de salida, generando así la corriente IC(t). En este punto es muy importante conocer la función transferencia que vincula la tensión generada por el microcontrolador con la corriente consumida en la línea.
 
-En la *Imagen 2* se muestra únicamente el espectro en módulo de las corrientes y no hay que perder de vista que también está el espectro de fase. Es por eso que matemáticamente es incorrecto restar "armónico por armónico" como se hace en el gráfico (no existen módulos negativos). Sin embargo, me tomé la licencia de representarlo de esa manera a modo didáctico. Ahora bien, lo correcto en realidad es sumarle a los armónicos indeseados, una corriente de igual módulo y desfasado 180°.
+En la *Imagen 2* se muestra únicamente el espectro en amplitud de las corrientes. Matemáticamente, el gráfico dice que a la corriente de línea se le inyecta en contra-fase los armónicos indeseados. Es decir, armónico por armónico se inyecta una corriente de igual módulo y desfasado 180°.
 
-Esto último que se menciona es de suma importancia porque es el efecto similar a lo que ocurre cuando la potencia reactiva de un capacitor suple al consumo de potencia reactiva de un inductor (en el "triángulo de potencias" decimos que se anulan porque la energía de ambos componentes está desfasada 180°). Entonces, en nuestro caso utilizaremos el mismo principio físico para eliminar armónicos.
+Esto último que se menciona es de suma importancia porque es el efecto similar a lo que ocurre cuando la potencia reactiva en un capacitor suple al consumo de potencia reactiva en un inductor (en el "triángulo de potencias" decimos que se anulan porque la energía de ambos componentes está desfasada 180°). Entonces, en nuestro caso utilizaremos el mismo principio físico para eliminar armónicos.
 
 *4 - Sincronización*
 
-En el punto anterior es muy importante que la corriente hay que "empezar a consumirla" en el momento adecuado, es decir, la inyección de corriente debe estar sincronizada con la tensión de línea. De lo contrario, el resultado no será el esperado. 
+En el punto anterior es muy importante que la corriente hay que "empezar a consumirla" en el momento adecuado, es decir, la inyección de corriente debe estar sincronizada con la tensión de línea. De lo contrario, el resultado no será el esperado.
 
-En nuestro caso la metodología de sincronización la hacemos con un detector de ciclos. Este circuito se encarga de detectar ciclos. Entrega 3.3 V cuando la tensión de línea está en el semi-ciclo positivo y 0 V cuando.
+En nuestro caso la metodología de sincronización la hacemos con un "detector de cruce por cero modificado". Entrega 3.3 V cuando la tensión de línea está en el semi-ciclo positivo y 0 V en el negativo. A este circuito lo llamamos "detector de ciclos" (si bien no es formalmente no es un detector de ciclos, en el proyecto se utiliza como tal). 
 
-La lógica consiste en samplear una cantidad entera de ciclos (delimitados por el circuito anterior). Cuando se calcula la componente fundamental por Fourier se obtiene una función como la siguiente:
+La lógica consiste en tomar muestras de una cantidad entera de ciclos (delimitados por el circuito anterior). Cuando se calcula la componente fundamental por Fourier se obtiene una función como la siguiente:
 
 fundamental(t) = A0 * cos(w0 * t + θ)
 
-El ángulo "θ" nos dice que existe un desfasaje entre la detección del inicio del ciclo y la ubicación de la fundamental. Por ende, cuando se hace la operación:
+El ángulo "θ" nos dice que existe un desfase entre la detección del inicio del ciclo y la ubicación de la fundamental. Por ende, cuando se hace la operación:
 
 IC(t) = fundamental(t) - I(t)
 
 Se obtiene directamente el vector a inyectar en la línea referido al inicio del ciclo.
 
-Un dato interesante es que cambiando el valor de θ, forzándolo a gusto podemos cambiar la naturaleza con la que la línea ve al sistema (capacitivo, resistivo o inductivo). Es decir, además de conseguir THD = 0 % podríamos conseguir que FP = 1. La gran consideración que hay que tener es que si hacemos esto, la etapa de potencia debe suministrar una cantidad de energía considerable.
+Un dato interesante es que cambiando el valor de θ, forzándolo a gusto podemos cambiar la naturaleza con la que la línea ve al sistema (capacitivo, resistivo o inductivo). Es decir, además de conseguir THD = 0 % podríamos conseguir que el FP tenga un valor deseado. La gran consideración que hay que tener es que si hacemos esto, la etapa de potencia debe suministrar una cantidad de energía considerable. Por ejemplo, si en la ecuación de la fundamental consideramos θ=0, la tensión queda en fase con la corriente y conseguiríamos THD = 0 % y FP = 1. Es posible que exista un trade-off entre potencia suministrada por el filtro y factor de potencia deseado. Por eso es que lo ideal sería tener un set point de factor de potencia (en la sección "Extra" hay un filtro activo industrial que justamente propone tener un set point).
 
 ## Descripción del Trabajo Práctico Final del Curso de Sistemas Embebidos
 La finalidad de este trabajo práctico final es asentar las bases para conseguir lo descrito en la sección anterior, "Descripción del Trabajo Final de Electrónica de Potencia".
 
 Para ello la propuesta es desarrollar las etapas de medición y procesamiento. La etapa de potencia aún está en desarrollo y por eso no se incluye en el presente trabajo práctico. 
 
-Sin embargo, el objetivo será entonces, medir la señal de corriente de línea, calcular la corriente IC(t) y mostrar dicho cálculo en la salida DAC. Por otro lado, también se debe procesar la señal de corriente de línea y calcular el THD para mostrarlo en el display.
+Sin embargo, el objetivo será entonces, medir la señal de corriente de línea, calcular la corriente IC(t) y entregarla en la salida DAC. Por otro lado, también se debe procesar la señal de corriente de línea y calcular la THD para mostrarlo en el display.
 
 En la *Imagen 3* podemos ver de manera simplificada las señales de entrada y salida del sistema:
 
@@ -170,7 +170,7 @@ En la *Imagen 6* se ve el diagrama en bloques del sensor ACS712. Como se observa
 
 Un punto a tener en cuenta es que la señal viene acondicionada entre 0 y 5 V. Por eso hay que re-acondicionarlo para ajustarle el rango dinámico a 0 - 3.3 V.
 
-Por otro lado, hay que añadirle un filtro para evitar aliasing al momento de muestrear en el microcontrolador. En este caso la frecuencia de corte es de 5 kHz, es decir, vamos a leer hasta el armónico 100.
+Por otro lado, hay que añadirle un filtro para evitar aliasing al momento de tomar muestras con el ADC. En este caso la frecuencia de corte es de 5 kHz, es decir, vamos a leer hasta el armónico 100.
 
 ![alt text](<img/acond_sens_corr.png>)
 
@@ -216,7 +216,7 @@ Cabe destacar que esta salida es provisoria. En el proyecto final la salida no s
 
 ### Adquisición de datos
 Para adquirir los datos de manera eficiente propongo la implementación de la técnica de "double buffering en la entrada y la salida"<sup>[6]</sup>.
-Para el procesamiento en tiempo real es una buena estrategia para hacer uso eficiente del procesador. La idea es que el procesador no use demasiados recursos en samplear, queremos que se aproveche lo máximo posible para resolver las operaciones matemáticas requeridas en el procesamiento.
+Para el procesamiento en tiempo real es una buena estrategia para hacer uso eficiente del procesador. La idea es que el procesador no use demasiados recursos en tomar muestras, queremos que se aproveche lo máximo posible para resolver las operaciones matemáticas requeridas en el procesamiento.
 
 Entonces la técnica de double buffering (también llamado ping pong buffering) tiene un esquema de funcionamiento como el siguiente:
 
@@ -239,7 +239,7 @@ Idealmente:
 De esta manera solamente se encarga de procesar los datos de ptr_procesador_in y los deposita en ptr_procesador_out
 Una vez que terminó de procesar se queda esperando a que los DMA terminen de ingresar y sacar datos.
 
-Una vez que terminaron los DMA, se hace un trueque de buffers (tanto en la entrada como en la salida):
+Una vez que terminaron los DMA, se hace una conmutación de buffers (tanto en la entrada como en la salida):
 - ptr_procesador --> Pasa a ser el del DMA
 - ptr_DMA        --> Pasa a ser el del procesador
 
@@ -253,7 +253,7 @@ Trabajar con DMA hará que el procesador no esté demasiado cargado y se crea un
 
 La Tabla 2 se presentan los requerimientos del proyecto.
 
-| Grupo de Requerimiento  | Requerimiento  | Descripción                                                                                                                                     |
+| Grupo de Requerimiento  | Requerimiento  | Descripción                                                                                                         |
 |-------------------------|----------------|---------------------------------------------------------------------------------------------------------------------|
 | Aislamiento             | 1.0            | La lógica en todo momento debe estar aislada de la línea de 24 VCA                                                  |
 | Sincronización          | 2.0            | El sistema se sincroniza con la linea mediante un detector de ciclos                                                |
@@ -262,7 +262,7 @@ La Tabla 2 se presentan los requerimientos del proyecto.
 | Salida analógica        | 4.1            | La salida para mostrar la señal correctora será vía DAC                                                             |
 | Sistema de buffers      | 5.1            | Se tendrá un esquema double-buffering tanto para tomar muestras como para sacarlas                                  |
 | Procesamiento           | 6.1            | Se deberá calcular la componente fundamental de corriente                                                           |
-| Procesamiento           | 6.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal muestreada        |
+| Procesamiento           | 6.2            | Se debe conseguir la "forma de onda correctora" haciendo la resta entre la fundamental y la señal leída             |
 | Procesamiento           | 6.3            | El sistema debe corregir en régimen permanente (No importa si el procesamiento / muestreo es lento)                 |
 | Display                 | 6.1            | En el display de caracteres LCD se mostrará THD de la señal de entrada                                              |
 | Testeo                  | 7.1            | Para verificar el funcionamiento usar el método de la sección "Testeo"                                              |
@@ -278,14 +278,14 @@ Llegaron 50 ciclos // idealmente 1seg para freq de linea de 50 Hz
 ###### Precondición
 Se haya previamente iniciado el timer de sincronización: timer_sinc_start()
 
-###### Flujo basico
+###### Flujo básico
 - Detengo DMA
 - tiempo_muestreo = timer_sinc_stop()      //idealmente 1seg
 - tiempo_muestreo = timer_sinc_start()     //Inicializo timer
-- Switcheo buffers                         //Switcheo buffers del double buffering                  
+- Conmutación buffers                      //Conmuta buffers del double buffering                  
 - Inicializo DMA disparo único (ADC y DAC)
 - muestras = tiempo_muestreo * fs // idealmente 20 mil con fs = 20 kHz
-- Calculo FFT de la señal muestreada a la entrada
+- Calculo FFT de la señal leída a la entrada
 - Identifico modulo y fase de la fundamental
 - Calculo THD
 - Completo el vector uint32_t fundamental[muestras] con la señal fundamental (Repetida múltiples veces)
@@ -299,10 +299,10 @@ Me quedo esperando a que se termine la ventana de 50 ciclos
 ###### Disparador
 Llamen a la función updateDisplay()
 
-###### Precondicion
+###### Precondición
 Hayan inicializado el display
 
-###### Flujo basico
+###### Flujo básico
 Actualiza valor de THD mostrado
 
 ###### Flujo alternativo
