@@ -206,7 +206,7 @@ Para el display se utiliza el esquema de la *Imagen 12*
 *Imagen 12: Display*
 
 #### Filtro Interpolación DAC
-Para el DAC simplemente voy a utilizar un circuito RC para suavizar las altas frecuencias del DAC (*Imagen 13*)
+Para el DAC simplemente voy a utilizar un circuito RC para suavizar las altas frecuencias producidas por la cuantización en la señal de salida (*Imagen 13*)
 
 ![alt text](<img/dac.png>)
 
