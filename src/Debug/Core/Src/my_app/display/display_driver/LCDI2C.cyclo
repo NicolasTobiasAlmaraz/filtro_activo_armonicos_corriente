@@ -1,6 +1,0 @@
-../Core/Src/my_app/display/display_driver/LCDI2C.c:9:6:LCD_sendCMD	1
-../Core/Src/my_app/display/display_driver/LCDI2C.c:21:6:LCD_sendData	1
-../Core/Src/my_app/display/display_driver/LCDI2C.c:33:6:LCD_Clear	2
-../Core/Src/my_app/display/display_driver/LCDI2C.c:40:6:LCD_Init	1
-../Core/Src/my_app/display/display_driver/LCDI2C.c:63:6:LCD_sendSTR	2
-../Core/Src/my_app/display/display_driver/LCDI2C.c:67:6:LCD_setCursor	85
