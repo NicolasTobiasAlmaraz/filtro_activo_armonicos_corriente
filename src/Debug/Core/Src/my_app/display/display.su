@@ -1,0 +1,2 @@
+../Core/Src/my_app/display/display.c:38:6:display_init	8	static
+../Core/Src/my_app/display/display.c:54:6:display_update_THD	24	static

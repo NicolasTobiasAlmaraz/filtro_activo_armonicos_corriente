@@ -1,0 +1,6 @@
+../Core/Src/my_app/display/display_driver/LCDI2C.c:9:6:LCD_sendCMD	32	static
+../Core/Src/my_app/display/display_driver/LCDI2C.c:21:6:LCD_sendData	32	static
+../Core/Src/my_app/display/display_driver/LCDI2C.c:33:6:LCD_Clear	16	static
+../Core/Src/my_app/display/display_driver/LCDI2C.c:40:6:LCD_Init	8	static
+../Core/Src/my_app/display/display_driver/LCDI2C.c:63:6:LCD_sendSTR	16	static
+../Core/Src/my_app/display/display_driver/LCDI2C.c:67:6:LCD_setCursor	24	static
