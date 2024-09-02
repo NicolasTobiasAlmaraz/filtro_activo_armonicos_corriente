@@ -1,0 +1,3 @@
+../Core/Src/my_app/timer_api/timer_api.c:36:6:timer_api_init	1
+../Core/Src/my_app/timer_api/timer_api.c:40:15:timer_api_timeout	1
+../Core/Src/my_app/timer_api/timer_api.c:45:6:timer_api_set_count	1

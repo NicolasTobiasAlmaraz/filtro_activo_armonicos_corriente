@@ -1,0 +1,2 @@
+../Core/Src/my_app/my_app.c:60:6:my_app_init	8	static
+../Core/Src/my_app/my_app.c:68:6:my_app_loop	16	static
