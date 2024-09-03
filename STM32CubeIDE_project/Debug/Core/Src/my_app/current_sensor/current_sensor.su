@@ -1,6 +1,0 @@
-../Core/Src/my_app/current_sensor/current_sensor.c:57:10:current_sensor_get_sample_ADC	4	static
-../Core/Src/my_app/current_sensor/current_sensor.c:65:6:current_sensor_init	4	static
-../Core/Src/my_app/current_sensor/current_sensor.c:69:6:curent_sensor_calibrate	32	static
-../Core/Src/my_app/current_sensor/current_sensor.c:99:6:current_sensor_sampling_loop	8	static
-../Core/Src/my_app/current_sensor/current_sensor.c:107:6:current_sensor_clean_samples	4	static
-../Core/Src/my_app/current_sensor/current_sensor.c:111:10:current_sensor_get_samples	16	static

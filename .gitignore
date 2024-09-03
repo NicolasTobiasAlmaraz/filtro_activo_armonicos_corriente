@@ -1,0 +1,8 @@
+# Ignorar archivos de Eclipse
+.settings/
+Debug/
+*.launch
+
+# Ignorar otros archivos generales
+*.log
+*.tmp
