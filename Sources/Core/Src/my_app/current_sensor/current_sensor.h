@@ -79,6 +79,13 @@ void current_sensor_get_samples(cycle_t *ptr_out);
  * This function notifies the API that a new line cycle has started.
  * It is recommended to use this function in the GPIO cycle detection interrupt callback.
  */
-void set_new_cycle();
+void current_sensor_set_new_cycle();
+
+
+/**
+ * @brief Returns the calibrate value (conversion when the current is 0A)
+ * @retval offset
+ */
+uint16_t current_sensor_get_offset();
 
 #endif /* SRC_MY_APP_CURRENT_SENSOR_CURRENT_SENSOR_H_ */

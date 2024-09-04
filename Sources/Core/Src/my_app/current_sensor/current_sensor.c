@@ -177,6 +177,11 @@ void current_sensor_get_samples(cycle_t *ptr_out) {
     memcpy(ptr_out, g_current_cycles, sizeof(g_current_cycles));
 }
 
-void set_new_cycle() {
+void current_sensor_set_new_cycle() {
 	g_f_new_cycle = true;
 }
+
+uint16_t current_sensor_get_offset() {
+	return g_offset;
+}
+
