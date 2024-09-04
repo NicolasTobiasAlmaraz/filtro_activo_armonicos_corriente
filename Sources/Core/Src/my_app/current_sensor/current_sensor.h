@@ -81,7 +81,6 @@ void current_sensor_get_samples(cycle_t *ptr_out);
  */
 void current_sensor_set_new_cycle();
 
-
 /**
  * @brief Returns the calibrate value (conversion when the current is 0A)
  * @retval offset

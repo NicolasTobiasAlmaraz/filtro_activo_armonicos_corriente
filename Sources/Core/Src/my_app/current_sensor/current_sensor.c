@@ -82,7 +82,7 @@ void current_sensor_init() {
 	current_sensor_clean_samples();
 }
 
-bool curent_sensor_calibrate() {
+bool current_sensor_calibrate() {
 	uint16_t sample_max = 0;
 	uint16_t sample_min = MAX_UINT16_t;
 	uint32_t suma = 0;

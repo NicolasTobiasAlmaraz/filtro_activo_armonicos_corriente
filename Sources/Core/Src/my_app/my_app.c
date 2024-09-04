@@ -70,7 +70,7 @@ void my_app_loop() {
 		case STATE_INICIO:
 			break;
 		case STATE_CALIBRANDO:
-			bool status = curent_sensor_calibrate();
+			bool status = current_sensor_calibrate();
 			if(status)
 				g_estado = STATE_STAND_BY;
 			else
@@ -87,6 +87,7 @@ void my_app_loop() {
 			break;
 
 		case STATE_PROCESANDO:
+
 			break;
 
 		case STATE_ACTUALIZANDO_INYECCION:
