@@ -36,7 +36,7 @@ typedef struct {
 /**
  * @brief Initializes the Measurement API
  */
-void current_sensor_init();
+void current_sensor_api_init();
 
 /**
  * @brief Measures the offset of the signal when there is no current and saves the value for future conversions
@@ -50,24 +50,24 @@ void current_sensor_init();
  *  CALIBRATE_ERROR: Current consumption was detected during calibration.
  * @retval status
  */
-bool current_sensor_calibrate();
+bool current_sensor_api_calibrate();
 
 /**
  * @brief Main sampling loop for the current sensor
  * @retval true if an end of cycle (EOC) is reached, false otherwise
  */
-bool current_sensor_sampling_loop();
+bool current_sensor_api_sampling_loop();
 
 /**
  * @brief Clears all current samples and resets the state machine
  */
-void current_sensor_clean_samples();
+void current_sensor_api_clean_samples();
 
 /**
  * @brief Copies the collected samples to an output buffer
  * @param ptr_out Pointer to the output buffer
  */
-void current_sensor_get_samples(cycle_t *ptr_out);
+void current_sensor_api_get_samples(cycle_t *ptr_out);
 
 /**
  * @brief Indicates to the API that a new line cycle has started.
@@ -75,12 +75,12 @@ void current_sensor_get_samples(cycle_t *ptr_out);
  * This function notifies the API that a new line cycle has started.
  * It is recommended to use this function in the GPIO cycle detection interrupt callback.
  */
-void current_sensor_set_new_cycle();
+void current_sensor_api_set_new_cycle();
 
 /**
  * @brief Returns the calibration offset for the sensor
  * @retval Calibration offset
  */
-uint16_t current_sensor_get_offset();
+uint16_t current_sensor_api_get_offset();
 
 #endif /* SRC_MY_APP_CURRENT_SENSOR_CURRENT_SENSOR_H_ */

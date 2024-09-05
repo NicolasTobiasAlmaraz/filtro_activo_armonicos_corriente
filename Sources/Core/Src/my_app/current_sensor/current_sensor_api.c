@@ -21,7 +21,7 @@
 #include <string.h>
 
 #include "main.h"
-#include "current_sensor.h"
+#include "current_sensor_api.h"
 #include "timer_api/timer_api.h"
 
 //======================================
@@ -81,13 +81,13 @@ static bool g_f_new_cycle = false;
  * @brief Returns the value read by the ADC
  * @retval 16-bit ADC sample
  */
-uint16_t current_sensor_get_sample_ADC();
+uint16_t current_sensor_api_get_sample_ADC();
 
 //======================================
 // Private Function Implementations
 //======================================
 
-uint16_t current_sensor_get_sample_ADC() {
+uint16_t current_sensor_api_get_sample_ADC() {
 	uint32_t sample = HAL_ADC_GetValue(&hadc1);
 	return (uint16_t)sample;
 }
@@ -96,18 +96,18 @@ uint16_t current_sensor_get_sample_ADC() {
 // Public Function Implementations
 //======================================
 
-void current_sensor_init() {
-	current_sensor_clean_samples();
+void current_sensor_api_init() {
+	current_sensor_api_clean_samples();
 }
 
-bool current_sensor_calibrate() {
+bool current_sensor_api_calibrate() {
 	uint16_t sample_max = 0;
 	uint16_t sample_min = MAX_UINT16_t;
 	uint32_t sum = 0;
 
 	for(uint32_t i = 0; i < 100; i++) {
 		// Take a sample
-		uint16_t sample = current_sensor_get_sample_ADC();
+		uint16_t sample = current_sensor_api_get_sample_ADC();
 
 		// Update max and min
 		if(sample > sample_max)
@@ -132,7 +132,7 @@ bool current_sensor_calibrate() {
 	return CALIBRATE_OK;
 }
 
-bool current_sensor_sampling_loop() {
+bool current_sensor_api_sampling_loop() {
 	bool f_eoc = false;
 
 	switch(g_state) {
@@ -144,7 +144,7 @@ bool current_sensor_sampling_loop() {
 
 		case STATE_SAMPLING:
 			// Take a new sample
-			uint16_t sample = current_sensor_get_sample_ADC();
+			uint16_t sample = current_sensor_api_get_sample_ADC();
 
 			// Start timer
 			timer_api_set_count(TIMER_SAMPLING, 200);
@@ -192,7 +192,7 @@ bool current_sensor_sampling_loop() {
 	return f_eoc;
 }
 
-void current_sensor_clean_samples() {
+void current_sensor_api_clean_samples() {
 	g_state = STATE_START;
 	g_cycles_index = 0;
 	for(uint32_t i = 0; i < CYCLES; i++) {
@@ -200,14 +200,14 @@ void current_sensor_clean_samples() {
 	}
 }
 
-void current_sensor_get_samples(cycle_t *ptr_out) {
+void current_sensor_api_get_samples(cycle_t *ptr_out) {
     memcpy(ptr_out, g_current_cycles, sizeof(g_current_cycles));
 }
 
-void current_sensor_set_new_cycle() {
+void current_sensor_api_set_new_cycle() {
 	g_f_new_cycle = true;
 }
 
-uint16_t current_sensor_get_offset() {
+uint16_t current_sensor_api_get_offset() {
 	return g_offset;
 }

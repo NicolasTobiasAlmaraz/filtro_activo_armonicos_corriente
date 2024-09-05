@@ -1,38 +1,42 @@
 /**
- * @file current_sensor.h
+ * @file zero_cross.c
  * @author Nicolás Almaraz
- * @brief Procesamiento principal de señales para obtener THD e ic(t)
+ * @brief Zero-cross detection handling
  */
 
 //======================================
-// Dependencias
+// Dependencies
 //======================================
-#include "signal_analyzer.h"
+#include <cycle_detector/cycle_detector_api.h>
+#include "main.h"
 
 //======================================
-// Defines Privados
-//======================================
-
-//======================================
-// Estructuras y Tipos de Datos Privados
+// Private Defines
 //======================================
 
 //======================================
-// Variables Privadas
+// Private Data Structures and Types
 //======================================
 
 //======================================
-// Declaración de Funciones Privadas
+// Private Variables
 //======================================
 
 //======================================
-// Implementación de Funciones Privadas
+// Private Function Declarations
 //======================================
 
 //======================================
-// Implementación de Funciones Públicas
+// Private Function Implementations
 //======================================
 
-void signal_analyzer_init() {
+//======================================
+// Public Function Implementations
+//======================================
+
+void cycle_detector_api_init() {
+}
+
+void cycle_detector_api_callback() {
 
 }

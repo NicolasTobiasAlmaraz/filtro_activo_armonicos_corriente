@@ -1,35 +1,36 @@
 /**
- * @file zero_cross.h
+ * @file inject_simulator.c
  * @author Nicolás Almaraz
- * @brief Atención al cruce por cero
+ * @brief Implementa las funcionalidades para salida DAC
  */
-
-#ifndef SRC_MY_APP_ZERO_CROSS_ZERO_CROSS_H_
-#define SRC_MY_APP_ZERO_CROSS_ZERO_CROSS_H_
 
 //======================================
 // Dependencias
 //======================================
+#include "inject_simulator_api.h"
 
 //======================================
-// Defines Públicos
-//======================================
-
-//======================================
-// Estructuras y Tipos de datos públicos
+// Defines Privados
 //======================================
 
 //======================================
-// Variables Globales
+// Estructuras y Tipos de Datos Privados
+//======================================
+
+//======================================
+// Variables Privadas
 //======================================
 
 //======================================
 // Declaración de Funciones Privadas
 //======================================
 
-/**
- * @brief XXXXXXXX
- */
-void zero_cross_init();
+//======================================
+// Implementación de Funciones Privadas
+//======================================
 
-#endif /* SRC_MY_APP_ZERO_CROSS_ZERO_CROSS_H_ */
+//======================================
+// Implementación de Funciones Públicas
+//======================================
+void inject_simulator_init() {
+}
