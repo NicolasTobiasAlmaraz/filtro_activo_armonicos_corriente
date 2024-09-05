@@ -152,7 +152,7 @@ bool current_sensor_sampling_loop() {
 			break;
 
 		case STATE_WAITING:
-			if( timer_api_timeout(TIMER_SAMPLING) ==  TIMER_FINISH) {
+			if( timer_api_check_timer(TIMER_SAMPLING) ==  TIMER_FINISH) {
 				g_state = STATE_SAMPLING;
 			}
 			break;

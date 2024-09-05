@@ -45,20 +45,22 @@ typedef enum {
 //======================================
 
 /**
- * @brief Inicializa timer por polling
+ * @Init Initialize Timer API by polling
  */
 void timer_api_init();
 
 /**
- * @brief Verifica si venció el timer consultado
- * @param id Timer a consultar
- * @retval status
+ * @brief Checks the timer state
+ * @param id Timer
+ * @retval Status
  */
-timer_state_t timer_api_timeout(timer_id_t id);
+timer_state_t timer_api_check_timer(timer_id_t id);
 
 /**
- * @brief Le da inicio al timer indicado
+ * @brief Timer Start
+ * @param id Timer to start
+ * @param time_us Time in microseconds
  */
-void timer_api_set_count(timer_id_t id, uint32_t count);
+void timer_api_set_count(timer_id_t id, uint32_t time_us);
 
 #endif /* SRC_MY_APP_TIMER_API_TIMER_API_H_ */
