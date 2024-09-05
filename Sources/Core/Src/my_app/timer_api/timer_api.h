@@ -1,7 +1,7 @@
 /**
  * @file timer_api.h
  * @author Nicolás Almaraz
- * @brief Funciones de timer y gestion de tiempos
+ * @brief Timer functions and time management
  */
 
 
@@ -9,56 +9,59 @@
 #define SRC_MY_APP_TIMER_API_TIMER_API_H_
 
 //======================================
-// Dependencias
+// Dependencies
 //======================================
 #include <stdbool.h>
 #include <stdint.h>
 //======================================
-// Defines Públicos
+// Public Defines
 //======================================
 
 //======================================
-// Estructuras y Tipos de Datos Públicos
+// Public Data Structures and Types
 //======================================
 
 /**
- * @brief Timers
+ * @brief Timer IDs
  */
 typedef enum {
-	TIMER_SAMPLING,
-	TIMER_DISPLAY,
-	TIMER_DELAY,
-}timer_id_t;
+    TIMER_SAMPLING,
+    TIMER_DISPLAY,
+    TIMER_DELAY,
+} timer_id_t;
 
+/**
+ * @brief Timer states
+ */
 typedef enum {
-	TIMER_RUNNING,
-	TIMER_FINISH,
-	TIMER_NO_CONFIG,
-}timer_state_t;
+    TIMER_RUNNING,
+    TIMER_FINISHED,
+    TIMER_NOT_CONFIGURED,
+} timer_state_t;
 
 //======================================
-// Variables Globales
+// Global Variables
 //======================================
 
 //======================================
-// Declaración de Funciones Públicas
+// Public Function Declarations
 //======================================
 
 /**
- * @Init Initialize Timer API by polling
+ * @brief Initialize the Timer API
  */
 void timer_api_init();
 
 /**
- * @brief Checks the timer state
- * @param id Timer
- * @retval Status
+ * @brief Check the state of a timer
+ * @param id Timer ID
+ * @retval Timer state
  */
 timer_state_t timer_api_check_timer(timer_id_t id);
 
 /**
- * @brief Timer Start
- * @param id Timer to start
+ * @brief Start a timer
+ * @param id Timer ID to start
  * @param time_us Time in microseconds
  */
 void timer_api_set_count(timer_id_t id, uint32_t time_us);

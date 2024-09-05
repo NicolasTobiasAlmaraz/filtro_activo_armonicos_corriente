@@ -53,23 +53,19 @@ void current_sensor_init();
 bool current_sensor_calibrate();
 
 /**
- * @brief Capture 50 cycles of current (non-blocking function)
- *
- * This function indicates when it has finished capturing CYCLES cycles of current.
- * These cycles are stored in the 'sample_t' structure.
- * The function should be called repeatedly in a loop and will signal the end of conversion through its return status.
- *
- * @retval Flag End Of Conversion: 1-Finish / 0-Not yet
+ * @brief Main sampling loop for the current sensor
+ * @retval true if an end of cycle (EOC) is reached, false otherwise
  */
 bool current_sensor_sampling_loop();
 
 /**
- * @brief Restarts the sampling process
+ * @brief Clears all current samples and resets the state machine
  */
 void current_sensor_clean_samples();
 
 /**
- * @brief Returns the 50 cycles captured
+ * @brief Copies the collected samples to an output buffer
+ * @param ptr_out Pointer to the output buffer
  */
 void current_sensor_get_samples(cycle_t *ptr_out);
 
@@ -82,8 +78,8 @@ void current_sensor_get_samples(cycle_t *ptr_out);
 void current_sensor_set_new_cycle();
 
 /**
- * @brief Returns the calibrate value (conversion when the current is 0A)
- * @retval offset
+ * @brief Returns the calibration offset for the sensor
+ * @retval Calibration offset
  */
 uint16_t current_sensor_get_offset();
 

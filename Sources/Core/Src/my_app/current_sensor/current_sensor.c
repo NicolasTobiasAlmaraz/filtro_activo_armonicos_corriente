@@ -1,22 +1,22 @@
 /**
  * @file current_sensor.c
  * @author Nicolás Almaraz
- * @brief Implementa las funcionalidades para lectura del sensor de corriente
+ * @brief Implements functionality for reading the current sensor
  *
- * Cálculos del Sensor de Corriente:
- * 		Sensibilidad:
+ * Current Sensor Calculations:
+ * 		Sensitivity:
  * 		S = 185mV/A
- * 		|--> 1mV = 1.2409 cuentas
- * 		|--> S = 229.5681 cuentas / A
+ * 		|--> 1mV = 1.2409 counts
+ * 		|--> S = 229.5681 counts / A
  *
- * 		cuentas = S * corriente
- * 		|--> corriente = cuentas * 1/S
- * 		|--> 1/S = 0.004356004 A / cuentas
- * 		|--> 1/S = 4.356004 mA / cuentas
+ * 		counts = S * current
+ * 		|--> current = counts * 1/S
+ * 		|--> 1/S = 0.004356004 A / counts
+ * 		|--> 1/S = 4.356004 mA / counts
  */
 
 //======================================
-// Dependencias
+// Dependencies
 //======================================
 #include <string.h>
 
@@ -25,49 +25,66 @@
 #include "timer_api/timer_api.h"
 
 //======================================
-// Defines Privados
+// Private Defines
 //======================================
+/** Maximum value of a 16-bit unsigned integer */
 #define MAX_UINT16_t 				65535
-#define TOLERANCIA_CALIBRACION_MA	1
-#define PENDIENTE_CORRIENTE 		(float) 4.356004 //mA / cuentas
+
+/** Calibration tolerance in milliamps */
+#define CALIBRATION_TOLERANCE_MA	1
+
+/** Current slope in milliamps per count */
+#define CURRENT_SLOPE 				(float) 4.356004 // [mA/counts]
 
 //======================================
-// Estructuras y Tipos de Datos Privados
+// Private Data Structures and Types
 //======================================
-typedef enum{
-	STATE_START,
-	STATE_SAMPLING,
-	STATE_WAITING,
-	STATE_EOC,
-}state_current_sensor_t;
+
+/** State machine for the current sensor */
+typedef enum {
+	STATE_START,		/**< Initial state */
+	STATE_SAMPLING,		/**< Sampling in progress */
+	STATE_WAITING,		/**< Waiting for timer or cycle */
+	STATE_EOC,			/**< End of cycle (EOC) */
+} state_current_sensor_t;
 
 //======================================
-// Handlers STM32
+// STM32 Handlers
 //======================================
+/** ADC handle for the current sensor (defined in main.c) */
 extern ADC_HandleTypeDef hadc1;
 
 //======================================
-// Variables Privadas
+// Private Variables
 //======================================
-static state_current_sensor_t g_state = STATE_START;	//<! Estado maquina de estados
 
-static cycle_t g_current_cycles[CYCLES];				//<! Muestras
-static uint32_t g_cycles_index = 0;						//<! Indice del vector
-static uint16_t g_offset = MAX_UINT16_t / 2;			//<! Offset que hay que ponerle a las muestras
+/** Current state of the sensor's state machine */
+static state_current_sensor_t g_state = STATE_START;
 
-static bool g_f_new_cycle = false;						//<! Flag que notifica si llegó un nuevo ciclo en la tensión de línea
+/** Array of current samples for multiple cycles*/
+static cycle_t g_current_cycles[CYCLES];
+
+/** Index for tracking the current cycle in the array*/
+static uint32_t g_cycles_index = 0;
+
+/** Offset applied to the ADC readings for calibration*/
+static uint16_t g_offset = MAX_UINT16_t / 2;
+
+/** Flag indicating if a new cycle in the line voltage has occurred*/
+static bool g_f_new_cycle = false;
 
 //======================================
-// Declaración de Funciones Privadas
+// Private Function Declarations
 //======================================
 
 /**
- * @brief Retorna el valor leído por el ADC
+ * @brief Returns the value read by the ADC
+ * @retval 16-bit ADC sample
  */
-uint16_t current_sensor_get_sample();
+uint16_t current_sensor_get_sample_ADC();
 
 //======================================
-// Implementación de Funciones Privadas
+// Private Function Implementations
 //======================================
 
 uint16_t current_sensor_get_sample_ADC() {
@@ -76,8 +93,9 @@ uint16_t current_sensor_get_sample_ADC() {
 }
 
 //======================================
-// Implementación de Funciones Públicas
+// Public Function Implementations
 //======================================
+
 void current_sensor_init() {
 	current_sensor_clean_samples();
 }
@@ -85,32 +103,32 @@ void current_sensor_init() {
 bool current_sensor_calibrate() {
 	uint16_t sample_max = 0;
 	uint16_t sample_min = MAX_UINT16_t;
-	uint32_t suma = 0;
+	uint32_t sum = 0;
 
-	for(uint32_t i=0; i<100; i++) {
-		//Sample
+	for(uint32_t i = 0; i < 100; i++) {
+		// Take a sample
 		uint16_t sample = current_sensor_get_sample_ADC();
 
-		//Update max and min
-		 if(sample>sample_max)
-			 sample_max = sample;
+		// Update max and min
+		if(sample > sample_max)
+			sample_max = sample;
 
-		 if(sample<sample_min)
-			 sample_min = sample;
+		if(sample < sample_min)
+			sample_min = sample;
 
-		 suma += sample;
+		sum += sample;
 
-		//Wait 10ms
+		// Wait 10ms
 		HAL_Delay(10);
 	}
 
-	//Max deviation
-	float variabilidad = (sample_max - sample_min) * PENDIENTE_CORRIENTE;
-	if(variabilidad > TOLERANCIA_CALIBRACION_MA)
+	// Calculate max deviation
+	float variability = (sample_max - sample_min) * CURRENT_SLOPE;
+	if(variability > CALIBRATION_TOLERANCE_MA)
 		return CALIBRATE_ERROR;
 
-	//Calculate offset
-	g_offset = (uint16_t) suma / 100;
+	// Calculate offset
+	g_offset = (uint16_t) (sum / 100);
 	return CALIBRATE_OK;
 }
 
@@ -125,18 +143,18 @@ bool current_sensor_sampling_loop() {
 			break;
 
 		case STATE_SAMPLING:
-			//Take a new sample
+			// Take a new sample
 			uint16_t sample = current_sensor_get_sample_ADC();
 
-			//Timer start
+			// Start timer
 			timer_api_set_count(TIMER_SAMPLING, 200);
 
-			//If i receive a new cycle notification, change the cycle
-			if( g_f_new_cycle ) {
+			// If a new cycle notification is received, change the cycle
+			if(g_f_new_cycle) {
 				g_f_new_cycle = false;
 				g_cycles_index++;
 
-				//If the CYCLES cycles are completed return EOC
+				// If all CYCLES are completed, return EOC
 				if(g_cycles_index == CYCLES) {
 					g_state = STATE_EOC;
 					f_eoc = true;
@@ -144,7 +162,7 @@ bool current_sensor_sampling_loop() {
 				}
 			}
 
-			//Save the sample
+			// Save the sample
 			uint32_t len = g_current_cycles[g_cycles_index].len;
 			g_current_cycles[g_cycles_index].cycle[len] = sample;
 			len++;
@@ -152,7 +170,16 @@ bool current_sensor_sampling_loop() {
 			break;
 
 		case STATE_WAITING:
-			if( timer_api_check_timer(TIMER_SAMPLING) ==  TIMER_FINISH) {
+			// Return to sampling state if...
+
+			// 1 - Timeout
+			if(timer_api_check_timer(TIMER_SAMPLING) == TIMER_FINISHED) {
+				g_state = STATE_SAMPLING;
+			}
+
+			// 2 - A new cycle starts
+			// The cycles must be properly aligned for processing
+			if(g_f_new_cycle) {
 				g_state = STATE_SAMPLING;
 			}
 			break;
@@ -168,8 +195,8 @@ bool current_sensor_sampling_loop() {
 void current_sensor_clean_samples() {
 	g_state = STATE_START;
 	g_cycles_index = 0;
-	for(uint32_t i=0; i<CYCLES; i++) {
-		g_current_cycles[i].len=0;
+	for(uint32_t i = 0; i < CYCLES; i++) {
+		g_current_cycles[i].len = 0;
 	}
 }
 
@@ -184,4 +211,3 @@ void current_sensor_set_new_cycle() {
 uint16_t current_sensor_get_offset() {
 	return g_offset;
 }
-
