@@ -16,22 +16,34 @@
  * - The appropriate API callback function is called based on the interrupt or event source.
  */
 
+//======================================
+// Dependencies
+//======================================
+#include "main.h"
+#include "cycle_detector/cycle_detector_api.h"
+
+//======================================
+// Callbacks
+//======================================
 
 /**
- * @brief  Redefinition of WEAK function. GPIO EXTI Callback
- * @param  GPIO_Pin Specifies the pins connected EXTI line
- * @retval None
+ * @brief Redefinition of WEAK function. GPIO EXTI Callback
+ * @param GPIO_Pin Specifies the pins connected EXTI line
  */
-
-#include "main.h"
-
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	switch(GPIO_Pin) {
-		case 0:
+		case CYCLE_DETECTOR_Pin:
+			cycle_detector_api_callback();
 			break;
-		case 1:
+		case USER_BUTTON_Pin:
+			push_button_driver_callback();
 			break;
 	}
 }
 
+/**
+ * @brief  Redefinition of WEAK function. DAC DMA Tx complete
+ */
+void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac) {
 
+}

@@ -32,4 +32,9 @@
  */
 void cycle_detector_api_init();
 
+/**
+ * @brief Function callback
+ */
+void cycle_detector_api_callback();
+
 #endif /* SRC_MY_APP_CYCLE_DETECTOR_ZERO_CROSS_H_ */

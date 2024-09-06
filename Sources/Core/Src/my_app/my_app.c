@@ -62,7 +62,7 @@ void my_app_init() {
 	signal_analyzer_init();
 	display_init();
 	current_sensor_api_init();
-	inject_simulator_init();
+	inject_simulator_api_init();
 }
 
 void my_app_loop() {

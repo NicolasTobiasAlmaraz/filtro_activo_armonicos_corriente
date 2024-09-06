@@ -28,7 +28,6 @@
 // Declaración de Funciones Privadas
 //======================================
 
-
 /**
  * @brief Hace la inicializacion del sistema completo
  */
