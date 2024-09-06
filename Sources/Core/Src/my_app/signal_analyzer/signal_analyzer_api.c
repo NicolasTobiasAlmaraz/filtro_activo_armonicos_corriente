@@ -132,6 +132,10 @@ void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16
 }
 
 
-uint8_t signal_analyzer_api_get_thd();
+uint8_t signal_analyzer_api_get_thd() {
+	return g_thd;
+}
 
-cycle_t signal_analyzer_api_get_inject_current();
+cycle_t signal_analyzer_api_get_inject_current() {
+	return g_inject_cycle;
+}

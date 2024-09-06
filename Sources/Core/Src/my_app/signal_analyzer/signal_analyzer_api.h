@@ -42,4 +42,14 @@ void signal_analyzer_api_init();
  */
 void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16_t zero_offset);
 
+/**
+ *
+ */
+uint8_t signal_analyzer_api_get_thd();
+
+/**
+ *
+ */
+cycle_t signal_analyzer_api_get_inject_current();
+
 #endif /* SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_ */
