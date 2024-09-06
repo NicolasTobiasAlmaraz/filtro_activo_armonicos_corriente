@@ -11,7 +11,9 @@
 //======================================
 // Dependencias
 //======================================
+#include "main.h"
 
+#include "current_sensor/current_sensor_api.h"
 //======================================
 // Defines Públicos
 //======================================
@@ -29,8 +31,15 @@
 //======================================
 
 /**
- * @brief XXXX
+ * @brief Inicializa la API
  */
-void signal_analyzer_init();
+void signal_analyzer_api_init();
+
+/**
+ * @brief Analyzes the signal
+ * @param cycles Samples of each cycle
+ * @param len Quantity of cycles
+ */
+void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16_t zero_offset);
 
 #endif /* SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_ */

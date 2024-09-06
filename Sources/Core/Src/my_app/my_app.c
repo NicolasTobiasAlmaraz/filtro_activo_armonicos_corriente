@@ -59,7 +59,7 @@ static app_state_t g_estado = STATE_INICIO;
 //======================================
 void my_app_init() {
 	cycle_detector_api_init();
-	signal_analyzer_init();
+	signal_analyzer_api_init();
 	display_init();
 	current_sensor_api_init();
 	inject_simulator_api_init();
