@@ -48,8 +48,13 @@ void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16
 uint8_t signal_analyzer_api_get_thd();
 
 /**
- *
+ *@brief
  */
 cycle_t signal_analyzer_api_get_inject_current();
+
+/**
+ * @brief
+ */
+void signal_analyzer_api_set_fs(uint32_t fs);
 
 #endif /* SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_ */
