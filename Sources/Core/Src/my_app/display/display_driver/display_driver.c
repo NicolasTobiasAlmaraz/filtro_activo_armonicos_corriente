@@ -1,158 +1,158 @@
 /**
  * @file LCDI2C.c
- * @brief Driver LCD Display with bridge I2C
+ * @brief LCD Display Driver with I2C bridge
  * @author Nicolas Almaraz
  */
 
 //======================================
-// Dependencias
+// Dependencies
 //======================================
 #include <display/display_driver/display_driver.h>
 #include "main.h"
 
 //======================================
-// Defines Privados
+// Private Defines
 //======================================
 
 /**
- * @brief Dirección I2C del display LCD.
- * Esta dirección depende de cómo esté configurado el pin A0 del LCD.
+ * @brief I2C address of the LCD display.
+ * This address depends on how the A0 pin of the LCD is configured.
  */
 #define ADDR 0x4E
 
 //======================================
-// Estructuras y Tipos de Datos Privados
+// Private Structures and Data Types
 //======================================
 
 //======================================
-// Variables Privadas
+// Private Variables
 //======================================
 
 //======================================
-// Handlers STM32
+// STM32 Handlers
 //======================================
-extern I2C_HandleTypeDef hi2c1;  //!< Handler del periférico I2C utilizado
+extern I2C_HandleTypeDef hi2c1;  //!< I2C peripheral handler used
 
 //======================================
-// Declaración de Funciones Privadas
+// Private Function Declarations
 //======================================
-
-/**
- * @brief Envía un comando al display LCD.
- * Esta función envía comandos de configuración al display,
- * como el ajuste de modo, encendido, apagado, etc.
- * @param cmd Comando a enviar.
- */
-void LCD_sendCMD (char cmd);
 
 /**
- * @brief Envía un dato al display LCD.
- * Esta función se utiliza para enviar caracteres a mostrar en el LCD.
- * @param data Dato (carácter) a enviar.
+ * @brief Sends a command to the LCD display.
+ * This function sends configuration commands to the display,
+ * such as mode adjustment, power on/off, etc.
+ * @param cmd Command to send.
  */
-void LCD_sendData (char data);
+static void display_driver_send_cmd (char cmd);
+
+/**
+ * @brief Sends data to the LCD display.
+ * This function is used to send characters to be displayed on the LCD.
+ * @param data Data (character) to send.
+ */
+static void display_driver_send_data (char data);
 
 //======================================
-// Implementación de Funciones Privadas
+// Private Function Implementations
 //======================================
 
-void LCD_sendCMD (char cmd) {
+void display_driver_send_cmd (char cmd) {
     char _U, _L;
     uint8_t _T[4];
 
-    _U = (cmd & 0xf0);           // Más significativo del comando
-    _L = ((cmd << 4) & 0xf0);    // Menos significativo del comando
+    _U = (cmd & 0xf0);           // Most significant part of the command
+    _L = ((cmd << 4) & 0xf0);    // Least significant part of the command
 
-    // Configuración de los 4 bits altos y bajos
+    // Setting up the high and low 4 bits
     _T[0] = _U | 0x0C;
     _T[1] = _U | 0x08;
     _T[2] = _L | 0x0C;
     _T[3] = _L | 0x08;
 
-    // Transmisión del comando a través de I2C
+    // Sending the command via I2C
     HAL_I2C_Master_Transmit(&hi2c1, ADDR, (uint8_t *) _T, 4, 100);
 }
 
-void LCD_sendData (char data) {
+void display_driver_send_data (char data) {
     char _U, _L;
     uint8_t _T[4];
 
-    _U = (data & 0xf0);          //!< Más significativo del dato
-    _L = ((data << 4) & 0xf0);   //!< Menos significativo del dato
+    _U = (data & 0xf0);          //!< Most significant part of the data
+    _L = ((data << 4) & 0xf0);   //!< Least significant part of the data
 
-    // Configuración de los 4 bits altos y bajos
+    // Setting up the high and low 4 bits
     _T[0] = _U | 0x0D;
     _T[1] = _U | 0x09;
     _T[2] = _L | 0x0D;
     _T[3] = _L | 0x09;
 
-    // Transmisión del dato a través de I2C
+    // Sending the data via I2C
     HAL_I2C_Master_Transmit(&hi2c1, ADDR, (uint8_t *) _T, 4, 100);
 }
 
 //======================================
-// Implementación de Funciones Públicas
+// Public Function Implementations
 //======================================
 
 void display_driver_clear (void) {
-    LCD_sendData(0x00); //!< Posiciono en el inicio del display
+    display_driver_send_data(0x00); //!< Set cursor to the start of the display
 
     for (int i = 0; i < 100; i++) {
-        LCD_sendData(' '); //!< Lleno el display con espacios
+        display_driver_send_data(' '); //!< Fill the display with spaces
     }
 }
 
 void display_driver_init () {
-    // Secuencia de inicialización en 4 bits
-    HAL_Delay(50);              //!< Espera de estabilización
-    LCD_sendCMD(0x30);          //!< Comando de inicialización
+    // 4-bit initialization sequence
+    HAL_Delay(50);              //!< Stabilization wait
+    display_driver_send_cmd(0x30);          //!< Initialization command
     HAL_Delay(5);
-    LCD_sendCMD(0x30);
+    display_driver_send_cmd(0x30);
     HAL_Delay(1);
-    LCD_sendCMD(0x30);
+    display_driver_send_cmd(0x30);
     HAL_Delay(10);
-    LCD_sendCMD(0x20);          //!< Configuración a 4 bits
+    display_driver_send_cmd(0x20);          //!< Set to 4-bit mode
     HAL_Delay(10);
 
-    // Configuraciones adicionales del LCD
-    LCD_sendCMD(0x28);          // Configuración del LCD en modo 4 bits, 2 líneas
+    // Additional LCD configurations
+    display_driver_send_cmd(0x28);          // LCD 4-bit mode, 2-line configuration
     HAL_Delay(1);
-    LCD_sendCMD(0x08);          // Apaga el display
+    display_driver_send_cmd(0x08);          // Turn off the display
     HAL_Delay(1);
-    LCD_sendCMD(0x01);          // Limpia el display
+    display_driver_send_cmd(0x01);          // Clear the display
     HAL_Delay(1);
     HAL_Delay(1);
-    LCD_sendCMD(0x06);          // Modo de entrada: incremento automático, sin desplazamiento
+    display_driver_send_cmd(0x06);          // Input mode: auto increment, no shift
     HAL_Delay(1);
-    LCD_sendCMD(0x0C);          // Enciende el display, sin cursor y sin parpadeo
+    display_driver_send_cmd(0x0C);          // Turn on the display, no cursor, no blinking
 }
 
 void display_driver_send_string(char *str) {
-	//Envía cada carácter de la cadena
+    // Send each character of the string
     while (*str) {
-    	LCD_sendData(*str++);
+        display_driver_send_data(*str++);
     }
 }
 
-void display_driver_set_cursor(uint8_t renglon, uint8_t letra) {
+void display_driver_set_cursor(uint8_t row, uint8_t column) {
     uint8_t cursor;
 
-    // Determina la dirección del cursor basada en la fila y la columna
-    switch (renglon) {
+    // Determine the cursor address based on the row and column
+    switch (row) {
         case 0:
-            cursor = 0x00 + letra;
+            cursor = 0x00 + column;
             break;
         case 1:
-            cursor = 0x40 + letra;
+            cursor = 0x40 + column;
             break;
         case 2:
-            cursor = 0x14 + letra;
+            cursor = 0x14 + column;
             break;
         case 3:
-            cursor = 0x54 + letra;
+            cursor = 0x54 + column;
             break;
     }
 
-    // Envía el comando para posicionar el cursor
-    LCD_sendCMD(0x80 | cursor);
+    // Send the command to set the cursor position
+    display_driver_send_cmd(0x80 | cursor);
 }
