@@ -21,9 +21,9 @@
 // Estructuras y Tipos de Datos Privados
 //======================================
 typedef struct {
-	float amplitude;
-	float frequency;
-	float phase;
+	float32_t amplitude;
+	float32_t frequency;
+	float32_t phase;
 }sine_t;
 
 
@@ -49,7 +49,7 @@ static uint32_t g_fs;
  * -------- Input: --------
  * Cycle 1:
  *
- *     * --> Glitch
+ *    (*)--> Glitch
  *    **
  *   *  *  *
  *       **
@@ -59,20 +59,20 @@ static uint32_t g_fs;
  *    **
  *   *  *  *
  *       **
- *        * --> Glitch
+ *       (*)--> Glitch
  * .....
  *
  * Cycle CYCLES:
  *
- *                * --> Glitch
- *    **    **    **    **
- *   *  *  *  *  *  *  *  *
- *       **    **    **
+ *   (*)--> Glitch
+ *    **
+ *   *  *  *
+ *       **
  *
  * -------- Output: --------
  *
  * Average Cycle:
- * (Only one cycle)
+ *
  *    **
  *   *  *  *
  *       **
@@ -87,7 +87,7 @@ static cycle_t signal_analyzer_api_calculate_average_cycle(cycle_t *cycles, uint
  * Energy = Σ {first_sample, last_sample} {sample**2}
  * Power = Energy / samples
  */
-static float signal_analyzer_api_calculate_sig_power(cycle_t cycle);
+static float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle);
 
 /**
  * @brief Calculate Fundamental Harmonic
@@ -105,24 +105,29 @@ static sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t 
  * @param sine
  * @retval power of the sine
  */
-static float signal_analyzer_api_calculate_sine_power(sine_t sine);
+static float32_t signal_analyzer_api_calculate_sine_power(sine_t sine);
 
 /**
  * @brief Calculate THD
  * @param fund_power Power of the fundamental
- * @param harm_power Power of the harmonics
+ * @param signal_power Power of the signal
  *
  * THD% = 100% * power_harmonics / power_fundamental
  */
-static uint8_t signal_analyzer_api_calculate_thd(float fund_power, float harm_power);
+static uint8_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t signal_power);
 
 /**
  * @brief Calculate signal to inject
  * @param fundamental The wish signal of current in the line
  * @param ave_cycle One cycle of the current waveform
+ * @param zero_offset Offset
+ *
  * @retval The signal to inject each "start of cycle" interrupt
+ *
+ * inject_cycle = fundamental - distorsioned_cycle
+ *
  */
-static cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle);
+static cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset);
 
 /**
  * @brief Calculate the minimal length of the cycles
@@ -170,13 +175,13 @@ uint32_t signal_analyzer_api_min_len(cycle_t *cycles, uint32_t num_cycles) {
 }
 
 
-float signal_analyzer_api_calculate_sig_power(cycle_t cycle) {
+float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle) {
 	uint32_t energy = 0;
 	for(uint32_t i=0 ; i<cycle.len ; i++) {
 		energy += (cycle.cycle[i] * cycle.cycle[i]);
 	}
 
-	float power = (float) energy / cycle.len;
+	float32_t power = (float32_t) energy / cycle.len;
 	return power;
 }
 
@@ -187,9 +192,9 @@ sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_of
 	uint32_t len = cycle.len;
 
 	//Assign memory for ptr in and ptr out
-	ptr_in = (float32_t*) calloc (len, sizeof(uint16_t));
-	ptr_fft = (float32_t*) calloc (len, sizeof(uint16_t));
-	magnitude = (float32_t*) calloc (len/2, sizeof(uint16_t));
+	ptr_in = (float32_t*) calloc (len, sizeof(float32_t));
+	ptr_fft = (float32_t*) calloc (len, sizeof(float32_t));
+	magnitude = (float32_t*) calloc (len/2, sizeof(float32_t));
 
 	//Filter Continuous Component of the signal
 	for(uint32_t i=0; i<len ; i++) {
@@ -219,20 +224,46 @@ sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_of
 	fundamental.frequency = fund_freq;
 	fundamental.phase = 0;	//Assuming the correction wants cos(phi) = 1
 
+	//Free memory
+	free(ptr_fft);
+	free(ptr_in);
+	free(magnitude);
+
 	return fundamental;
 }
 
-float signal_analyzer_api_calculate_sine_power(sine_t sine) {
-	return 0;
+float32_t signal_analyzer_api_calculate_sine_power(sine_t sine) {
+	float32_t power = sine.amplitude*sine.amplitude / 2;
+	return power;
 }
 
-uint8_t signal_analyzer_api_calculate_thd(float fund_power, float harm_power) {
-	return 0;
+uint8_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t signal_power) {
+	uint8_t thd = (uint8_t) (signal_power - fund_power) *100 / fund_power;
+	return thd;
 }
 
-cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle) {
-	cycle_t cycle;
-	return cycle;
+cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset) {
+	//Save the len cycle to inject
+	uint32_t len = ave_cycle.len;
+
+	//Generate array with the fundamental sine
+	float32_t *ptr_fund = (float32_t*) calloc (len, sizeof(float32_t));
+	for (int i = 0; i < len; i++) {
+		ptr_fund[i] = fundamental.amplitude * arm_sin_f32(2 * PI * i / len);
+	}
+
+	//Calculate cycle to inject
+	//Remember...
+	//inject_cycle = fundamental_cycle - distorsioned_cycle
+	cycle_t cycle_to_inject;
+	for(uint32_t i=0; i<len ; i++) {
+		cycle_to_inject.cycle[i] = (uint16_t) (zero_offset + ptr_fund[i] - ave_cycle.cycle[i]);
+	}
+
+	free(ptr_fund);
+
+	//This signal must be injected each zero cross
+	return cycle_to_inject;
 }
 
 
@@ -245,9 +276,9 @@ void signal_analyzer_api_init() {
 }
 
 void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16_t zero_offset) {
-	static float current_power;
+	static float32_t current_power;
 	static sine_t fundamental;
-	static float fundamental_power;
+	static float32_t fundamental_power;
 
 	// Average Signal
 	g_ave_cycle = signal_analyzer_api_calculate_average_cycle(cycles, len);
@@ -265,7 +296,7 @@ void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16
 	g_thd = signal_analyzer_api_calculate_thd(fundamental_power, current_power);
 
 	// Calculate Signal to Inject
-	g_inject_cycle = signal_analyzer_api_calculate_injection(fundamental, g_ave_cycle);
+	g_inject_cycle = signal_analyzer_api_calculate_injection(fundamental, g_ave_cycle, zero_offset);
 }
 
 
