@@ -1,63 +1,72 @@
 /**
  * @file display.h
  * @author Nicolás Almaraz
- * @brief Actualización de display con mensajes al usuario
+ * @brief Display update with user messages
  */
 
 //======================================
-// Dependencias
+// Dependencies
 //======================================
+#include <display/display_driver/display_driver.h>
 #include "main.h"
 #include "display_api.h"
-#include "display_driver/LCDI2C.h"
 
 //======================================
-// Defines Privados
-//======================================
-
-//======================================
-// Estructuras y Tipos de Datos Privados
+// Private Defines
 //======================================
 
 //======================================
-// Variables Privadas
+// Private Data Structures and Types
 //======================================
 
 //======================================
-// Declaración de Funciones Privadas
+// Private Variables
 //======================================
 
 //======================================
-// Implementación de Funciones Privadas
+// Private Function Declarations
 //======================================
 
 //======================================
-// Implementación de Funciones Públicas
+// Private Function Implementations
+//======================================
+
+//======================================
+// Public Function Implementations
 //======================================
 
 void display_init() {
-	LCD_Init();	//Initialization
+	// Display Initialization
+	display_driver_init();
 
-	LCD_setCursor(0,0);
-	LCD_sendSTR("N. Almaraz - TP3:");
+	//Display Set Initial Messages
 
-	LCD_setCursor(1,0);
-	LCD_sendSTR("Filt Act Armon i(t)");
+	//Line 1
+	display_driver_set_cursor(0,0);
+	display_driver_send_string("N. Almaraz - TP3:");
 
-	LCD_setCursor(2,0);
-	LCD_sendSTR("Corriente de liena");
+	//Line 2
+	display_driver_set_cursor(1,0);
+	display_driver_send_string("Filt Act Harmonic i(t)");
 
-	LCD_setCursor(3,0);
-	LCD_sendSTR("THD: XX %");
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Line Current");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("THD: XX %");
 }
 
 void display_update_THD(uint8_t thd) {
-	if(thd >= 100)
-		thd=99;
+	//Check ranges
+	if (thd >= 100)
+		thd = 99;
 
-	LCD_setCursor(3,5);
-	char numero[2];
-	numero[0] = '0'+thd/10;
-	numero[1] = '0'+thd%10;
-	LCD_sendSTR(numero);
+	//Write THD value on display
+	display_driver_set_cursor(3,5);
+	char number[2];
+	number[0] = '0' + thd / 10;
+	number[1] = '0' + thd % 10;
+	display_driver_send_string(number);
 }

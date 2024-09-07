@@ -14,7 +14,7 @@
 // Private Defines
 //======================================
 #define TICK_TIME 1
-#define NUM_TIMERS 3
+#define NUM_TIMERS 4
 
 //======================================
 // Private Data Structures and Types

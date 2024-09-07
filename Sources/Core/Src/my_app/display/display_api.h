@@ -1,37 +1,37 @@
 /**
  * @file display.h
  * @author Nicolás Almaraz
- * @brief Actualización de display con mensajes al usuario
+ * @brief Display update with user messages
  */
 
 #ifndef SRC_SUBSYSTEMS_DISPLAY_LOGS_H_
 #define SRC_SUBSYSTEMS_DISPLAY_LOGS_H_
 
 //======================================
-// Dependencias
+// Dependencies
 //======================================
 #include <stdbool.h>
 #include "main.h"
 
 //======================================
-// Defines Públicos
+// Public Defines
 //======================================
 
 //======================================
-// Estructuras y Tipos de Datos Públicos
+// Public Structures and Data Types
 //======================================
 
 //======================================
-// Declaración de Funciones Públicas
+// Public Function Declarations
 //======================================
 
 /**
- * @brief Inicializa el display (perifericos y mensajes estáticos)
+ * @brief Initializes the display (peripherals and static messages)
  */
 void display_init();
 
 /**
- * @brief Actualiza el valor de THD en el display
+ * @brief Updates the THD value on the display
  */
 void display_update_THD(uint8_t thd);
 

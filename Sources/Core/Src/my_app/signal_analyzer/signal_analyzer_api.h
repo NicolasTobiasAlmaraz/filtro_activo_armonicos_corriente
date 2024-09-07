@@ -1,7 +1,7 @@
 /**
  * @file signal_analyzer.h
  * @author Nicolás Almaraz
- * @brief Procesamiento principal de señales para obtener THD e ic(t)
+ * @brief Main signal processing to obtain THD and ic(t)
  */
 
 
@@ -9,51 +9,53 @@
 #define SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_
 
 //======================================
-// Dependencias
+// Dependencies
 //======================================
 #include "main.h"
-
 #include "current_sensor/current_sensor_api.h"
+
 //======================================
-// Defines Públicos
+// Public Defines
 //======================================
 
 //======================================
-// Estructuras y Tipos de Datos Públicos
+// Public Structures and Data Types
 //======================================
 
 //======================================
-// Variables Globales
+// Global Variables
 //======================================
 
 //======================================
-// Declaración de Funciones Públicas
+// Public Function Declarations
 //======================================
 
 /**
- * @brief Inicializa la API
+ * @brief Initializes the API
  */
 void signal_analyzer_api_init();
 
 /**
  * @brief Analyzes the signal
  * @param cycles Samples of each cycle
- * @param len Quantity of cycles
+ * @param len Number of cycles
+ * @param zero_offset Zero crossing offset value
  */
 void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16_t zero_offset);
 
 /**
- *
+ * @brief Retrieves the Total Harmonic Distortion (THD)
  */
 uint8_t signal_analyzer_api_get_thd();
 
 /**
- *@brief
+ * @brief Retrieves the injected current
  */
 cycle_t signal_analyzer_api_get_inject_current();
 
 /**
- * @brief
+ * @brief Sets the sampling frequency (fs)
+ * @param fs Sampling frequency in Hz
  */
 void signal_analyzer_api_set_fs(uint32_t fs);
 

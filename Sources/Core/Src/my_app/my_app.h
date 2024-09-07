@@ -38,4 +38,9 @@ void my_app_init();
  */
 void my_app_loop();
 
+/**
+ * @brief Notify the user button was pressed
+ */
+void my_app_set_edge_button();
+
 #endif /* SRC_SYSTEM_MY_APP_H_ */

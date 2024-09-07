@@ -7,8 +7,8 @@
 //======================================
 // Dependencias
 //======================================
+#include <display/display_driver/display_driver.h>
 #include "main.h"
-#include "LCDI2C.h"
 
 //======================================
 // Defines Privados
@@ -94,7 +94,7 @@ void LCD_sendData (char data) {
 // Implementación de Funciones Públicas
 //======================================
 
-void LCD_Clear (void) {
+void display_driver_clear (void) {
     LCD_sendData(0x00); //!< Posiciono en el inicio del display
 
     for (int i = 0; i < 100; i++) {
@@ -102,7 +102,7 @@ void LCD_Clear (void) {
     }
 }
 
-void LCD_Init () {
+void display_driver_init () {
     // Secuencia de inicialización en 4 bits
     HAL_Delay(50);              //!< Espera de estabilización
     LCD_sendCMD(0x30);          //!< Comando de inicialización
@@ -127,14 +127,14 @@ void LCD_Init () {
     LCD_sendCMD(0x0C);          // Enciende el display, sin cursor y sin parpadeo
 }
 
-void LCD_sendSTR(char *str) {
+void display_driver_send_string(char *str) {
 	//Envía cada carácter de la cadena
     while (*str) {
     	LCD_sendData(*str++);
     }
 }
 
-void LCD_setCursor(uint8_t renglon, uint8_t letra) {
+void display_driver_set_cursor(uint8_t renglon, uint8_t letra) {
     uint8_t cursor;
 
     // Determina la dirección del cursor basada en la fila y la columna

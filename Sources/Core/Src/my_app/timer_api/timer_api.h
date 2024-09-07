@@ -4,7 +4,6 @@
  * @brief Timer functions and time management
  */
 
-
 #ifndef SRC_MY_APP_TIMER_API_TIMER_API_H_
 #define SRC_MY_APP_TIMER_API_TIMER_API_H_
 
@@ -13,6 +12,7 @@
 //======================================
 #include <stdbool.h>
 #include <stdint.h>
+
 //======================================
 // Public Defines
 //======================================
@@ -28,6 +28,7 @@ typedef enum {
     TIMER_SAMPLING,
     TIMER_DISPLAY,
     TIMER_DELAY,
+    TIMER_DEBOUNCE_BUTTON,
 } timer_id_t;
 
 /**
