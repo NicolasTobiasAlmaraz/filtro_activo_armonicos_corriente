@@ -31,26 +31,18 @@
  * @brief Enum to represent the current injection state.
  */
 typedef enum {
-	STATE_INJECTION_DISABLED,  /**<! Injection is disabled */
-	STATE_INJECTION_WAITING,   /**<! Waiting for a new cycle to start the injection */
-	STATE_INJECTION_RUNNING,   /**<! Injection is running and actively updating the DAC */
+	STATE_INJECTION_DISABLED,  //!< Injection is disabled
+	STATE_INJECTION_WAITING,   //!< Waiting for a new cycle to start the injection
+	STATE_INJECTION_RUNNING,   //!< Injection is running and actively updating the DAC
 } inject_state_t;
 
 //======================================
 // Private Variables
 //======================================
-
-/** Pointer to the current waveform buffer to be injected via DAC. */
-static uint16_t* g_current_buffer = NULL;
-
-/** Length of the current waveform buffer. */
-static uint32_t g_len_current = 0;
-
-/** Current state of the injection (disabled, waiting, or running). */
-static inject_state_t g_state = STATE_INJECTION_DISABLED;
-
-/** Flag to indicate the detection of a new cycle. */
-static bool g_f_new_cycle = false;
+static uint16_t* g_current_buffer = NULL;					//!< Pointer to the current waveform buffer to be injected via DAC.
+static uint32_t g_len_current = 0;							//!< Length of the current waveform buffer.
+static inject_state_t g_state = STATE_INJECTION_DISABLED;	//!< Current state of the injection (disabled, waiting, or running).
+static bool g_f_new_cycle = false;							//!< Flag to indicate the detection of a new cycle.
 
 //======================================
 // STM32 Handlers
@@ -116,6 +108,10 @@ void inject_simulator_api_set_current_waveform(uint16_t *buffer, uint32_t len) {
 
 void inject_simulator_api_set_enable(bool enable) {
 	if(enable) {
+		// If was enabled return
+		if(g_state == STATE_INJECTION_WAITING)
+			return;
+
 		// Enable the injection and wait for a new cycle to start
 		g_state = STATE_INJECTION_WAITING;
 		g_f_new_cycle = false;

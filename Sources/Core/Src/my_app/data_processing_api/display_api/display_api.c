@@ -7,9 +7,8 @@
 //======================================
 // Dependencies
 //======================================
-#include <display/display_driver/display_driver.h>
-#include "main.h"
 #include "display_api.h"
+#include "display_driver/display_driver.h"
 
 //======================================
 // Private Defines
@@ -35,7 +34,7 @@
 // Public Function Implementations
 //======================================
 
-void display_init() {
+void display_api_init() {
 	// Display Initialization
 	display_driver_init();
 
@@ -47,18 +46,20 @@ void display_init() {
 
 	//Line 2
 	display_driver_set_cursor(1,0);
-	display_driver_send_string("Filt Act Harmonic i(t)");
+	display_driver_send_string("Filt Act Arm i(t)");
+}
 
+void display_api_set_msg_THD() {
 	//Line 3
 	display_driver_set_cursor(2,0);
-	display_driver_send_string("Line Current");
+	display_driver_send_string("Corriente de linea:");
 
 	//Line 4
 	display_driver_set_cursor(3,0);
-	display_driver_send_string("THD: XX %");
+	display_driver_send_string("THD: -- %");
 }
 
-void display_update_THD(uint8_t thd) {
+void display_api_update_THD(uint8_t thd) {
 	//Check ranges
 	if (thd >= 100)
 		thd = 99;
@@ -69,4 +70,44 @@ void display_update_THD(uint8_t thd) {
 	number[0] = '0' + thd / 10;
 	number[1] = '0' + thd % 10;
 	display_driver_send_string(number);
+}
+
+void display_api_set_msg_calibrate() {
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Desconecte cargas y");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("presione el pulsador");
+}
+
+void display_api_set_msg_start() {
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Para iniciar proceso");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("presione el pulsador");
+}
+
+void display_api_set_msg_calibrating() {
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Calibrando ...");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("                    ");
+}
+
+void display_api_set_msg_calibration_error() {
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Error! Reintente");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("presionando pulsador");
 }

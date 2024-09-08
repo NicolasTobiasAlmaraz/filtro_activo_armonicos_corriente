@@ -1,7 +1,7 @@
 /**
  * @file my_app.h
  * @author Nicolás Almaraz
- * @brief Lógica a nivel sistema
+ * @brief This is API starts the app
  */
 
 #ifndef SRC_SYSTEM_MY_APP_H_
@@ -37,10 +37,5 @@ void my_app_init();
  * @brief Loop principal de toda la app
  */
 void my_app_loop();
-
-/**
- * @brief Notify the user button was pressed
- */
-void my_app_set_edge_button();
 
 #endif /* SRC_SYSTEM_MY_APP_H_ */

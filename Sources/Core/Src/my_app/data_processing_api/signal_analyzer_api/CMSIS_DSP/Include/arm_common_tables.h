@@ -29,7 +29,7 @@
 #ifndef _ARM_COMMON_TABLES_H
 #define _ARM_COMMON_TABLES_H
 
-#include <signal_analyzer/CMSIS_DSP/Include/arm_math.h>
+#include <data_processing_api/signal_analyzer/CMSIS_DSP/Include/arm_math.h>
 
 #if !defined(ARM_DSP_CONFIG_TABLES) || defined(ARM_FFT_ALLOW_TABLES) 
 

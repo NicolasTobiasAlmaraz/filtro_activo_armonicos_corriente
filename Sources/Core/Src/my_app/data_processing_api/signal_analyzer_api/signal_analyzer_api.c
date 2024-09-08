@@ -1,7 +1,7 @@
 /**
  * @file current_sensor.h
  * @author Nicolás Almaraz
- * @brief Main signal processing to obtain THD and ic(t)
+ * @brief Main signal processing to obtain THD and current to inject
  */
 
 //======================================
@@ -9,9 +9,11 @@
 //======================================
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal_analyzer/CMSIS_DSP/Include/arm_math.h>
+
+#include "CMSIS_DSP/Include/arm_math.h"
 #include "signal_analyzer_api.h"
-#include "current_sensor/current_sensor_api.h"
+
+#include "current_sensor_api/current_sensor_api.h"
 
 //======================================
 // Private Defines
@@ -38,6 +40,7 @@ static uint32_t g_fs;
 //======================================
 // Private Function Declarations
 //======================================
+
 /**
  * @brief Calculate one cycle average
  * @param cycles Sampled cycles
@@ -274,7 +277,7 @@ void signal_analyzer_api_init() {
 
 }
 
-void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16_t zero_offset) {
+status_processing_t signal_analyzer_api_analyze_loop(cycle_t *cycles, uint32_t len, uint16_t zero_offset) {
     static float32_t current_power;
     static sine_t fundamental;
     static float32_t fundamental_power;
@@ -296,9 +299,11 @@ void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16
 
     // Calculate Inject Signal
     g_inject_cycle = signal_analyzer_api_calculate_injection(fundamental, g_ave_cycle, zero_offset);
+
+    return PROCESSING_COMPLETED;
 }
 
-cycle_t signal_analyzer_api_get_inject_cycle(void) {
+cycle_t signal_analyzer_api_get_cycle_to_inject(void) {
     return g_inject_cycle;
 }
 

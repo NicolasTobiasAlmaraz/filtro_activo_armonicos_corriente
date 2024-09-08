@@ -16,10 +16,10 @@
 //======================================
 // Public Defines
 //======================================
-#define CYCLES              50
-#define LEN_MAX             450
 #define CALIBRATE_OK        0
 #define CALIBRATE_ERROR     1
+#define CYCLES				50
+#define LEN_MAX             450
 
 //======================================
 // Public Data Structures and Types
@@ -28,6 +28,11 @@ typedef struct {
     uint16_t cycle[LEN_MAX];
     uint32_t len;
 } cycle_t;
+
+typedef enum {
+	SAMPLING_IN_PROGRESS,
+	SAMPLING_COMPLETED,
+}status_sampling_t;
 
 //======================================
 // Public Function Declarations
@@ -54,9 +59,14 @@ bool current_sensor_api_calibrate();
 
 /**
  * @brief Main sampling loop for the current sensor
- * @retval true if an end of cycle (EOC) is reached, false otherwise
  */
-bool current_sensor_api_sampling_loop();
+void current_sensor_api_loop();
+
+/**
+ * @brief Returns the status of the sampling
+ * @retval status
+ */
+status_sampling_t current_sensor_api_get_status();
 
 /**
  * @brief Clears all current samples and resets the state machine

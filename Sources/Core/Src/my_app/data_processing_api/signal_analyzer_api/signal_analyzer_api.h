@@ -12,7 +12,7 @@
 // Dependencies
 //======================================
 #include "main.h"
-#include "current_sensor/current_sensor_api.h"
+#include "current_sensor_api/current_sensor_api.h"
 
 //======================================
 // Public Defines
@@ -21,6 +21,10 @@
 //======================================
 // Public Structures and Data Types
 //======================================
+typedef enum {
+	PROCESSING_IN_PROGRESS,
+	PROCESSING_COMPLETED,
+}status_processing_t;
 
 //======================================
 // Global Variables
@@ -40,8 +44,9 @@ void signal_analyzer_api_init();
  * @param cycles Samples of each cycle
  * @param len Number of cycles
  * @param zero_offset Zero crossing offset value
+ * @retval Status code
  */
-void signal_analyzer_api_start_new_analyze(cycle_t *cycles, uint32_t len, uint16_t zero_offset);
+status_processing_t signal_analyzer_api_analyze_loop(cycle_t *cycles, uint32_t len, uint16_t zero_offset);
 
 /**
  * @brief Retrieves the Total Harmonic Distortion (THD)
@@ -51,7 +56,7 @@ uint8_t signal_analyzer_api_get_thd();
 /**
  * @brief Retrieves the injected current
  */
-cycle_t signal_analyzer_api_get_inject_current();
+cycle_t signal_analyzer_api_get_cycle_to_inject();
 
 /**
  * @brief Sets the sampling frequency (fs)

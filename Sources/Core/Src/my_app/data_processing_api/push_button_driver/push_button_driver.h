@@ -32,7 +32,8 @@
 void push_button_driver_init();
 
 /**
- * @biref Callback
+ * @biref Function Callback
+ * This callback must be called in the button interrupt
  */
 void push_button_driver_callback();
 

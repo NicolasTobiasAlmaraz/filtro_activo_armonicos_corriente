@@ -27,7 +27,7 @@
 typedef enum {
     TIMER_SAMPLING,
     TIMER_DISPLAY,
-    TIMER_DELAY,
+    TIMER_SETTING,
     TIMER_DEBOUNCE_BUTTON,
 } timer_id_t;
 
@@ -38,7 +38,7 @@ typedef enum {
     TIMER_RUNNING,
     TIMER_FINISHED,
     TIMER_NOT_CONFIGURED,
-} timer_state_t;
+} status_timer_t;
 
 //======================================
 // Global Variables
@@ -58,7 +58,7 @@ void timer_api_init();
  * @param id Timer ID
  * @retval Timer state
  */
-timer_state_t timer_api_check_timer(timer_id_t id);
+status_timer_t timer_api_check_timer(timer_id_t id);
 
 /**
  * @brief Start a timer

@@ -28,12 +28,36 @@
 /**
  * @brief Initializes the display (peripherals and static messages)
  */
-void display_init();
+void display_api_init();
 
 /**
- * @brief Updates the THD value on the display
+ * @brief Sets information about THD
  */
-void display_update_THD(uint8_t thd);
+void display_api_set_msg_THD();
 
+/**
+ * @brief Updates only THD value
+ */
+void display_api_update_THD(uint8_t thd);
+
+/**
+ * @brief Show instructions about calibration
+ */
+void display_api_set_msg_calibrate();
+
+/**
+ * @brief Show instructions about start the working
+ */
+void display_api_set_msg_start();
+
+/**
+ * @brief Show: Calibrating...
+ */
+void display_api_set_msg_calibrating();
+
+/**
+ * @brief Show: "Calibration Error! Try again"
+ */
+void display_api_set_msg_calibration_error();
 
 #endif /* SRC_SUBSYSTEMS_DISPLAY_LOGS_H_ */

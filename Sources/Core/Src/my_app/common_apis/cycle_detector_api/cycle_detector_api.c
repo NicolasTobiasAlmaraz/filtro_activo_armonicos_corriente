@@ -1,19 +1,21 @@
 /**
- * @file push_button_driver.c
+ * @file zero_cross.c
  * @author Nicolás Almaraz
- * @brief User Push Button Processing
+ * @brief Zero-cross detection handling
  */
 
 //======================================
 // Dependencies
 //======================================
-#include "main.h"
-#include "timer_api/timer_api.h"
+
+#include "cycle_detector_api.h"
+
+#include "inject_simulator_api/inject_simulator_api.h"
+#include "current_sensor_api/current_sensor_api.h"
 
 //======================================
 // Private Defines
 //======================================
-#define TIME_DEBOUNCE 30000 //30ms
 
 //======================================
 // Private Data Structures and Types
@@ -35,21 +37,16 @@
 // Public Function Implementations
 //======================================
 
-/**
- * @biref Init driver
- */
-void push_button_driver_init() {
+void cycle_detector_api_init() {
 
 }
 
-/**
- * @biref Callback
- */
-void push_button_driver_callback() {
-	//Check debounce timeout
-	timer_state_t timeout = timer_api_check_timer(TIMER_DEBOUNCE_BUTTON);
-	if(timeout != TIMER_RUNNING) {
-		timer_api_set_count(TIMER_DEBOUNCE_BUTTON, TIME_DEBOUNCE);
-		my_app_set_edge_button();
-	}
+void cycle_detector_api_callback() {
+	//Notify the begin of a new cycle
+
+	//Current Sensor API
+	current_sensor_api_set_new_cycle();
+
+	//Inject Simulator API
+	inject_simulator_api_set_new_cycle();
 }

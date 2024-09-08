@@ -22,7 +22,7 @@
 
 #include "main.h"
 #include "current_sensor_api.h"
-#include "timer_api/timer_api.h"
+#include "common_apis/timer_api/timer_api.h"
 
 //======================================
 // Private Defines
@@ -34,7 +34,7 @@
 #define CALIBRATION_TOLERANCE_MA	1
 
 /** Current slope in milliamps per count */
-#define CURRENT_SLOPE 				(float) 4.356004 // [mA/counts]
+#define CURRENT_SLOPE 		(float) 4.356004 // [mA/counts]
 
 //======================================
 // Private Data Structures and Types
@@ -58,20 +58,13 @@ extern ADC_HandleTypeDef hadc1;
 // Private Variables
 //======================================
 
-/** Current state of the sensor's state machine */
-static state_current_sensor_t g_state = STATE_START;
+static state_current_sensor_t g_state = STATE_START; 	//!< Current state of the sensor's state machine
+static cycle_t g_current_cycles[CYCLES];				//!< Array of current samples for multiple cycles
+static uint32_t g_cycles_index = 0;						//!< Index for tracking the current cycle in the array
+static uint16_t g_offset = MAX_UINT16_t / 2;			//!< Offset applied to the ADC readings for calibration
+static bool g_f_new_cycle = false; 						//!< Flag indicating if a new cycle in the line voltage has occurred
+static status_sampling_t g_status = SAMPLING_COMPLETED;	//!< Status of the current sampling
 
-/** Array of current samples for multiple cycles*/
-static cycle_t g_current_cycles[CYCLES];
-
-/** Index for tracking the current cycle in the array*/
-static uint32_t g_cycles_index = 0;
-
-/** Offset applied to the ADC readings for calibration*/
-static uint16_t g_offset = MAX_UINT16_t / 2;
-
-/** Flag indicating if a new cycle in the line voltage has occurred*/
-static bool g_f_new_cycle = false;
 
 //======================================
 // Private Function Declarations
@@ -132,13 +125,12 @@ bool current_sensor_api_calibrate() {
 	return CALIBRATE_OK;
 }
 
-bool current_sensor_api_sampling_loop() {
-	bool f_eoc = false;
-
+void current_sensor_api_loop() {
 	switch(g_state) {
 		case STATE_START:
 			if(g_f_new_cycle) {
 				g_state = STATE_SAMPLING;
+				g_status = SAMPLING_IN_PROGRESS;
 			}
 			break;
 
@@ -157,7 +149,7 @@ bool current_sensor_api_sampling_loop() {
 				// If all CYCLES are completed, return EOC
 				if(g_cycles_index == CYCLES) {
 					g_state = STATE_EOC;
-					f_eoc = true;
+					g_status = SAMPLING_COMPLETED;
 					break;
 				}
 			}
@@ -185,11 +177,13 @@ bool current_sensor_api_sampling_loop() {
 			break;
 
 		case STATE_EOC:
-			f_eoc = true;
+			//Do nothing
 			break;
 	}
+}
 
-	return f_eoc;
+status_sampling_t current_sensor_api_get_status() {
+	return g_status;
 }
 
 void current_sensor_api_clean_samples() {

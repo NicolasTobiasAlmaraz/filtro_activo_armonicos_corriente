@@ -30,8 +30,8 @@
 #ifndef _ARM_CONST_STRUCTS_H
 #define _ARM_CONST_STRUCTS_H
 
-#include <signal_analyzer/CMSIS_DSP/Include/arm_common_tables.h>
-#include <signal_analyzer/CMSIS_DSP/Include/arm_math.h>
+#include <data_processing_api/signal_analyzer/CMSIS_DSP/Include/arm_common_tables.h>
+#include <data_processing_api/signal_analyzer/CMSIS_DSP/Include/arm_math.h>
 
    extern const arm_cfft_instance_f32 arm_cfft_sR_f32_len16;
    extern const arm_cfft_instance_f32 arm_cfft_sR_f32_len32;

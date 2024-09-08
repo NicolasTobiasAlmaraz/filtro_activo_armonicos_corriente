@@ -7,8 +7,8 @@
 //======================================
 // Dependencies
 //======================================
+#include <common_apis/timer_api/timer_api.h>
 #include "main.h"
-#include "timer_api.h"
 
 //======================================
 // Private Defines
@@ -21,7 +21,7 @@
 //======================================
 typedef struct {
     uint32_t end_count;
-    timer_state_t state;
+    status_timer_t state;
 } polling_timer_t;
 
 //======================================
@@ -33,6 +33,7 @@ extern TIM_HandleTypeDef htim2;
 // Private Variables
 //======================================
 static polling_timer_t g_timers[NUM_TIMERS];
+static bool f_init = false;
 
 //======================================
 // Private Function Declarations
@@ -47,7 +48,10 @@ static polling_timer_t g_timers[NUM_TIMERS];
 //======================================
 
 void timer_api_init() {
-    // Initialize timers
+	//Flag init
+	f_init = true;
+
+	// Initialize timers
     for(uint8_t i = 0; i < NUM_TIMERS; i++)
         g_timers[i].state = TIMER_NOT_CONFIGURED;
 
@@ -55,8 +59,12 @@ void timer_api_init() {
     HAL_TIM_Base_Start(&htim2);
 }
 
-timer_state_t timer_api_check_timer(timer_id_t id) {
-    // Verify if the timer was configured
+status_timer_t timer_api_check_timer(timer_id_t id) {
+	//Init check
+	if(!f_init)
+		return TIMER_NOT_CONFIGURED;
+
+	// Verify if the timer was configured
     if(g_timers[id].state == TIMER_NOT_CONFIGURED)
         return TIMER_NOT_CONFIGURED;
 
@@ -75,7 +83,11 @@ timer_state_t timer_api_check_timer(timer_id_t id) {
 }
 
 void timer_api_set_count(timer_id_t id, uint32_t time_us) {
-    // Get the current timer count
+	//Init check
+	if(!f_init)
+		return;
+
+	// Get the current timer count
     uint32_t tim_count = __HAL_TIM_GET_COUNTER(&htim2);
 
     // Set the end time and status
