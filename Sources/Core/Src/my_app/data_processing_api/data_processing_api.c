@@ -10,6 +10,7 @@
 #include <stdbool.h>
 
 #include "main.h"
+#include "my_app.h"
 
 #include "common_apis/cycle_detector_api/cycle_detector_api.h"
 #include "common_apis/timer_api/timer_api.h"
@@ -24,7 +25,6 @@
 //======================================
 // Private Defines
 //======================================
-#define SETTING_TIME_US 2000000 //2 seg
 
 //======================================
 // Private Data Structures and Types
@@ -125,7 +125,10 @@ void data_processing_api_state_sampling() {
 	//End Of Conversion
 	if(status_s == SAMPLING_COMPLETED) {
 		g_state = STATE_PROCESSING;
+		//Take the samples
 		current_sensor_api_get_samples(g_cycles_array);
+		//Start a new analyze
+		signal_analyzer_api_clear();
 	}
 
 	//Stop button
@@ -143,7 +146,6 @@ void data_processing_api_state_processing() {
 
 	//End of processing
 	if(p_status == PROCESSING_COMPLETED) {
-		//Change state
 		g_state = STATE_WAITING_SETTING_TIME;
 
 		//Start the timer

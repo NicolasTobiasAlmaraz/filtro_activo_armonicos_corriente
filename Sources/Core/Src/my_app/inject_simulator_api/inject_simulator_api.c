@@ -47,8 +47,7 @@ static bool g_f_new_cycle = false;							//!< Flag to indicate the detection of 
 //======================================
 // STM32 Handlers
 //======================================
-/** ADC handle for the DAC output */
-extern DAC_HandleTypeDef hdac;
+extern DAC_HandleTypeDef hdac;								//!< ADC handle for the DAC output
 
 //======================================
 // Private Function Declarations

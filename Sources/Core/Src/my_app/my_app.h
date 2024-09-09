@@ -8,33 +8,33 @@
 #define SRC_SYSTEM_MY_APP_H_
 
 //======================================
-// Dependencias
-//======================================
-#include "main.h"
-
-//======================================
-// Defines Públicos
+// Dependencies
 //======================================
 
 //======================================
-// Estructuras y Tipos de datos públicos
+// Public Defines
+//======================================
+
+//Common defines
+#define SAMPLING_FREQUENCY_HZ 	20000	//fs = 20kHz
+#define CYCLES_TO_PROCESS		50		//Processing 50 cycles
+#define SETTING_TIME_US 		5000000 //5 seg
+
+//======================================
+// Public Structures and Data Types
 //======================================
 
 //======================================
-// Variables Globales
-//======================================
-
-//======================================
-// Declaración de Funciones Privadas
+// Public Function Declarations
 //======================================
 
 /**
- * @brief Hace la inicializacion del sistema completo
+ * @brief Initialize the whole system
  */
 void my_app_init();
 
 /**
- * @brief Loop principal de toda la app
+ * @brief Main loop
  */
 void my_app_loop();
 

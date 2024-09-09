@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "my_app.h"
+
 #include "CMSIS_DSP/Include/arm_math.h"
 #include "signal_analyzer_api.h"
 
@@ -22,12 +24,25 @@
 //======================================
 // Private Structures and Data Types
 //======================================
+
+/**
+ * @brief Characteristics values of a sine waveform
+ */
 typedef struct {
-    float32_t amplitude;
-    float32_t frequency;
-    float32_t phase;
+    float32_t amplitude;	//!< Amplitude [mA]
+    float32_t frequency;	//!< Frequency [Hz]
+    float32_t phase;		//!< Phase [rad]
 } sine_t;
 
+typedef enum {
+	STATE_AVERAGE_SIGNAL,
+	STATE_AVERAGE_POWER,
+	STATE_FUNDAMENTAL,
+	STATE_FUND_POWER,
+	STATE_THD,
+	STATE_SIGNAL_TO_INJECT,
+	STATE_PROCESSING_COMPLETED,
+} state_processing_t;
 
 //======================================
 // Private Variables
@@ -35,7 +50,7 @@ typedef struct {
 static cycle_t g_ave_cycle;
 static cycle_t g_inject_cycle;
 static uint8_t g_thd;
-static uint32_t g_fs;
+static state_processing_t g_state = STATE_AVERAGE_SIGNAL;
 
 //======================================
 // Private Function Declarations
@@ -44,9 +59,10 @@ static uint32_t g_fs;
 /**
  * @brief Calculate one cycle average
  * @param cycles Sampled cycles
- * @retval average cycle
+ * @param num_cycles Quantity of cycles
+ * @retval Average cycle
  *
- * This function takes 50 cycles sampled by the current sensor and reduces all these samples to an average cycle.
+ * This function takes num_cycles cycles sampled by the current sensor and reduces all these samples to an average cycle.
  * This cycle represents one period of the periodic signal.
  *
  * -------- Input: --------
@@ -218,7 +234,7 @@ sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_of
     uint32_t fund_i;
     float32_t amplitude;
     arm_max_f32(magnitude, len / 2, &amplitude, &fund_i);
-    float32_t fund_freq = (g_fs * fund_i) / len;
+    float32_t fund_freq = (SAMPLING_FREQUENCY_HZ * fund_i) / len;
 
     // Fill the return structure
     sine_t fundamental;
@@ -281,26 +297,55 @@ status_processing_t signal_analyzer_api_analyze_loop(cycle_t *cycles, uint32_t l
     static float32_t current_power;
     static sine_t fundamental;
     static float32_t fundamental_power;
+    switch(g_state) {
+    	case STATE_AVERAGE_SIGNAL:
+			// Average Signal
+			g_ave_cycle = signal_analyzer_api_calculate_average_cycle(cycles, len);
+			g_state = STATE_AVERAGE_SIGNAL;
+			break;
 
-    // Average Signal
-    g_ave_cycle = signal_analyzer_api_calculate_average_cycle(cycles, len);
+    	case STATE_AVERAGE_POWER:
+			// Calculate Average Signal Power
+			current_power = signal_analyzer_api_calculate_sig_power(g_ave_cycle);
+			g_state = STATE_FUNDAMENTAL;
+			break;
 
-    // Calculate Average Signal Power
-    current_power = signal_analyzer_api_calculate_sig_power(g_ave_cycle);
+    	case STATE_FUNDAMENTAL:
+			// Calculate Fundamental
+			fundamental = signal_analyzer_api_calculate_fundamental(g_ave_cycle, zero_offset);
+			g_state = STATE_FUND_POWER;
+			break;
 
-    // Calculate Fundamental
-    fundamental = signal_analyzer_api_calculate_fundamental(g_ave_cycle, zero_offset);
+    	case STATE_FUND_POWER:
+			// Calculate Fundamental Power
+			fundamental_power = signal_analyzer_api_calculate_sine_power(fundamental);
+			g_state = STATE_THD;
+			break;
 
-    // Calculate Fundamental Power
-    fundamental_power = signal_analyzer_api_calculate_sine_power(fundamental);
+    	case STATE_THD:
+			// Calculate THD
+			g_thd = signal_analyzer_api_calculate_thd(fundamental_power, current_power);
+			g_state = STATE_SIGNAL_TO_INJECT;
+			break;
 
-    // Calculate THD
-    g_thd = signal_analyzer_api_calculate_thd(fundamental_power, current_power);
+    	case STATE_SIGNAL_TO_INJECT:
+			// Calculate Inject Signal
+			g_inject_cycle = signal_analyzer_api_calculate_injection(fundamental, g_ave_cycle, zero_offset);
+			g_state = STATE_PROCESSING_COMPLETED;
+			break;
 
-    // Calculate Inject Signal
-    g_inject_cycle = signal_analyzer_api_calculate_injection(fundamental, g_ave_cycle, zero_offset);
+    	case STATE_PROCESSING_COMPLETED:
+    		break;
+    }
 
-    return PROCESSING_COMPLETED;
+    if(g_state == STATE_PROCESSING_COMPLETED)
+    	return PROCESSING_COMPLETED;
+    else
+    	return PROCESSING_IN_PROGRESS;
+}
+
+void signal_analyzer_api_clear() {
+	g_state = STATE_AVERAGE_SIGNAL;
 }
 
 cycle_t signal_analyzer_api_get_cycle_to_inject(void) {

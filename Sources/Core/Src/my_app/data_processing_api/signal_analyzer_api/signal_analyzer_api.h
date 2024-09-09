@@ -50,18 +50,19 @@ status_processing_t signal_analyzer_api_analyze_loop(cycle_t *cycles, uint32_t l
 
 /**
  * @brief Retrieves the Total Harmonic Distortion (THD)
+ * @retval THD [%]
  */
 uint8_t signal_analyzer_api_get_thd();
 
 /**
  * @brief Retrieves the injected current
+ * @retval Cycle to inject
  */
 cycle_t signal_analyzer_api_get_cycle_to_inject();
 
 /**
- * @brief Sets the sampling frequency (fs)
- * @param fs Sampling frequency in Hz
+ * @brief Restart the processing
  */
-void signal_analyzer_api_set_fs(uint32_t fs);
+void signal_analyzer_api_clear();
 
 #endif /* SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_ */
