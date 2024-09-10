@@ -11,8 +11,8 @@
 //======================================
 // Dependencies
 //======================================
-#include <app_processing/current_sensor_api/current_sensor_api.h>
 #include "main.h"
+#include "app_processing/current_sensor_api/current_sensor_api.h"
 
 //======================================
 // Public Defines
@@ -35,18 +35,17 @@ typedef enum {
 //======================================
 
 /**
- * @brief Initializes the API
+ * @brief Set parameters to analyze
+ * @param cycles average_cycle
+ * @param zero_offset Value of ADC when the sensor measures 0A
  */
-void signal_analyzer_api_init();
+void signal_analyzer_api_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_offset);
 
 /**
- * @brief Analyzes the signal
- * @param cycles Samples of each cycle
- * @param len Number of cycles
- * @param zero_offset Zero crossing offset value
- * @retval Status code
+ * @brief Analyzes the signal setted with signal_analyzer_api_set_signal_to_analyze()
+ * @retval Status of analyzes (Completed / In progress)
  */
-status_processing_t signal_analyzer_api_analyze_loop(cycle_t *cycles, uint32_t len, uint16_t zero_offset);
+status_processing_t signal_analyzer_api_analyze_loop();
 
 /**
  * @brief Retrieves the Total Harmonic Distortion (THD)
@@ -59,10 +58,5 @@ uint8_t signal_analyzer_api_get_thd();
  * @retval Cycle to inject
  */
 cycle_t signal_analyzer_api_get_cycle_to_inject();
-
-/**
- * @brief Restart the processing
- */
-void signal_analyzer_api_clear();
 
 #endif /* SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_ */

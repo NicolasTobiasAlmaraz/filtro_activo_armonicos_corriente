@@ -19,12 +19,15 @@
 //======================================
 // Dependencies
 //======================================
-#include <app_processing/push_button_driver/push_button_driver.h>
 #include "main.h"
+
+#include "app_processing/push_button_driver/push_button_driver.h"
+#include "app_processing/current_sensor_api/current_sensor_api.h"
+#include "common_apis/timer_api/timer_api.h"
 #include "common_apis/cycle_detector_api/cycle_detector_api.h"
 
 //======================================
-// Callbacks
+// Callbacks - GPIO
 //======================================
 
 /**
@@ -42,9 +45,35 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	}
 }
 
+//======================================
+// Callbacks - ADC / DAC
+//======================================
+
+/**
+ * @brief  Redefinition of WEAK function. Period elapsed callback in non-blocking mode
+ * @param  htim TIM handle
+ * @retval None
+ */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    if (htim->Instance == TIM2) {
+        current_sensor_api_timer_callback();
+    }
+}
+
+
+/**
+ * @brief  Redefinition of WEAK function. Regular conversion complete callback in non blocking mode
+ * @param  hadc pointer to a ADC_HandleTypeDef structure that contains
+ *         the configuration information for the specified ADC.
+ * @retval None
+ */
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+    current_sensor_api_dma_callback();
+}
+
 /**
  * @brief  Redefinition of WEAK function. DAC DMA Tx complete
  */
-void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac) {
+//void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac) {
 	//Do nothing
-}
+//}

@@ -33,7 +33,13 @@
 void cycle_detector_api_init();
 
 /**
- * @brief Function callback
+ * @brief Calculates the average period of 220V 50Hz line
+ * retval period_us
+ */
+uint32_t cycle_detector_api_get_period();
+
+/**
+ * @brief This function must be called on cycle detector interrupt
  */
 void cycle_detector_api_callback();
 

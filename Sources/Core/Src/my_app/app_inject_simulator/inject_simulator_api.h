@@ -17,6 +17,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "my_app.h"
+
 //======================================
 // Public Defines
 //======================================
@@ -46,10 +48,9 @@ void inject_simulator_api_loop();
 
 /**
  * @brief Sets the current waveform to inject on each new cycle detection
- * @param buffer Pointer to the waveform data buffer
- * @param len Number of positions in the buffer
+ * @param buffer with the cycle to inject
  */
-void inject_simulator_api_set_current_waveform(uint16_t *buffer, uint32_t len);
+void inject_simulator_api_set_current_waveform(cycle_t cycle);
 
 /**
  * @brief Enable or disable the injection

@@ -50,12 +50,10 @@ void my_app_init() {
 }
 
 void my_app_loop() {
-	//Current sensor state machine
-	current_sensor_api_loop();
-
 	//Processing state machine
 	app_processing_loop();
 
 	//Inject state machine
+	//By the way DMA DAC because there is not Power Electronics Stage yet (controlled by PWM signals)
 	//inject_simulator_api_loop();
 }

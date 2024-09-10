@@ -18,6 +18,9 @@
 //======================================
 // Dependencies
 //======================================
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <app_processing/current_sensor_api/current_sensor_api.h>
 #include <string.h>
 
@@ -34,24 +37,22 @@
 #define CALIBRATION_TOLERANCE_MA	1
 
 /** Current slope in milliamps per count */
-#define CURRENT_SLOPE 		(float) 4.356004 // [mA/counts]
+#define CURRENT_SENSIBILITY 		(float) 4.356004 // [mA/counts]
+
+/** ADC Buffer Len DMA*/
+#define ADC_BUF_LEN             	20000
+
+/** ADC SAMPLING PERIOD (Ts) */
+#define SAMPLING_PERIOD_US			50
 
 //======================================
 // Private Data Structures and Types
 //======================================
 
-typedef enum {
-	WAITING_CALIBRATION,
-	START_CALIBRATION,
-	CALIBRATION_COMPLETED,
-};
-
 /** State machine for the current sensor */
 typedef enum {
-	STATE_START,		/**< Initial state */
+	STATE_RESET,		/**< Sampling completed */
 	STATE_SAMPLING,		/**< Sampling in progress */
-	STATE_WAITING,		/**< Waiting for timer or cycle */
-	STATE_EOC,			/**< End of cycle (EOC) */
 } state_current_sensor_t;
 
 //======================================
@@ -64,162 +65,183 @@ extern ADC_HandleTypeDef hadc1;
 // Private Variables
 //======================================
 
-static state_current_sensor_t g_state = STATE_START; 	//!< Current state of the sensor's state machine
-static cycle_t g_current_cycles[CYCLES];				//!< Array of current samples for multiple cycles
-static uint32_t g_cycles_index = 0;						//!< Index for tracking the current cycle in the array
-static uint16_t g_offset = MAX_UINT16_t / 2;			//!< Offset applied to the ADC readings for calibration
-static bool g_f_new_cycle = false; 						//!< Flag indicating if a new cycle in the line voltage has occurred
-static status_sampling_t g_status = SAMPLING_COMPLETED;	//!< Status of the current sampling
-
+static uint16_t g_ADC_buffer[ADC_BUF_LEN];					//!< ADC Buffer
+static uint16_t g_offset = MAX_UINT16_t / 2;				//!< Offset applied to the ADC readings for calibration
+static uint32_t g_period_AC_sig_us = 20000; 				//!< AC period signal (In theory 50Hz --> 20000 us)
+static status_sampling_t g_status_sam = SAMPLING_COMPLETED;	//!< Status of the sampling
+static bool g_f_eoc_dma = false;							//!< Status of DMA Conv
 
 //======================================
 // Private Function Declarations
 //======================================
 
+#ifdef DEBUG_NICOLAS
 /**
- * @brief Returns the value read by the ADC
- * @retval 16-bit ADC sample
+ * @brief Takes one sample by polling.
+ * Typical Time Conversion: 3 or 4 useg
  */
-uint16_t current_sensor_api_get_sample_ADC();
+static uint16_t current_sensor_api_get_sample_ADC();
+#endif
+
+/**
+ * @brief Start the ADC using DMA Controller by Single Conversion
+ */
+static void current_sensor_api_start_ADC_sampling_DMA(uint16_t *ptr);
 
 //======================================
 // Private Function Implementations
 //======================================
-
-uint16_t current_sensor_api_get_sample_ADC() {
-	HAL_ADC_PollForConversion(&hadc1, 1);
-	uint32_t sample = HAL_ADC_GetValue(&hadc1);
-	return (uint16_t)sample;
+void current_sensor_api_start_ADC_sampling_DMA(uint16_t *ptr) {
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ptr, 1);
 }
+
+#ifdef DEBUG_NICOLAS
+uint16_t current_sensor_api_get_sample_ADC() {
+	uint32_t t1 = timer_api_get_ticks();
+
+
+	HAL_ADC_Start(&hadc1);
+	HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+	uint16_t raw = HAL_ADC_GetValue(&hadc1);
+
+	uint32_t t2 = timer_api_get_ticks();
+	uint32_t time_conv = t2-t1;
+	if(time_conv>1000)
+		return 0;
+
+
+	return raw;
+
+}
+#endif
 
 //======================================
 // Public Function Implementations
 //======================================
 
 void current_sensor_api_init() {
+	//Init ADC
 	HAL_ADC_Init(&hadc1);
-	HAL_ADC_Start(&hadc1);
-	current_sensor_api_start_sampling();
-}
-
-void current_sensor_api_calibrate_start() {
-
-}
-
-status_calibration_t current_sensor_api_calibrate_loop() {
-	uint16_t sample_max = 0;
-	uint16_t sample_min = MAX_UINT16_t;
-	uint32_t sum = 0;
-	uint32_t tiempo_delay;
-	uint32_t tiempo_sample;
-	static state_calibrate_t state;
-	static status_calibration_t status = CALIBRATE_IN_PROGRESS;
-
-	switch(state) {
-		case START_CALIBRATION:
-			//dma_start(1024); // todo
-			state = WAITING_CALIBRATION;
-			break;
-		case WAITING_CALIBRATION:
-			if(/*dma_eoc*/1) {
-				// Calculate max deviation
-				float variability = (sample_max - sample_min) * CURRENT_SLOPE;
-				if(variability > CALIBRATION_TOLERANCE_MA) {
-					state = CALIBRATION_COMPLETED;
-					status = CALIBRATE_ERROR;
-					break;
-				}
-
-				// Calculate offset
-				g_offset = (uint16_t) (sum / 100);
-				status = CALIBRATE_OK;
-				CALIBRATION_COMPLETED;
-			}
-			break;
-
-		case CALIBRATION_COMPLETED:
-			break;
-	}
-	return status;
-}
-
-void current_sensor_api_loop() {
-	switch(g_state) {
-		case STATE_START:
-			if(g_f_new_cycle) {
-				g_state = STATE_SAMPLING;
-				g_status = SAMPLING_IN_PROGRESS;
-			}
-			break;
-
-		case STATE_SAMPLING:
-			// Take a new sample
-			uint16_t sample = current_sensor_api_get_sample_ADC();
-
-			// Start timer
-			timer_api_set_count(TIMER_SAMPLING, 200);
-
-			// If a new cycle notification is received, change the cycle
-			if(g_f_new_cycle) {
-				g_f_new_cycle = false;
-				g_cycles_index++;
-
-				// If all CYCLES are completed, return EOC
-				if(g_cycles_index == CYCLES) {
-					g_state = STATE_EOC;
-					g_status = SAMPLING_COMPLETED;
-					break;
-				}
-			}
-
-			// Save the sample
-			uint32_t len = g_current_cycles[g_cycles_index].len;
-			g_current_cycles[g_cycles_index].cycle[len] = sample;
-			len++;
-			g_current_cycles[g_cycles_index].len = len;
-			break;
-
-		case STATE_WAITING:
-			// Return to sampling state if...
-
-			// 1 - Timeout fs --> Time to take another sample
-			if(timer_api_check_timer(TIMER_SAMPLING) == TIMER_FINISHED) {
-				g_state = STATE_SAMPLING;
-			}
-
-			// 2 - A new cycle starts
-			// The cycles must be properly aligned for processing
-			if(g_f_new_cycle) {
-				g_state = STATE_SAMPLING;
-			}
-			break;
-
-		case STATE_EOC:
-			//Do nothing
-			break;
-	}
-}
-
-status_sampling_t current_sensor_api_get_status() {
-	return g_status;
 }
 
 void current_sensor_api_start_sampling() {
-	g_state = STATE_START;
-	g_cycles_index = 0;
-	for(uint32_t i = 0; i < CYCLES; i++) {
-		g_current_cycles[i].len = 0;
+	g_status_sam = SAMPLING_IN_PROGRESS;
+	timer_api_enable_interrupts();
+}
+
+status_sampling_t current_sensor_api_get_status() {
+	return g_status_sam;
+}
+
+status_calibration_t current_sensor_api_get_calibration() {
+	status_calibration_t retval;
+	uint64_t sum=0;
+	uint16_t max_value = 0;
+	uint16_t min_value = MAX_UINT16_t;
+
+	//Process buff
+	for(uint32_t i=0 ; i<ADC_BUF_LEN ; i++) {
+		uint16_t raw = g_ADC_buffer[i];
+		sum += raw;
+		if(raw > max_value)
+			max_value = raw;
+		if(raw < min_value)
+			min_value = raw;
 	}
-}
 
-void current_sensor_api_get_samples(cycle_t *ptr_out) {
-    memcpy(ptr_out, g_current_cycles, sizeof(g_current_cycles));
-}
+	//Calculate max variation
+	float slope_ma = (max_value - min_value) * CURRENT_SENSIBILITY;
+	retval = CALIBRATE_OK;
+	if(slope_ma > CALIBRATION_TOLERANCE_MA)
+		retval = CALIBRATE_ERROR;
 
-void current_sensor_api_set_new_cycle() {
-	g_f_new_cycle = true;
+	//Calculate offset
+	g_offset = (uint16_t) sum / ADC_BUF_LEN;
+
+	return retval;
 }
 
 uint16_t current_sensor_api_get_offset() {
 	return g_offset;
+}
+
+void current_sensor_api_set_period_220(uint32_t period_us) {
+	g_period_AC_sig_us = period_us;
+}
+
+void current_sensor_api_dma_callback() {
+	g_f_eoc_dma = true;
+}
+
+void current_sensor_api_timer_callback() {
+	static state_current_sensor_t state;
+	static uint32_t sample = 0;
+
+	switch(state) {
+		case STATE_RESET:
+			//Checks if sampling start
+			if(g_status_sam==SAMPLING_IN_PROGRESS) {
+				//Start process
+				sample = 0;
+				current_sensor_api_start_ADC_sampling_DMA(&g_ADC_buffer[sample]);
+				sample++;
+				state = STATE_SAMPLING;
+			}
+			break;
+
+		case STATE_SAMPLING:
+			//Wait DMA notifies "Conversion Completed"
+			if(g_f_eoc_dma) {
+				g_f_eoc_dma = false;
+
+				//Checks if buffer was completed
+				if(sample >= ADC_BUF_LEN) {
+					state = STATE_RESET;
+					g_status_sam = SAMPLING_COMPLETED;
+					state = STATE_RESET;
+					timer_api_disable_interrupts();
+					return;
+				}
+
+				//Start DMA again
+				current_sensor_api_start_ADC_sampling_DMA(&g_ADC_buffer[sample]);
+				sample++;
+			}
+
+			break;
+	}
+}
+
+cycle_t current_sensor_api_get_average_cycle() {
+	//Iterator for DMA buffer
+	uint32_t dma_i=0;
+
+	//Calculate how many samples are by cycle
+	uint32_t len_cycle = g_period_AC_sig_us / SAMPLING_PERIOD_US;
+
+	//Calculate how many cycles are in one ADC sampling process
+	uint8_t cycles_num = ADC_BUF_LEN /len_cycle;
+
+	//Structure data by cycles
+	//cycle_array = [cycle1, cycle2, ... cycleN]
+	cycle_t *cycle_array;
+	cycle_array = (cycle_t *)calloc(cycles_num, sizeof(cycle_t));
+	for(uint8_t cycle=0; cycle<cycles_num ; cycle++) {
+		for(uint32_t i=0; i<len_cycle; i++) {
+			cycle_array[cycle].buffer[i] = g_ADC_buffer[dma_i];
+			dma_i++;
+		}
+	}
+
+	//Calculate the average cycle
+	cycle_t average_cycle;
+	average_cycle.len = len_cycle;
+	for(uint32_t i=0; i<len_cycle; i++) {
+		float sum = 0;
+		for(uint8_t cycle=0; cycle<cycles_num ; cycle++) {
+			sum += cycle_array[cycle].buffer[i];
+		}
+		average_cycle.buffer[i] = (uint16_t) sum / cycles_num;
+	}
+	return average_cycle;
 }

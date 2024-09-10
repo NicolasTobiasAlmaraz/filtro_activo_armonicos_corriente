@@ -34,7 +34,6 @@ typedef struct {
 } sine_t;
 
 typedef enum {
-	STATE_AVERAGE_SIGNAL,
 	STATE_AVERAGE_POWER,
 	STATE_FUNDAMENTAL,
 	STATE_FUND_POWER,
@@ -47,55 +46,14 @@ typedef enum {
 // Private Variables
 //======================================
 static cycle_t g_ave_cycle;
+static uint16_t g_zero_offset;
 static cycle_t g_inject_cycle;
 static uint8_t g_thd;
-static state_processing_t g_state = STATE_AVERAGE_SIGNAL;
+static state_processing_t g_state = STATE_AVERAGE_POWER;
 
 //======================================
 // Private Function Declarations
 //======================================
-
-/**
- * @brief Calculate one cycle average
- * @param cycles Sampled cycles
- * @param num_cycles Quantity of cycles
- * @retval Average cycle
- *
- * This function takes num_cycles cycles sampled by the current sensor and reduces all these samples to an average cycle.
- * This cycle represents one period of the periodic signal.
- *
- * -------- Input: --------
- * Cycle 1:
- *
- *    (*)--> Glitch
- *    **
- *   *  *  *
- *       **
- *
- * Cycle 2:
- *
- *    **
- *   *  *  *
- *       **
- *       (*)--> Glitch
- * .....
- *
- * Cycle CYCLES:
- *
- *   (*)--> Glitch
- *    **
- *   *  *  *
- *       **
- *
- * -------- Output: --------
- *
- * Average Cycle:
- *
- *    **
- *   *  *  *
- *       **
- */
-static cycle_t signal_analyzer_api_calculate_average_cycle(cycle_t *cycles, uint32_t num_cycles);
 
 /**
  * @brief Calculate signal power
@@ -147,55 +105,15 @@ static uint8_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t
  */
 static cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset);
 
-/**
- * @brief Calculate the minimum length of the cycles
- * @param cycles An array with different length cycles
- * @param num_cycles Number of cycles
- * @retval The minimum cycle duration
- */
-static uint32_t signal_analyzer_api_min_len(cycle_t *cycles, uint32_t num_cycles);
 
 //======================================
 // Private Function Implementations
 //======================================
 
-cycle_t signal_analyzer_api_calculate_average_cycle(cycle_t *cycles, uint32_t num_cycles) {
-    cycle_t cycle_prom;
-    uint32_t cycle_i;
-    uint32_t sample_i;
-    uint32_t sum_sample = 0;
-
-    // Check the minimum length of the samples
-    uint32_t min_len = signal_analyzer_api_min_len(cycles, num_cycles);
-    cycle_prom.len = min_len;
-
-    // Align cycles and average the columns
-    for(sample_i = 0; sample_i < min_len; sample_i++) {
-        sum_sample = 0;
-        for(cycle_i = 0; cycle_i < num_cycles; cycle_i++) {
-            sum_sample += cycles[cycle_i].cycle[sample_i];
-        }
-        uint16_t prom = (uint16_t)(sum_sample / num_cycles);
-        cycle_prom.cycle[sample_i] = prom;
-    }
-    return cycle_prom;
-}
-
-uint32_t signal_analyzer_api_min_len(cycle_t *cycles, uint32_t num_cycles) {
-    uint32_t i;
-    uint32_t min_len = cycles[0].len;
-    for(i = 1; i < num_cycles; i++) {
-        uint32_t len = cycles[i].len;
-        if(len < min_len)
-            min_len = len;
-    }
-    return min_len;
-}
-
 float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle) {
     uint32_t energy = 0;
     for(uint32_t i = 0; i < cycle.len; i++) {
-        energy += (cycle.cycle[i] * cycle.cycle[i]);
+        energy += (cycle.buffer[i] * cycle.buffer[i]);
     }
 
     float32_t power = (float32_t) energy / cycle.len;
@@ -215,7 +133,7 @@ sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_of
 
     // Filter the DC component of the signal
     for(uint32_t i = 0; i < len; i++) {
-        ptr_in[i] = cycle.cycle[i] - zero_offset;
+        ptr_in[i] = cycle.buffer[i] - zero_offset;
     }
 
     // --- Calculate the FFT ---
@@ -274,7 +192,7 @@ cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_
     // inject_cycle = fundamental_cycle - distorted_cycle
     cycle_t cycle_to_inject;
     for(uint32_t i = 0; i < len; i++) {
-        cycle_to_inject.cycle[i] = (uint16_t) (zero_offset + ptr_fund[i] - ave_cycle.cycle[i]);
+        cycle_to_inject.buffer[i] = (uint16_t) (ptr_fund[i] - ave_cycle.buffer[i] + zero_offset);
     }
 
     free(ptr_fund);
@@ -288,63 +206,55 @@ cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_
 // Public Function Implementations
 //======================================
 
-void signal_analyzer_api_init() {
-
+void signal_analyzer_api_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_offset) {
+	g_ave_cycle = ave_cycle;
+	g_zero_offset = zero_offset;
+	g_state = STATE_AVERAGE_POWER;
 }
 
-status_processing_t signal_analyzer_api_analyze_loop(cycle_t *cycles, uint32_t len, uint16_t zero_offset) {
+status_processing_t signal_analyzer_api_analyze_loop() {
     static float32_t current_power;
     static sine_t fundamental;
     static float32_t fundamental_power;
-    switch(g_state) {
-    	case STATE_AVERAGE_SIGNAL:
-			// Average Signal
-			g_ave_cycle = signal_analyzer_api_calculate_average_cycle(cycles, len);
-			g_state = STATE_AVERAGE_SIGNAL;
-			break;
 
+    /**
+     * Some operations take too much time,
+     * So I divide them into a state machine to proceed in stages
+     * and refresh the rest of the functionalities within the main loop
+     */
+    switch(g_state) {
     	case STATE_AVERAGE_POWER:
-			// Calculate Average Signal Power
-			current_power = signal_analyzer_api_calculate_sig_power(g_ave_cycle);
-			g_state = STATE_FUNDAMENTAL;
-			break;
+    		current_power = signal_analyzer_api_calculate_sig_power(g_ave_cycle);
+    		g_state = STATE_FUNDAMENTAL;
+    		break;
 
     	case STATE_FUNDAMENTAL:
-			// Calculate Fundamental
-			fundamental = signal_analyzer_api_calculate_fundamental(g_ave_cycle, zero_offset);
-			g_state = STATE_FUND_POWER;
-			break;
+    		fundamental = signal_analyzer_api_calculate_fundamental(g_ave_cycle, g_zero_offset);
+    		g_state = STATE_FUND_POWER;
+    		break;
 
     	case STATE_FUND_POWER:
-			// Calculate Fundamental Power
-			fundamental_power = signal_analyzer_api_calculate_sine_power(fundamental);
-			g_state = STATE_THD;
-			break;
+    		fundamental_power = signal_analyzer_api_calculate_sine_power(fundamental);
+    		g_state = STATE_THD;
+    		break;
 
     	case STATE_THD:
-			// Calculate THD
-			g_thd = signal_analyzer_api_calculate_thd(fundamental_power, current_power);
-			g_state = STATE_SIGNAL_TO_INJECT;
-			break;
+    		current_power = signal_analyzer_api_calculate_thd(fundamental_power, current_power);
+    		g_state = STATE_FUNDAMENTAL;
+    		break;
 
     	case STATE_SIGNAL_TO_INJECT:
-			// Calculate Inject Signal
-			g_inject_cycle = signal_analyzer_api_calculate_injection(fundamental, g_ave_cycle, zero_offset);
-			g_state = STATE_PROCESSING_COMPLETED;
-			break;
+    		g_inject_cycle = signal_analyzer_api_calculate_injection(fundamental, g_ave_cycle, g_zero_offset);
+    		g_state = STATE_PROCESSING_COMPLETED;
+    		break;
 
     	case STATE_PROCESSING_COMPLETED:
     		break;
     }
-
-    if(g_state == STATE_PROCESSING_COMPLETED)
-    	return PROCESSING_COMPLETED;
-    else
+    if(g_state != STATE_PROCESSING_COMPLETED)
     	return PROCESSING_IN_PROGRESS;
-}
-
-void signal_analyzer_api_clear() {
-	g_state = STATE_AVERAGE_SIGNAL;
+    else
+    	return PROCESSING_COMPLETED;
 }
 
 cycle_t signal_analyzer_api_get_cycle_to_inject(void) {

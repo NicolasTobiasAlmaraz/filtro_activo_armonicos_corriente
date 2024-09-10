@@ -28,6 +28,7 @@ typedef struct {
 // STM32 Handlers
 //======================================
 extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
 
 //======================================
 // Private Variables
@@ -57,6 +58,8 @@ void timer_api_init() {
 
     // Start timer
     HAL_TIM_Base_Start(&htim2);
+    HAL_TIM_Base_Start_IT(&htim3);
+
 }
 
 status_timer_t timer_api_check_timer(timer_id_t id) {
@@ -97,4 +100,17 @@ void timer_api_set_count(timer_id_t id, uint32_t time_us) {
 
     // Assign the timer to the global array
     g_timers[id] = timer;
+}
+
+uint32_t timer_api_get_ticks() {
+	return __HAL_TIM_GET_COUNTER(&htim2);
+}
+
+void timer_api_enable_interrupts() {
+	__HAL_TIM_ENABLE_IT(&htim3, TIM_IT_UPDATE);
+}
+
+
+void timer_api_disable_interrupts(){
+	__HAL_TIM_DISABLE_IT(&htim3, TIM_IT_UPDATE);
 }

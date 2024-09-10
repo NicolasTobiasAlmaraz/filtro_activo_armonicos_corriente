@@ -68,4 +68,19 @@ status_timer_t timer_api_check_timer(timer_id_t id);
  */
 void timer_api_set_count(timer_id_t id, uint32_t time_us);
 
+/**
+ * @brief Returns the timer ticks (1tick = 1useg)
+ */
+uint32_t timer_api_get_ticks();
+
+/**
+ * @brief Enables timer interrupt
+ */
+void timer_api_enable_interrupts();
+
+/**
+ * @brief Disable timer interrupt
+ */
+void timer_api_disable_interrupts();
+
 #endif /* SRC_MY_APP_TIMER_API_TIMER_API_H_ */

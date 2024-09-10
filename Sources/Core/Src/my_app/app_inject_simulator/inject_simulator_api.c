@@ -47,7 +47,7 @@ static bool g_f_new_cycle = false;							//!< Flag to indicate the detection of 
 //======================================
 // STM32 Handlers
 //======================================
-extern DAC_HandleTypeDef hdac;								//!< ADC handle for the DAC output
+//extern DAC_HandleTypeDef hdac;								//!< ADC handle for the DAC output
 
 //======================================
 // Private Function Declarations
@@ -76,7 +76,7 @@ void inject_simulator_api_loop() {
 			if(g_f_new_cycle) {
 				g_f_new_cycle = false;
 				// Start DAC output with the current waveform buffer
-				HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1, (uint32_t*)g_current_buffer, g_len_current / 2, DAC_ALIGN_12B_R);
+				//HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1, (uint32_t*)g_current_buffer, g_len_current / 2, DAC_ALIGN_12B_R);
 			}
 			break;
 
@@ -85,24 +85,24 @@ void inject_simulator_api_loop() {
 			if(g_f_new_cycle) {
 				g_f_new_cycle = false;
 				// Stop and restart DAC output to synchronize with the new cycle
-				HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_1);
-				HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1, (uint32_t*)g_current_buffer, g_len_current / 2, DAC_ALIGN_12B_R);
+				//HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_1);
+				//HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1, (uint32_t*)g_current_buffer, g_len_current / 2, DAC_ALIGN_12B_R);
 			}
 			break;
 	}
 }
 
-void inject_simulator_api_set_current_waveform(uint16_t *buffer, uint32_t len) {
-	// Reallocate dynamic memory for the current waveform buffer
-	g_current_buffer = realloc((void *) g_current_buffer, len * sizeof(uint16_t));
-	if(g_current_buffer == NULL)
-		return;
-
-	// Copy the new waveform into the buffer
-	memcpy(g_current_buffer, buffer, len * sizeof(uint16_t));
-
-	// Update the current length of the buffer
-	g_len_current = len;
+void inject_simulator_api_set_current_waveform(cycle_t cycle) {
+//	// Reallocate dynamic memory for the current waveform buffer
+//	g_current_buffer = realloc((void *) g_current_buffer, len * sizeof(uint16_t));
+//	if(g_current_buffer == NULL)
+//		return;
+//
+//	// Copy the new waveform into the buffer
+//	memcpy(g_current_buffer, buffer, len * sizeof(uint16_t));
+//
+//	// Update the current length of the buffer
+//	g_len_current = len;
 }
 
 void inject_simulator_api_set_enable(bool enable) {

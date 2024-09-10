@@ -34,11 +34,14 @@
 // Public Function Implementations
 //======================================
 
+
+//--- Initial messages
+
 void display_api_init() {
 	// Display Initialization
 	display_driver_init();
 
-	//Display Set Initial Messages
+	//Display Set initial messages
 
 	//Line 1
 	display_driver_set_cursor(0,0);
@@ -48,6 +51,64 @@ void display_api_init() {
 	display_driver_set_cursor(1,0);
 	display_driver_send_string("Filtro Act Armo i(t)");
 }
+
+
+//--- Calibration messages
+
+void display_api_set_msg_start_calibration() {
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Desconecte cargas y ");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("presione el pulsador");
+}
+
+void display_api_set_msg_calibrating() {
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Calibrando ...      ");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("                    ");
+}
+
+void display_api_set_msg_calibration_ok() {
+	//Line 1
+	display_driver_set_cursor(0,0);
+	display_driver_send_string("Calibracion Exitosa!");
+
+	//Line 2
+	display_driver_set_cursor(1,0);
+	display_driver_send_string("Conecte cargas y    ");
+
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("presione pulsador   ");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("para iniciar proceso");
+}
+
+void display_api_set_msg_calibration_error() {
+	//Line 1
+	display_driver_set_cursor(0,0);
+	display_driver_send_string("Error de calibracion!");
+
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Vuelva a intentar   ");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("presionando pulsador");
+}
+
+
+//--- THD messages
 
 void display_api_set_msg_THD() {
 	//Line 2
@@ -74,48 +135,4 @@ void display_api_update_THD(uint8_t thd) {
 	number[0] = '0' + thd / 10;
 	number[1] = '0' + thd % 10;
 	display_driver_send_string(number);
-}
-
-void display_api_set_msg_calibrate() {
-	//Line 3
-	display_driver_set_cursor(2,0);
-	display_driver_send_string("Desconecte cargas y ");
-
-	//Line 4
-	display_driver_set_cursor(3,0);
-	display_driver_send_string("presione el pulsador");
-}
-
-void display_api_set_msg_start() {
-	//Line 2
-	display_driver_set_cursor(1,0);
-	display_driver_send_string("Conecte cargas y    ");
-
-	//Line 3
-	display_driver_set_cursor(2,0);
-	display_driver_send_string("presione pulsador   ");
-
-	//Line 4
-	display_driver_set_cursor(3,0);
-	display_driver_send_string("para iniciar proceso");
-}
-
-void display_api_set_msg_calibrating() {
-	//Line 3
-	display_driver_set_cursor(2,0);
-	display_driver_send_string("Calibrando ...      ");
-
-	//Line 4
-	display_driver_set_cursor(3,0);
-	display_driver_send_string("                    ");
-}
-
-void display_api_set_msg_calibration_error() {
-	//Line 3
-	display_driver_set_cursor(2,0);
-	display_driver_send_string("Error! Reintente    ");
-
-	//Line 4
-	display_driver_set_cursor(3,0);
-	display_driver_send_string("presionando pulsador");
 }

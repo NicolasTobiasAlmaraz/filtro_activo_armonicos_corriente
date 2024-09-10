@@ -13,22 +13,15 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "my_app.h"
+
 //======================================
 // Public Defines
 //======================================
-#define LEN_MAX             450
 
 //======================================
 // Public Data Structures and Types
 //======================================
-
-/**
- * @brief This structure contains current samples for a 50Hz cycle
- */
-typedef struct {
-    uint16_t cycle[LEN_MAX];	//!< Samples
-    uint32_t len;				//!< Number of Samples
-} cycle_t;
 
 /**
  * @brief Status code of the calibration process
@@ -57,11 +50,17 @@ void current_sensor_api_init();
 
 /**
  * @brief Starts a new ADC conversion using DMA Controller
+ * @note check the end of conversion with current_sensor_api_get_status() function
  */
 void current_sensor_api_start_sampling();
 
 /**
- * @brief Returns the status of the sampling
+ * @brief This function must be called on the DMA Complete Callback
+ */
+void current_sensor_api_DMA_cplt_callback();
+
+/**
+ * @brief Returns the status of the sampling (in progress or completed)
  * @retval status
  */
 status_sampling_t current_sensor_api_get_status();
@@ -91,8 +90,13 @@ void current_sensor_api_set_period_220(uint32_t period_us);
 cycle_t current_sensor_api_get_average_cycle();
 
 /**
- * @brief This function must be called on the DMA Complete Callback
+ * @brief This function must be called on Timer Interrupt callback
  */
-void current_sensor_api_DMA_cplt_callback();
+void current_sensor_api_timer_callback();
+
+/**
+ * @brief This function must be called on ADC DMA Conversion Complete callback
+ */
+void current_sensor_api_dma_callback();
 
 #endif /* SRC_MY_APP_CURRENT_SENSOR_CURRENT_SENSOR_H_ */
