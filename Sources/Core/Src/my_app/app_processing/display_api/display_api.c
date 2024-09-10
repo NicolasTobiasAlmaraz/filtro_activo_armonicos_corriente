@@ -94,8 +94,8 @@ void display_api_set_msg_calibration_ok() {
 }
 
 void display_api_set_msg_calibration_error() {
-	//Line 1
-	display_driver_set_cursor(0,0);
+	//Line 2
+	display_driver_set_cursor(1,0);
 	display_driver_send_string("Error de calibracion!");
 
 	//Line 3
@@ -111,6 +111,10 @@ void display_api_set_msg_calibration_error() {
 //--- THD messages
 
 void display_api_set_msg_THD() {
+	//Line 1
+	display_driver_set_cursor(0,0);
+	display_driver_send_string("Nico Almaraz - TP3: ");
+
 	//Line 2
 	display_driver_set_cursor(1,0);
 	display_driver_send_string("Filtro Act Armo i(t)");

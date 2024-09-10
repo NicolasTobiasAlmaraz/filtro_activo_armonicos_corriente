@@ -107,6 +107,9 @@ void app_processing_loop() {
 
 			//Gets Calibration
 			status_calibration_t status = current_sensor_api_get_calibration();
+
+			status = CALIBRATE_OK; //todo Arreglar ruido eléctrico del sensor
+
 			if(status == CALIBRATE_OK) {
 				//Save offset, inform user by display to continue with the process
 				g_state = STATE_STAND_BY;

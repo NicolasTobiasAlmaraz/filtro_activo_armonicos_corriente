@@ -55,7 +55,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
  * @retval None
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if (htim->Instance == TIM2) {
+    if (htim->Instance == TIM3) {
         current_sensor_api_timer_callback();
     }
 }
