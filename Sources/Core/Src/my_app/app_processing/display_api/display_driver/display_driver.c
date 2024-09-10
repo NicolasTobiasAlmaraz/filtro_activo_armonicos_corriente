@@ -7,7 +7,7 @@
 //======================================
 // Dependencies
 //======================================
-#include "display_driver.h"
+#include <app_processing/display_api/display_driver/display_driver.h>
 
 //======================================
 // Private Defines

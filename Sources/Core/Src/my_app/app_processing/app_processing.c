@@ -7,6 +7,11 @@
 //======================================
 // Dependencies
 //======================================
+#include <app_inject_simulator/inject_simulator_api.h>
+#include <app_processing/app_processing.h>
+#include <app_processing/current_sensor_api/current_sensor_api.h>
+#include <app_processing/display_api/display_api.h>
+#include <app_processing/signal_analyzer_api/signal_analyzer_api.h>
 #include <stdbool.h>
 
 #include "main.h"
@@ -15,12 +20,7 @@
 #include "common_apis/cycle_detector_api/cycle_detector_api.h"
 #include "common_apis/timer_api/timer_api.h"
 
-#include "current_sensor_api/current_sensor_api.h"
-#include "inject_simulator_api/inject_simulator_api.h"
-#include "data_processing_api.h"
-
 #include "signal_analyzer_api/signal_analyzer_api.h"
-#include "display_api/display_api.h"
 
 //======================================
 // Private Defines
@@ -97,7 +97,7 @@ void data_processing_api_state_reset() {
 }
 
 void data_processing_api_state_calibrating() {
-	bool status = current_sensor_api_calibrate();
+	bool status = current_sensor_api_validate_calibration();
 	if(status == CALIBRATE_OK) {
 		g_state = STATE_STAND_BY;
 		g_zero_offset = current_sensor_api_get_offset();
@@ -113,7 +113,7 @@ void data_processing_api_state_stand_by() {
 	if(g_f_edge_button) {
 		g_f_edge_button = false;
 		g_state = STATE_SAMPLING;
-		current_sensor_api_clean_samples();
+		current_sensor_api_start_sampling();
 		display_api_set_msg_THD();
 	}
 }
@@ -172,7 +172,7 @@ void data_processing_api_state_waiting_setting_time() {
 	if(status_t) {
 		//Restart process
 		g_state = STATE_SAMPLING;
-		current_sensor_api_clean_samples();
+		current_sensor_api_start_sampling();
 	}
 
 	//Stop Button
@@ -191,12 +191,12 @@ static void data_processing_api_check_stop_button() {
 // Public Function Implementations
 //======================================
 
-void data_processing_api_init() {
+void app_processing_init() {
 	display_api_init();
 	display_api_set_msg_calibrate();
 }
 
-void data_processing_api_loop() {
+void app_processing_loop() {
 	switch (g_state) {
 		default:
 			g_state = RESET;

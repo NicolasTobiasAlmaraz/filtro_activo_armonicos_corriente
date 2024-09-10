@@ -12,12 +12,12 @@
 // Dependencies
 //======================================
 
+#include <app_inject_simulator/inject_simulator_api.h>
 #include <string.h>
 #include <stdlib.h>
 #include <malloc.h>
 
 #include "main.h"
-#include "inject_simulator_api.h"
 
 //======================================
 // Private Defines

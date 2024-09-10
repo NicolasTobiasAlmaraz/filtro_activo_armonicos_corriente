@@ -7,11 +7,11 @@
 //======================================
 // Dependencies
 //======================================
+#include <app_inject_simulator/inject_simulator_api.h>
 #include "cycle_detector_api.h"
 
 #include "common_apis/timer_api/timer_api.h"
 
-#include "inject_simulator_api/inject_simulator_api.h"
 #include "current_sensor_api/current_sensor_api.h"
 
 //======================================

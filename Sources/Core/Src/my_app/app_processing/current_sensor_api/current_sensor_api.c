@@ -18,10 +18,10 @@
 //======================================
 // Dependencies
 //======================================
+#include <app_processing/current_sensor_api/current_sensor_api.h>
 #include <string.h>
 
 #include "main.h"
-#include "current_sensor_api.h"
 #include "common_apis/timer_api/timer_api.h"
 
 //======================================
@@ -39,6 +39,12 @@
 //======================================
 // Private Data Structures and Types
 //======================================
+
+typedef enum {
+	WAITING_CALIBRATION,
+	START_CALIBRATION,
+	CALIBRATION_COMPLETED,
+};
 
 /** State machine for the current sensor */
 typedef enum {
@@ -93,48 +99,48 @@ uint16_t current_sensor_api_get_sample_ADC() {
 void current_sensor_api_init() {
 	HAL_ADC_Init(&hadc1);
 	HAL_ADC_Start(&hadc1);
-	current_sensor_api_clean_samples();
+	current_sensor_api_start_sampling();
 }
 
-//todo borrar
-extern TIM_HandleTypeDef htim2;
+void current_sensor_api_calibrate_start() {
 
-status_calibration_t current_sensor_api_calibrate() {
+}
+
+status_calibration_t current_sensor_api_calibrate_loop() {
 	uint16_t sample_max = 0;
 	uint16_t sample_min = MAX_UINT16_t;
 	uint32_t sum = 0;
+	uint32_t tiempo_delay;
+	uint32_t tiempo_sample;
+	static state_calibrate_t state;
+	static status_calibration_t status = CALIBRATE_IN_PROGRESS;
 
-	for(uint32_t i = 0; i < 10000; i++) {
-		// Take a sample
-		uint32_t t1 = __HAL_TIM_GET_COUNTER(&htim2);
-		uint16_t sample = current_sensor_api_get_sample_ADC();
-		uint32_t t2 = __HAL_TIM_GET_COUNTER(&htim2);
-		uint32_t tiempo_sample = t2-t1;
+	switch(state) {
+		case START_CALIBRATION:
+			//dma_start(1024); // todo
+			state = WAITING_CALIBRATION;
+			break;
+		case WAITING_CALIBRATION:
+			if(/*dma_eoc*/1) {
+				// Calculate max deviation
+				float variability = (sample_max - sample_min) * CURRENT_SLOPE;
+				if(variability > CALIBRATION_TOLERANCE_MA) {
+					state = CALIBRATION_COMPLETED;
+					status = CALIBRATE_ERROR;
+					break;
+				}
 
-		// Update max and min
-		if(sample > sample_max)
-			sample_max = sample;
+				// Calculate offset
+				g_offset = (uint16_t) (sum / 100);
+				status = CALIBRATE_OK;
+				CALIBRATION_COMPLETED;
+			}
+			break;
 
-		if(sample < sample_min)
-			sample_min = sample;
-
-		sum += sample;
-
-		// Wait 1ms
-		t1 = __HAL_TIM_GET_COUNTER(&htim2);
-		HAL_Delay(1);
-		t2 = __HAL_TIM_GET_COUNTER(&htim2);
-		uint32_t tiempo_delay = t2-t1;
+		case CALIBRATION_COMPLETED:
+			break;
 	}
-
-	// Calculate max deviation
-	float variability = (sample_max - sample_min) * CURRENT_SLOPE;
-	if(variability > CALIBRATION_TOLERANCE_MA)
-		return CALIBRATE_ERROR;
-
-	// Calculate offset
-	g_offset = (uint16_t) (sum / 100);
-	return CALIBRATE_OK;
+	return status;
 }
 
 void current_sensor_api_loop() {
@@ -198,7 +204,7 @@ status_sampling_t current_sensor_api_get_status() {
 	return g_status;
 }
 
-void current_sensor_api_clean_samples() {
+void current_sensor_api_start_sampling() {
 	g_state = STATE_START;
 	g_cycles_index = 0;
 	for(uint32_t i = 0; i < CYCLES; i++) {

@@ -7,8 +7,8 @@
 //======================================
 // Dependencies
 //======================================
+#include <app_processing/app_processing.h>
 #include "common_apis/timer_api/timer_api.h"
-#include "data_processing_api/data_processing_api.h"
 
 //======================================
 // Private Defines

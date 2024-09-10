@@ -7,15 +7,14 @@
 //======================================
 // Dependencies
 //======================================
+#include <app_processing/current_sensor_api/current_sensor_api.h>
+#include <app_processing/signal_analyzer_api/CMSIS_DSP/Include/arm_math.h>
+#include <app_processing/signal_analyzer_api/signal_analyzer_api.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "my_app.h"
 
-#include "CMSIS_DSP/Include/arm_math.h"
-#include "signal_analyzer_api.h"
-
-#include "current_sensor_api/current_sensor_api.h"
 
 //======================================
 // Private Defines

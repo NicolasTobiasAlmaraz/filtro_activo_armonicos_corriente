@@ -4,8 +4,8 @@
  * @brief This API resolves the data processing
  */
 
-#ifndef SRC_MY_APP_DATA_PROCESSING_API_DATA_PROCESSING_API_H_
-#define SRC_MY_APP_DATA_PROCESSING_API_DATA_PROCESSING_API_H_
+#ifndef SRC_MY_APP_APP_PROCESSING_APP_PROCESSING_H_
+#define SRC_MY_APP_APP_PROCESSING_APP_PROCESSING_H_
 
 //======================================
 // Dependencies
@@ -30,12 +30,12 @@
 /**
  * @brief Initialize the API
  */
-void data_processing_api_init();
+void app_processing_init();
 
 /**
  * @brief Loop for processing
  */
-void data_processing_api_loop();
+void app_processing_loop();
 
 /**
  * @brief Notify to the API that the button was pressed
@@ -43,4 +43,4 @@ void data_processing_api_loop();
 void data_processing_api_set_edge_button();
 
 
-#endif /* SRC_MY_APP_DATA_PROCESSING_API_DATA_PROCESSING_API_H_ */
+#endif /* SRC_MY_APP_APP_PROCESSING_APP_PROCESSING_H_ */

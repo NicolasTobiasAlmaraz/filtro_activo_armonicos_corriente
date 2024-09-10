@@ -11,8 +11,8 @@
 //======================================
 // Dependencies
 //======================================
+#include <app_processing/current_sensor_api/current_sensor_api.h>
 #include "main.h"
-#include "current_sensor_api/current_sensor_api.h"
 
 //======================================
 // Public Defines

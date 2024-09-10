@@ -7,19 +7,13 @@
 //======================================
 // Dependencies
 //======================================
+#include <app_inject_simulator/inject_simulator_api.h>
+#include <app_processing/app_processing.h>
+#include <app_processing/current_sensor_api/current_sensor_api.h>
 #include "main.h"
 #include "my_app.h"
 
 //Input
-#include "current_sensor_api/current_sensor_api.h"
-
-//Proccessing
-#include "data_processing_api/data_processing_api.h"
-
-//Output
-#include "inject_simulator_api/inject_simulator_api.h"
-
-//Common
 #include "common_apis/timer_api/timer_api.h"
 #include "common_apis/cycle_detector_api/cycle_detector_api.h"
 
@@ -51,7 +45,7 @@ void my_app_init() {
 	timer_api_init();
 	cycle_detector_api_init();
 	current_sensor_api_init();
-	data_processing_api_init();
+	app_processing_init();
 	//inject_simulator_api_init();
 }
 
@@ -60,7 +54,7 @@ void my_app_loop() {
 	current_sensor_api_loop();
 
 	//Processing state machine
-	data_processing_api_loop();
+	app_processing_loop();
 
 	//Inject state machine
 	//inject_simulator_api_loop();
