@@ -39,8 +39,6 @@ typedef enum {
 //======================================
 // Private Variables
 //======================================
-static uint16_t* g_current_buffer = NULL;					//!< Pointer to the current waveform buffer to be injected via DAC.
-static uint32_t g_len_current = 0;							//!< Length of the current waveform buffer.
 static inject_state_t g_state = STATE_INJECTION_DISABLED;	//!< Current state of the injection (disabled, waiting, or running).
 static bool g_f_new_cycle = false;							//!< Flag to indicate the detection of a new cycle.
 

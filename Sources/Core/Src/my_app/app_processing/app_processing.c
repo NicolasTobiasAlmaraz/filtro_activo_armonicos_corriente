@@ -110,7 +110,7 @@ void app_processing_loop() {
 			if( current_sensor_api_get_status()!=SAMPLING_COMPLETED )
 				break;
 
-			//Gets Calibration
+			//Get Calibration
 			status_calibration_t status = current_sensor_api_get_calibration();
 
 			status = CALIBRATE_OK; //todo Arreglar ruido eléctrico del sensor
@@ -147,8 +147,7 @@ void app_processing_loop() {
 				g_state = STATE_PROCESSING;
 				cycle_t average_cycle;
 				current_sensor_api_get_average_cycle(&average_cycle);
-				uint16_t zero_offset = current_sensor_api_get_offset();
-				signal_analyzer_api_set_signal_to_analyze(average_cycle, zero_offset);
+				signal_analyzer_api_set_signal_to_analyze(average_cycle, g_zero_offset);
 			}
 			break;
 

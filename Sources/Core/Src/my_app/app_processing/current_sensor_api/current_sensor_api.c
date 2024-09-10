@@ -67,7 +67,7 @@ extern ADC_HandleTypeDef hadc1;
 //======================================
 
 static uint16_t g_ADC_buffer[ADC_BUF_LEN];					//!< ADC Buffer
-static uint16_t g_offset = MAX_UINT16_t / 2;				//!< Offset applied to the ADC readings for calibration
+static uint16_t g_offset = 4096 / 2;				//!< Offset applied to the ADC readings for calibration
 static uint32_t g_period_AC_sig_us = 20000; 				//!< AC period signal (In theory 50Hz --> 20000 us)
 static status_sampling_t g_status_sam = SAMPLING_COMPLETED;	//!< Status of the sampling
 static bool g_f_eoc_dma = false;							//!< Status of DMA Conv
@@ -127,7 +127,7 @@ void current_sensor_api_init() {
 
 void current_sensor_api_start_sampling() {
 	g_status_sam = SAMPLING_IN_PROGRESS;
-	timer_api_enable_interrupts();
+	//timer_api_enable_interrupts();
 }
 
 status_sampling_t current_sensor_api_get_status() {
@@ -150,14 +150,15 @@ status_calibration_t current_sensor_api_get_calibration() {
 			min_value = raw;
 	}
 
+	//Calculate offset
+	float offset = (float) sum / ADC_BUF_LEN;
+	g_offset = (uint16_t)offset;
+
 	//Calculate max variation
 	float slope_ma = (max_value - min_value) * CURRENT_SENSIBILITY;
 	retval = CALIBRATE_OK;
 	if(slope_ma > CALIBRATION_TOLERANCE_MA)
 		retval = CALIBRATE_ERROR;
-
-	//Calculate offset
-	g_offset = (uint16_t) sum / ADC_BUF_LEN;
 
 	return retval;
 }
@@ -200,7 +201,7 @@ void current_sensor_api_timer_callback() {
 					state = STATE_RESET;
 					g_status_sam = SAMPLING_COMPLETED;
 					state = STATE_RESET;
-					timer_api_disable_interrupts();
+					//timer_api_disable_interrupts();
 					return;
 				}
 
@@ -220,6 +221,12 @@ void current_sensor_api_get_average_cycle(cycle_t *buffer) {
 	//Calculate how many samples are by cycle
 	g_period_AC_sig_us = cycle_detector_api_get_period();
 	uint32_t len_cycle = g_period_AC_sig_us / SAMPLING_PERIOD_US;
+
+	//If the cycle detector don't working -> Error
+	if(len_cycle==0) {
+		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, true); //debug
+		return;
+	}
 
 	//Calculate how many cycles are in one ADC sampling process
 	uint8_t cycles_num = ADC_BUF_LEN /len_cycle;

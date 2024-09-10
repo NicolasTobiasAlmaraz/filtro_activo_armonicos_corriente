@@ -19,6 +19,7 @@
 //======================================
 // Private Defines
 //======================================
+#define FFT_MAX_LEN 2048 //!< Length for FFT
 
 //======================================
 // Private Structures and Data Types
@@ -29,8 +30,8 @@
  */
 typedef struct {
     float32_t amplitude;	//!< Amplitude [mA]
-    float32_t frequency;	//!< Frequency [Hz]
-    float32_t phase;		//!< Phase [rad]
+    float32_t period_us;	//!< Frequency [Hz]
+    float32_t phase_us;		//!< Phase [rad]
 } sine_t;
 
 typedef enum {
@@ -48,7 +49,7 @@ typedef enum {
 static cycle_t g_ave_cycle;
 static uint16_t g_zero_offset;
 static cycle_t g_inject_cycle;
-static uint8_t g_thd;
+static int8_t g_thd;
 static state_processing_t g_state = STATE_AVERAGE_POWER;
 
 //======================================
@@ -58,12 +59,13 @@ static state_processing_t g_state = STATE_AVERAGE_POWER;
 /**
  * @brief Calculate signal power
  * @param cycle One cycle of the signal
+ * @param offset Offset of the signal
  * @retval power
  *
  * Energy = Σ {first_sample, last_sample} {sample**2}
  * Power = Energy / samples
  */
-static float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle);
+static float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle, uint16_t offset);
 
 /**
  * @brief Calculate Fundamental Harmonic
@@ -105,63 +107,120 @@ static uint8_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t
  */
 static cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset);
 
+/**
+ * @brief Apply Flat Top Window to the vector data
+ * @param data ptr to the data
+ * @note data will be modified
+ * @param len length of the vector
+ */
+void signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len);
 
 //======================================
 // Private Function Implementations
 //======================================
 
-float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle) {
-    uint32_t energy = 0;
+float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle, uint16_t offset) {
+    float64_t energy = 0;
     for(uint32_t i = 0; i < cycle.len; i++) {
-        energy += (cycle.buffer[i] * cycle.buffer[i]);
+    	int32_t value = cycle.buffer[i] - offset;
+        energy += (value * value);
     }
-
-    float32_t power = (float32_t) energy / cycle.len;
+    energy /= cycle.len;
+    float64_t power = (float32_t)energy;
     return power;
 }
 
+void signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len) {
+    for (uint32_t n = 0; n < len; n++) {
+        float32_t w = 1.0f - 1.93f * cosf(2.0f * M_PI * n / (len - 1)) +
+                      1.29f * cosf(4.0f * M_PI * n / (len - 1)) -
+                      0.388f * cosf(6.0f * M_PI * n / (len - 1)) +
+                      0.032f * cosf(8.0f * M_PI * n / (len - 1));
+        data[n] *= w;
+    }
+}
+
 sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_offset) {
-    float32_t *ptr_fft;
-    float32_t *ptr_in;
-    float32_t *magnitude;
+    float32_t *fft_output = NULL;
+    float32_t *fft_input = NULL;
+    float32_t *magnitude = NULL;
     uint32_t len = cycle.len;
+    uint32_t padded_len = FFT_MAX_LEN;
 
-    // Assign memory for input and output arrays
-    ptr_in = (float32_t*) calloc (len, sizeof(float32_t));
-    ptr_fft = (float32_t*) calloc (len, sizeof(float32_t));
-    magnitude = (float32_t*) calloc (len/2, sizeof(float32_t));
+    // Allocate memory for buffers in and out
+    fft_input = (float32_t*) calloc(padded_len, sizeof(float32_t));
+    fft_output = (float32_t*) calloc(padded_len, sizeof(float32_t));
+    magnitude = (float32_t*) calloc(padded_len / 2 + 1, sizeof(float32_t));
 
-    // Filter the DC component of the signal
-    for(uint32_t i = 0; i < len; i++) {
-        ptr_in[i] = cycle.buffer[i] - zero_offset;
+    // Check allocation
+    if (fft_input == NULL || fft_output == NULL) {
+        sine_t error_result = { .amplitude = 0.0f, .period_us = 0.0f, .phase_us = 0.0f };
+        if (fft_input)
+        	free(fft_input);
+        if (fft_output)
+        	free(fft_output);
+        if (magnitude)
+            free(magnitude);
+        return error_result;
+    }
+
+    // Repeat the cycle for vector
+    uint32_t repetitions = padded_len / len;
+    uint32_t remainder = padded_len % len;
+
+    uint32_t index = 0;
+
+    // Entire quantity
+    for (uint32_t rep = 0; rep < repetitions; rep++) {
+        for (uint32_t i = 0; i < len; i++) {
+            fft_input[index++] = cycle.buffer[i] - zero_offset;
+        }
+    }
+
+    // Rest of samples
+    for (uint32_t i = 0; i < remainder; i++) {
+        fft_input[index++] = cycle.buffer[i] - zero_offset;
     }
 
     // --- Calculate the FFT ---
 
     // Initialize FFT instance
-    arm_rfft_fast_instance_f32 fft_handler;
-    arm_rfft_fast_init_f32(&fft_handler, len);
+    arm_rfft_fast_instance_f32 fft;
+    arm_status status = arm_rfft_fast_init_f32(&fft, padded_len);
+    if (status != ARM_MATH_SUCCESS) {
+        sine_t error_result = { .amplitude = 0.0f, .period_us = 0.0f, .phase_us = 0.0f };
+        if (fft_input)
+        	free(fft_input);
+        if (fft_output)
+        	free(fft_output);
+        if (magnitude)
+        	free(magnitude);
+        HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, true); //debug
+        return error_result;
+	}
+
+    //Apply a flat top window for better accuracy in amplitude
+    signal_analyzer_api_apply_flat_top_window(fft_input, padded_len);
 
     // Calculate FFT
-    arm_rfft_fast_f32(&fft_handler, ptr_in, ptr_fft, 0);
-    // Discard the negative components
-    arm_cmplx_mag_f32(ptr_fft, magnitude, len / 2);
+    uint8_t ifftFlag = 0;
+    arm_rfft_fast_f32(&fft, fft_input, fft_output, ifftFlag);
+    arm_cmplx_mag_f32(fft_output, magnitude, padded_len/2);
 
     // Calculate the fundamental harmonic
-    uint32_t fund_i;
-    float32_t amplitude;
-    arm_max_f32(magnitude, len / 2, &amplitude, &fund_i);
-    float32_t fund_freq = (SAMPLING_FREQUENCY_HZ * fund_i) / len;
+    float32_t   maxValue;
+	uint32_t    maxIndex;
+    arm_max_f32(magnitude, padded_len/2, &maxValue, &maxIndex);
 
     // Fill the return structure
     sine_t fundamental;
-    fundamental.amplitude = amplitude;
-    fundamental.frequency = fund_freq;
-    fundamental.phase = 0;  // Assuming no phase shift
+    fundamental.amplitude = sqrt(maxValue);
+    fundamental.period_us = len * SAMPLING_PERIOD_US;   // Period in microseconds
+    fundamental.phase_us = 0.0f;                        // Assuming no phase shift
 
     // Free memory
-    free(ptr_fft);
-    free(ptr_in);
+    free(fft_output);
+    free(fft_input);
     free(magnitude);
 
     return fundamental;
@@ -173,8 +232,8 @@ float32_t signal_analyzer_api_calculate_sine_power(sine_t sine) {
 }
 
 uint8_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t signal_power) {
-    uint8_t thd = (uint8_t) (signal_power - fund_power) * 100 / fund_power;
-    return thd;
+    uint32_t thd = (signal_power - fund_power) * 100 / fund_power;
+    return (uint8_t)thd;
 }
 
 cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset) {
@@ -224,7 +283,7 @@ status_processing_t signal_analyzer_api_analyze_loop() {
      */
     switch(g_state) {
     	case STATE_AVERAGE_POWER:
-    		current_power = signal_analyzer_api_calculate_sig_power(g_ave_cycle);
+    		current_power = signal_analyzer_api_calculate_sig_power(g_ave_cycle, g_zero_offset);
     		g_state = STATE_FUNDAMENTAL;
     		break;
 
@@ -239,8 +298,8 @@ status_processing_t signal_analyzer_api_analyze_loop() {
     		break;
 
     	case STATE_THD:
-    		current_power = signal_analyzer_api_calculate_thd(fundamental_power, current_power);
-    		g_state = STATE_FUNDAMENTAL;
+    		g_thd = signal_analyzer_api_calculate_thd(fundamental_power, current_power);
+    		g_state = STATE_SIGNAL_TO_INJECT;
     		break;
 
     	case STATE_SIGNAL_TO_INJECT:
