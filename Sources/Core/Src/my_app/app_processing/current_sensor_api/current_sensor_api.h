@@ -87,7 +87,7 @@ void current_sensor_api_set_period_220(uint32_t period_us);
  * @brief Returns the average cycle in base of the last DMA Transfer samples
  * @retval average cycle
  */
-cycle_t current_sensor_api_get_average_cycle();
+void current_sensor_api_get_average_cycle(cycle_t *buffer);
 
 /**
  * @brief This function must be called on Timer Interrupt callback

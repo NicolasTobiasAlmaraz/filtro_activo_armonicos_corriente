@@ -117,7 +117,7 @@ void display_api_set_msg_THD() {
 
 	//Line 2
 	display_driver_set_cursor(1,0);
-	display_driver_send_string("Filtro Act Armo i(t)");
+	display_driver_send_string("State - Working     ");
 
 	//Line 3
 	display_driver_set_cursor(2,0);
@@ -139,4 +139,12 @@ void display_api_update_THD(uint8_t thd) {
 	number[0] = '0' + thd / 10;
 	number[1] = '0' + thd % 10;
 	display_driver_send_string(number);
+}
+
+
+// -- State messages
+void display_api_set_msg_stand_by() {
+	//Line 2
+	display_driver_set_cursor(1,0);
+	display_driver_send_string("State - Stand By    ");
 }

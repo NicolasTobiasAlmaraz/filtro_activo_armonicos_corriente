@@ -57,10 +57,12 @@ void cycle_detector_api_append_period(uint32_t period) {
 //======================================
 
 void cycle_detector_api_init() {
-
+	for(uint32_t i=0; i<LEN_MED_MOV ; i++) {
+		g_samples[i]=0;
+	}
 }
 
-uint32_t cycle_detector_api_get_period(uint32_t period) {
+uint32_t cycle_detector_api_get_period() {
 	uint32_t suma = 0;
 	for(uint32_t i=0; i<LEN_MED_MOV ; i++) {
 		suma += g_samples[i];

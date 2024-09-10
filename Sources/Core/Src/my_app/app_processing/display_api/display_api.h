@@ -51,7 +51,7 @@ void display_api_set_msg_calibration_ok();
 void display_api_set_msg_calibration_error();
 
 /**
- * @brief Sets information about THD
+ * @brief Sets information about THD and working mode
  */
 void display_api_set_msg_THD();
 
@@ -59,5 +59,10 @@ void display_api_set_msg_THD();
  * @brief Updates only THD value
  */
 void display_api_update_THD(uint8_t thd);
+
+/**
+ * @brief Set stand by msg
+ */
+void display_api_set_msg_stand_by();
 
 #endif /* SRC_SUBSYSTEMS_DISPLAY_LOGS_H_ */

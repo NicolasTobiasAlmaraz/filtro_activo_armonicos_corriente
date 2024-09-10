@@ -62,7 +62,12 @@ void app_processing_check_stop_button() {
 	if(g_f_edge_button) {
 		g_f_edge_button = false;
 		g_state = STATE_STAND_BY;
+
+		//Disable Injection
 		inject_simulator_api_set_enable(false);
+
+		//Set display "Stand By Mode"
+		display_api_set_msg_stand_by();
 	}
 }
 
@@ -140,7 +145,8 @@ void app_processing_loop() {
 			if(current_sensor_api_get_status()==SAMPLING_COMPLETED) {
 				//Process the signal
 				g_state = STATE_PROCESSING;
-				cycle_t average_cycle = current_sensor_api_get_average_cycle();
+				cycle_t average_cycle;
+				current_sensor_api_get_average_cycle(&average_cycle);
 				uint16_t zero_offset = current_sensor_api_get_offset();
 				signal_analyzer_api_set_signal_to_analyze(average_cycle, zero_offset);
 			}

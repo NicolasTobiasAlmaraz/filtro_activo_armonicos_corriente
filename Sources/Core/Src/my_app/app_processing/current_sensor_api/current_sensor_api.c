@@ -26,6 +26,7 @@
 
 #include "main.h"
 #include "common_apis/timer_api/timer_api.h"
+#include "common_apis/cycle_detector_api/cycle_detector_api.h"
 
 //======================================
 // Private Defines
@@ -212,11 +213,12 @@ void current_sensor_api_timer_callback() {
 	}
 }
 
-cycle_t current_sensor_api_get_average_cycle() {
+void current_sensor_api_get_average_cycle(cycle_t *buffer) {
 	//Iterator for DMA buffer
 	uint32_t dma_i=0;
 
 	//Calculate how many samples are by cycle
+	g_period_AC_sig_us = cycle_detector_api_get_period();
 	uint32_t len_cycle = g_period_AC_sig_us / SAMPLING_PERIOD_US;
 
 	//Calculate how many cycles are in one ADC sampling process
@@ -243,5 +245,10 @@ cycle_t current_sensor_api_get_average_cycle() {
 		}
 		average_cycle.buffer[i] = (uint16_t) sum / cycles_num;
 	}
-	return average_cycle;
+
+	//Copy on ptr_out
+	memcpy(buffer, &average_cycle, sizeof(cycle_t));
+
+	//Free memory
+	free(cycle_array);
 }
