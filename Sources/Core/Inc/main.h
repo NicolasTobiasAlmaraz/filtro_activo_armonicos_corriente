@@ -59,18 +59,15 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define USER_BUTTON_Pin GPIO_PIN_13
 #define USER_BUTTON_GPIO_Port GPIOC
+#define USER_BUTTON_EXTI_IRQn EXTI15_10_IRQn
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOH
 #define RMII_MDC_Pin GPIO_PIN_1
 #define RMII_MDC_GPIO_Port GPIOC
-#define SENSOR_I_Pin GPIO_PIN_0
-#define SENSOR_I_GPIO_Port GPIOA
 #define RMII_REF_CLK_Pin GPIO_PIN_1
 #define RMII_REF_CLK_GPIO_Port GPIOA
 #define RMII_MDIO_Pin GPIO_PIN_2
 #define RMII_MDIO_GPIO_Port GPIOA
-#define DAC_Pin GPIO_PIN_4
-#define DAC_GPIO_Port GPIOA
 #define RMII_CRS_DV_Pin GPIO_PIN_7
 #define RMII_CRS_DV_GPIO_Port GPIOA
 #define RMII_RXD0_Pin GPIO_PIN_4
@@ -81,6 +78,7 @@ void Error_Handler(void);
 #define LD1_GPIO_Port GPIOB
 #define CYCLE_DETECTOR_Pin GPIO_PIN_9
 #define CYCLE_DETECTOR_GPIO_Port GPIOE
+#define CYCLE_DETECTOR_EXTI_IRQn EXTI9_5_IRQn
 #define RMII_TXD1_Pin GPIO_PIN_13
 #define RMII_TXD1_GPIO_Port GPIOB
 #define LD3_Pin GPIO_PIN_14

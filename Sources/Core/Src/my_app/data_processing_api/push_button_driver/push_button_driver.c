@@ -42,8 +42,11 @@ void push_button_driver_init() {
 void push_button_driver_callback() {
 	//Check debounce timeout
 	status_timer_t timeout = timer_api_check_timer(TIMER_DEBOUNCE_BUTTON);
-	if(timeout != TIMER_RUNNING) {
-		timer_api_set_count(TIMER_DEBOUNCE_BUTTON, TIME_DEBOUNCE);
-		data_processing_api_set_edge_button();
-	}
+
+	//If timer was running, it means a bounce was detected
+	if(timeout == TIMER_RUNNING)
+		return;
+
+	timer_api_set_count(TIMER_DEBOUNCE_BUTTON, TIME_DEBOUNCE);
+	data_processing_api_set_edge_button();
 }

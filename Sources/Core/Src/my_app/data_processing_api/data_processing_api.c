@@ -98,7 +98,7 @@ void data_processing_api_state_reset() {
 
 void data_processing_api_state_calibrating() {
 	bool status = current_sensor_api_calibrate();
-	if(status) {
+	if(status == CALIBRATE_OK) {
 		g_state = STATE_STAND_BY;
 		g_zero_offset = current_sensor_api_get_offset();
 		display_api_set_msg_start();
@@ -192,6 +192,7 @@ static void data_processing_api_check_stop_button() {
 //======================================
 
 void data_processing_api_init() {
+	display_api_init();
 	display_api_set_msg_calibrate();
 }
 

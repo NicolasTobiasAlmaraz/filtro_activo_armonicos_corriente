@@ -42,21 +42,25 @@ void display_api_init() {
 
 	//Line 1
 	display_driver_set_cursor(0,0);
-	display_driver_send_string("N. Almaraz - TP3:");
+	display_driver_send_string("Nico Almaraz - TP3: ");
 
 	//Line 2
 	display_driver_set_cursor(1,0);
-	display_driver_send_string("Filt Act Arm i(t)");
+	display_driver_send_string("Filtro Act Armo i(t)");
 }
 
 void display_api_set_msg_THD() {
+	//Line 2
+	display_driver_set_cursor(1,0);
+	display_driver_send_string("Filtro Act Armo i(t)");
+
 	//Line 3
 	display_driver_set_cursor(2,0);
-	display_driver_send_string("Corriente de linea:");
+	display_driver_send_string("Corriente de linea: ");
 
 	//Line 4
 	display_driver_set_cursor(3,0);
-	display_driver_send_string("THD: -- %");
+	display_driver_send_string("THD: -- %           ");
 }
 
 void display_api_update_THD(uint8_t thd) {
@@ -75,7 +79,7 @@ void display_api_update_THD(uint8_t thd) {
 void display_api_set_msg_calibrate() {
 	//Line 3
 	display_driver_set_cursor(2,0);
-	display_driver_send_string("Desconecte cargas y");
+	display_driver_send_string("Desconecte cargas y ");
 
 	//Line 4
 	display_driver_set_cursor(3,0);
@@ -83,19 +87,23 @@ void display_api_set_msg_calibrate() {
 }
 
 void display_api_set_msg_start() {
+	//Line 2
+	display_driver_set_cursor(1,0);
+	display_driver_send_string("Conecte cargas y    ");
+
 	//Line 3
 	display_driver_set_cursor(2,0);
-	display_driver_send_string("Para iniciar proceso");
+	display_driver_send_string("presione pulsador   ");
 
 	//Line 4
 	display_driver_set_cursor(3,0);
-	display_driver_send_string("presione el pulsador");
+	display_driver_send_string("para iniciar proceso");
 }
 
 void display_api_set_msg_calibrating() {
 	//Line 3
 	display_driver_set_cursor(2,0);
-	display_driver_send_string("Calibrando ...");
+	display_driver_send_string("Calibrando ...      ");
 
 	//Line 4
 	display_driver_set_cursor(3,0);
@@ -105,7 +113,7 @@ void display_api_set_msg_calibrating() {
 void display_api_set_msg_calibration_error() {
 	//Line 3
 	display_driver_set_cursor(2,0);
-	display_driver_send_string("Error! Reintente");
+	display_driver_send_string("Error! Reintente    ");
 
 	//Line 4
 	display_driver_set_cursor(3,0);

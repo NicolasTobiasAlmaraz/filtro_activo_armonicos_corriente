@@ -29,6 +29,7 @@ typedef enum {
     TIMER_DISPLAY,
     TIMER_SETTING,
     TIMER_DEBOUNCE_BUTTON,
+	TIMER_DEBOUNCE_CYCLES_DETECTION,
 } timer_id_t;
 
 /**

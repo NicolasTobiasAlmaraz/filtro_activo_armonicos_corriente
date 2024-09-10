@@ -16,22 +16,35 @@
 //======================================
 // Public Defines
 //======================================
-#define CALIBRATE_OK        0
-#define CALIBRATE_ERROR     1
 #define CYCLES				50
 #define LEN_MAX             450
 
 //======================================
 // Public Data Structures and Types
 //======================================
+
+/**
+ * @brief This structure contains current samples for a 50Hz cycle
+ */
 typedef struct {
-    uint16_t cycle[LEN_MAX];
-    uint32_t len;
+    uint16_t cycle[LEN_MAX];	//!< Samples
+    uint32_t len;				//!< Number of Samples
 } cycle_t;
 
+/**
+ * @brief Status code of the calibration process
+ */
 typedef enum {
-	SAMPLING_IN_PROGRESS,
-	SAMPLING_COMPLETED,
+	CALIBRATE_OK,		//!<Calibration successful
+	CALIBRATE_ERROR,	//!<Calibration error
+}status_calibration_t;
+
+/**
+ * @brief Status code of the sampling process
+ */
+typedef enum {
+	SAMPLING_IN_PROGRESS,	//!< Sampling in progress
+	SAMPLING_COMPLETED,		//!< Samples ready for processing
 }status_sampling_t;
 
 //======================================
@@ -50,12 +63,9 @@ void current_sensor_api_init();
  * It is considered that there is current consumption when there is a variation greater than TOLERANCE_CALIBRATION_MA mA.
  * Internally, it saves the value in the API to calibrate future measurements.
  *
- * Returns:
- *  CALIBRATE_OK: Successful calibration, the offset was saved in the pointer.
- *  CALIBRATE_ERROR: Current consumption was detected during calibration.
  * @retval status
  */
-bool current_sensor_api_calibrate();
+status_calibration_t current_sensor_api_calibrate();
 
 /**
  * @brief Main sampling loop for the current sensor

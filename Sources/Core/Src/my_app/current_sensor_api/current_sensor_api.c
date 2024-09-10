@@ -81,6 +81,7 @@ uint16_t current_sensor_api_get_sample_ADC();
 //======================================
 
 uint16_t current_sensor_api_get_sample_ADC() {
+	HAL_ADC_PollForConversion(&hadc1, 1);
 	uint32_t sample = HAL_ADC_GetValue(&hadc1);
 	return (uint16_t)sample;
 }
@@ -90,17 +91,25 @@ uint16_t current_sensor_api_get_sample_ADC() {
 //======================================
 
 void current_sensor_api_init() {
+	HAL_ADC_Init(&hadc1);
+	HAL_ADC_Start(&hadc1);
 	current_sensor_api_clean_samples();
 }
 
-bool current_sensor_api_calibrate() {
+//todo borrar
+extern TIM_HandleTypeDef htim2;
+
+status_calibration_t current_sensor_api_calibrate() {
 	uint16_t sample_max = 0;
 	uint16_t sample_min = MAX_UINT16_t;
 	uint32_t sum = 0;
 
-	for(uint32_t i = 0; i < 100; i++) {
+	for(uint32_t i = 0; i < 10000; i++) {
 		// Take a sample
+		uint32_t t1 = __HAL_TIM_GET_COUNTER(&htim2);
 		uint16_t sample = current_sensor_api_get_sample_ADC();
+		uint32_t t2 = __HAL_TIM_GET_COUNTER(&htim2);
+		uint32_t tiempo_sample = t2-t1;
 
 		// Update max and min
 		if(sample > sample_max)
@@ -111,8 +120,11 @@ bool current_sensor_api_calibrate() {
 
 		sum += sample;
 
-		// Wait 10ms
-		HAL_Delay(10);
+		// Wait 1ms
+		t1 = __HAL_TIM_GET_COUNTER(&htim2);
+		HAL_Delay(1);
+		t2 = __HAL_TIM_GET_COUNTER(&htim2);
+		uint32_t tiempo_delay = t2-t1;
 	}
 
 	// Calculate max deviation
@@ -164,7 +176,7 @@ void current_sensor_api_loop() {
 		case STATE_WAITING:
 			// Return to sampling state if...
 
-			// 1 - Timeout
+			// 1 - Timeout fs --> Time to take another sample
 			if(timer_api_check_timer(TIMER_SAMPLING) == TIMER_FINISHED) {
 				g_state = STATE_SAMPLING;
 			}
