@@ -146,5 +146,13 @@ void display_api_update_THD(uint8_t thd) {
 void display_api_set_msg_stand_by() {
 	//Line 2
 	display_driver_set_cursor(1,0);
-	display_driver_send_string("State - Stand By    ");
+	display_driver_send_string("State- Stand By Mode");
+
+	//Line 3
+	display_driver_set_cursor(2,0);
+	display_driver_send_string("Presione el pulsador");
+
+	//Line 4
+	display_driver_set_cursor(3,0);
+	display_driver_send_string("Para corregir armon ");
 }
