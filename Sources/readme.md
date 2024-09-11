@@ -59,4 +59,4 @@ El resto de archivos fuente son generados por STM32 Cube IDE
 Por otro lado, es importante verificar las configuraciones de sistema hechas en el IOC
 
 # Video del funcionamiento:
-[Video de Nicolás Almaraz](https://www.youtube.com/watch?v=SaUtxi-bsFg&ab_channel=NicolasAlmaraz)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SaUtxi-bsFg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
