@@ -99,4 +99,9 @@ void current_sensor_api_timer_callback();
  */
 void current_sensor_api_dma_callback();
 
+/**
+ * @brief This function must be called on Cycle Detection callback
+ */
+void current_sensor_api_cycle_callback();
+
 #endif /* SRC_MY_APP_CURRENT_SENSOR_CURRENT_SENSOR_H_ */

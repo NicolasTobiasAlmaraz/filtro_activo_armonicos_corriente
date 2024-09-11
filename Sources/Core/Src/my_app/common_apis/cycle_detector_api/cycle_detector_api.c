@@ -17,7 +17,7 @@
 //======================================
 // Private Defines
 //======================================
-#define TIME_CYCLE_DETECTION_US 15000	//15ms
+#define TIME_CYCLE_DETECTION_US 19000	//19ms
 #define LEN_MED_MOV				100   	//100 cycles to estimate the period
 
 //======================================
@@ -87,12 +87,15 @@ void cycle_detector_api_callback() {
 
 	timer_api_set_count(TIMER_DEBOUNCE_CYCLES_DETECTION, TIME_CYCLE_DETECTION_US);
 
+	//Current Sensor API Notification
+	current_sensor_api_cycle_callback();
+
+	//Inject Simulator API Notification
+	inject_simulator_api_set_new_cycle();
+
 	//Calculate Line Period
 	uint32_t current_time = timer_api_get_ticks();
 	uint32_t period = current_time - time_mem;
 	time_mem = current_time;
 	cycle_detector_api_append_period(period);
-
-	//Inject Simulator API
-	inject_simulator_api_set_new_cycle();
 }

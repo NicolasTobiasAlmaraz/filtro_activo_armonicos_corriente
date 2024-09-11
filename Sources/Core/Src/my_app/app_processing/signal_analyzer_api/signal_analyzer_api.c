@@ -283,6 +283,7 @@ status_processing_t signal_analyzer_api_analyze_loop() {
      */
     switch(g_state) {
     	case STATE_AVERAGE_POWER:
+    		//aca llega mal el avg cycle
     		current_power = signal_analyzer_api_calculate_sig_power(g_ave_cycle, g_zero_offset);
     		g_state = STATE_FUNDAMENTAL;
     		break;
@@ -323,3 +324,5 @@ cycle_t signal_analyzer_api_get_cycle_to_inject(void) {
 uint8_t signal_analyzer_api_get_thd(void) {
     return g_thd;
 }
+
+

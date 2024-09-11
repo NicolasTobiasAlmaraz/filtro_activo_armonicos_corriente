@@ -147,7 +147,7 @@ void app_processing_loop() {
 				g_state = STATE_PROCESSING;
 				cycle_t average_cycle;
 				current_sensor_api_get_average_cycle(&average_cycle);
-				signal_analyzer_api_set_signal_to_analyze(average_cycle, g_zero_offset);
+				signal_analyzer_api_set_signal_to_analyze(average_cycle, g_zero_offset); //Llega mal el avg cycle
 			}
 			break;
 

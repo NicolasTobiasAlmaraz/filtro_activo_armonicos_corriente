@@ -17,8 +17,8 @@
 
 //Common defines
 #define SAMPLING_FREQUENCY_HZ 	20000	//fs = 20kHz
-#define SAMPLING_PERIOD_US 		50	//fs = 20kHz -> TS = 50 useg
-#define CYCLES_TO_PROCESS		50		//Processing 50 cycles
+#define SAMPLING_PERIOD_US 		50		//fs = 20kHz -> TS = 50 useg
+#define CYCLES_TO_PROCESS		10		//Processing 10 cycles
 #define SETTING_TIME_US 		5000000 //5 seg
 #define LEN_MAX             	500		//Max samples on 50Hz cycle
 

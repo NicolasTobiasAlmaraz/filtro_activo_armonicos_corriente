@@ -41,10 +41,17 @@
 #define CURRENT_SENSIBILITY 		(float) 4.356004 // [mA/counts]
 
 /** ADC Buffer Len DMA*/
-#define ADC_BUF_LEN             	20000
+#define ADC_BUF_LEN             	40000
 
 /** ADC SAMPLING PERIOD (Ts) */
 #define SAMPLING_PERIOD_US			50
+
+/** Minimum validate samples in one cycle */
+#define MIN_SAMPLES_CYCLE 375
+
+/** Maximum validate samples in one cycle */
+#define MAX_SAMPLES_CYCLE 415
+
 
 //======================================
 // Private Data Structures and Types
@@ -55,6 +62,17 @@ typedef enum {
 	STATE_RESET,		/**< Sampling completed */
 	STATE_SAMPLING,		/**< Sampling in progress */
 } state_current_sensor_t;
+
+typedef struct {
+	uint32_t index_init;
+	uint32_t index_end;
+} cycle_limits_t;
+
+typedef struct {
+	cycle_limits_t limits[150];
+	uint32_t cycles_num;
+} handler_cycle_lmits_t;
+
 
 //======================================
 // STM32 Handlers
@@ -67,10 +85,12 @@ extern ADC_HandleTypeDef hadc1;
 //======================================
 
 static uint16_t g_ADC_buffer[ADC_BUF_LEN];					//!< ADC Buffer
-static uint16_t g_offset = 4096 / 2;				//!< Offset applied to the ADC readings for calibration
+static uint32_t g_index_ADC_buffer = 0;									//!< Index for iterate g_ADC_buffer
+static uint16_t g_offset = 4096 / 2;						//!< Offset applied to the ADC readings for calibration
 static uint32_t g_period_AC_sig_us = 20000; 				//!< AC period signal (In theory 50Hz --> 20000 us)
 static status_sampling_t g_status_sam = SAMPLING_COMPLETED;	//!< Status of the sampling
 static bool g_f_eoc_dma = false;							//!< Status of DMA Conv
+static handler_cycle_lmits_t g_h_lim;						//!< Handler to register limits of each cycle inside the complete array (up to 100 cycles)
 
 //======================================
 // Private Function Declarations
@@ -177,16 +197,21 @@ void current_sensor_api_dma_callback() {
 
 void current_sensor_api_timer_callback() {
 	static state_current_sensor_t state;
-	static uint32_t sample = 0;
 
 	switch(state) {
 		case STATE_RESET:
 			//Checks if sampling start
 			if(g_status_sam==SAMPLING_IN_PROGRESS) {
-				//Start process
-				sample = 0;
-				current_sensor_api_start_ADC_sampling_DMA(&g_ADC_buffer[sample]);
-				sample++;
+				//Reset cycles handler
+				g_h_lim.cycles_num = 0;
+				g_h_lim.limits[0].index_init = 0;
+
+				//Reset index buffer
+				g_index_ADC_buffer = 0;
+
+				//Start Sampling
+				current_sensor_api_start_ADC_sampling_DMA(&g_ADC_buffer[g_index_ADC_buffer]);
+				g_index_ADC_buffer++;
 				state = STATE_SAMPLING;
 			}
 			break;
@@ -197,7 +222,7 @@ void current_sensor_api_timer_callback() {
 				g_f_eoc_dma = false;
 
 				//Checks if buffer was completed
-				if(sample >= ADC_BUF_LEN) {
+				if(g_index_ADC_buffer >= ADC_BUF_LEN) {
 					state = STATE_RESET;
 					g_status_sam = SAMPLING_COMPLETED;
 					state = STATE_RESET;
@@ -206,8 +231,8 @@ void current_sensor_api_timer_callback() {
 				}
 
 				//Start DMA again
-				current_sensor_api_start_ADC_sampling_DMA(&g_ADC_buffer[sample]);
-				sample++;
+				current_sensor_api_start_ADC_sampling_DMA(&g_ADC_buffer[g_index_ADC_buffer]);
+				g_index_ADC_buffer++;
 			}
 
 			break;
@@ -215,42 +240,55 @@ void current_sensor_api_timer_callback() {
 }
 
 void current_sensor_api_get_average_cycle(cycle_t *buffer) {
-	//Iterator for DMA buffer
-	uint32_t dma_i=0;
-
-	//Calculate how many samples are by cycle
-	g_period_AC_sig_us = cycle_detector_api_get_period();
-	uint32_t len_cycle = g_period_AC_sig_us / SAMPLING_PERIOD_US;
-
 	//If the cycle detector don't working -> Error
-	if(len_cycle==0) {
+	uint32_t cycles_num = g_h_lim.cycles_num-1;
+	if(cycles_num==0) {
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, true); //debug
 		return;
 	}
 
-	//Calculate how many cycles are in one ADC sampling process
-	uint8_t cycles_num = ADC_BUF_LEN /len_cycle;
-
 	//Structure data by cycles
 	//cycle_array = [cycle1, cycle2, ... cycleN]
 	cycle_t *cycle_array;
+	uint16_t min_lenght = MAX_UINT16_t;
+	uint16_t validated_cycles = 0;
+
 	cycle_array = (cycle_t *)calloc(cycles_num, sizeof(cycle_t));
+
+
+	//Complete cycles array
 	for(uint8_t cycle=0; cycle<cycles_num ; cycle++) {
-		for(uint32_t i=0; i<len_cycle; i++) {
-			cycle_array[cycle].buffer[i] = g_ADC_buffer[dma_i];
-			dma_i++;
+
+		//Calculate length and verify minimum length
+		uint16_t len_cycle = g_h_lim.limits[cycle].index_end - g_h_lim.limits[cycle].index_init;
+
+		//Discard if the cycle is too short or too long
+		if(len_cycle<MIN_SAMPLES_CYCLE || len_cycle>MAX_SAMPLES_CYCLE) {
+			continue;
 		}
+
+		if(len_cycle<min_lenght)
+			min_lenght = len_cycle;
+
+		//Complete cycle
+		cycle_array[validated_cycles].len = len_cycle;
+		uint32_t index_init = g_h_lim.limits[cycle].index_init;
+		for(uint32_t i=0; i<len_cycle; i++) {
+			cycle_array[validated_cycles].buffer[i] = g_ADC_buffer[index_init+i];
+		}
+		validated_cycles++;
 	}
 
 	//Calculate the average cycle
 	cycle_t average_cycle;
-	average_cycle.len = len_cycle;
-	for(uint32_t i=0; i<len_cycle; i++) {
-		float sum = 0;
-		for(uint8_t cycle=0; cycle<cycles_num ; cycle++) {
+	average_cycle.len = min_lenght;
+	for(uint32_t i=0; i<min_lenght; i++) {
+		uint64_t sum = 0;
+		for(uint8_t cycle=0; cycle<validated_cycles ; cycle++) {
 			sum += cycle_array[cycle].buffer[i];
 		}
-		average_cycle.buffer[i] = (uint16_t) sum / cycles_num;
+		sum /= validated_cycles;
+		average_cycle.buffer[i] = (uint16_t) sum;
 	}
 
 	//Copy on ptr_out
@@ -258,4 +296,21 @@ void current_sensor_api_get_average_cycle(cycle_t *buffer) {
 
 	//Free memory
 	free(cycle_array);
+}
+
+void current_sensor_api_cycle_callback() {
+	//Check if corresponds to analyze
+	if(g_status_sam == SAMPLING_COMPLETED) {
+		return;
+	}
+
+	// Read current cycle
+	uint32_t current_cycle = g_h_lim.cycles_num;
+
+	// Register the end of the current cycle and the start of the next
+	g_h_lim.limits[current_cycle].index_end = g_index_ADC_buffer-1;
+	g_h_lim.limits[current_cycle+1].index_init = g_index_ADC_buffer;
+
+	//Increment one cycle
+	g_h_lim.cycles_num++;
 }

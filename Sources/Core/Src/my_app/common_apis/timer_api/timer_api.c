@@ -7,14 +7,14 @@
 //======================================
 // Dependencies
 //======================================
-#include <common_apis/timer_api/timer_api.h>
+#include "common_apis/timer_api/timer_api.h"
 #include "main.h"
 
 //======================================
 // Private Defines
 //======================================
-#define TICK_TIME 1
-#define NUM_TIMERS 4
+#define TICK_TIME 	1
+#define NUM_TIMERS 	5
 
 //======================================
 // Private Data Structures and Types
