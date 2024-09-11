@@ -36,7 +36,7 @@ typedef struct {
 
 typedef enum {
 	STATE_AVERAGE_POWER,
-	STATE_FUNDAMENTAL,
+	STATE_FFT,
 	STATE_FUND_POWER,
 	STATE_THD,
 	STATE_SIGNAL_TO_INJECT,
@@ -73,7 +73,7 @@ static float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle, uint16_t
  * @param zero_offset This is the offset
  * @retval Returns the characteristic values of the fundamental harmonic (amplitude, frequency, and phase)
  */
-static sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_offset);
+static sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset);
 
 /**
  * @brief Calculate the power of a sine
@@ -92,7 +92,7 @@ static float32_t signal_analyzer_api_calculate_sine_power(sine_t sine);
  *
  * THD% = 100% * power_harmonics / power_fundamental
  */
-static uint8_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t signal_power);
+static uint16_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t signal_power);
 
 /**
  * @brief Calculate signal to inject
@@ -119,17 +119,6 @@ void signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len);
 // Private Function Implementations
 //======================================
 
-float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle, uint16_t offset) {
-    float64_t energy = 0;
-    for(uint32_t i = 0; i < cycle.len; i++) {
-    	int32_t value = cycle.buffer[i] - offset;
-        energy += (value * value);
-    }
-    energy /= cycle.len;
-    float64_t power = (float32_t)energy;
-    return power;
-}
-
 void signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len) {
     for (uint32_t n = 0; n < len; n++) {
         float32_t w = 1.0f - 1.93f * cosf(2.0f * M_PI * n / (len - 1)) +
@@ -140,7 +129,10 @@ void signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len) {
     }
 }
 
-sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_offset) {
+
+
+//todo: Dividir esta funcion en varias asi no ocupo el proc por tanto tiempo
+sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
     float32_t *fft_output = NULL;
     float32_t *fft_input = NULL;
     float32_t *magnitude = NULL;
@@ -208,15 +200,25 @@ sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_of
     arm_cmplx_mag_f32(fft_output, magnitude, padded_len/2);
 
     // Calculate the fundamental harmonic
-    float32_t   maxValue;
-	uint32_t    maxIndex;
-    arm_max_f32(magnitude, padded_len/2, &maxValue, &maxIndex);
+    float32_t   fund_power;
+	uint32_t    fund_index;
+    arm_max_f32(magnitude, padded_len/2, &fund_power, &fund_index);
 
     // Fill the return structure
     sine_t fundamental;
-    fundamental.amplitude = sqrt(maxValue);
+    fundamental.amplitude = sqrt(fund_power*2);			// P = maxValue = A**2/2 --> A = sqrt(maxValue*2)
     fundamental.period_us = len * SAMPLING_PERIOD_US;   // Period in microseconds
     fundamental.phase_us = 0.0f;                        // Assuming no phase shift
+
+    float64_t harm_power = 0;
+    for(uint32_t i=fund_index*2; i<padded_len/2; i++) {
+    	//Add Harm k*fundamental_freq
+    	if(i%fund_index==0)
+    		harm_power += magnitude[i]*magnitude[i];
+    }
+
+    // Calculate THD in base of the harmonics (k*F0)
+    g_thd = 100*(harm_power / fund_power);
 
     // Free memory
     free(fft_output);
@@ -226,16 +228,6 @@ sine_t signal_analyzer_api_calculate_fundamental(cycle_t cycle, uint16_t zero_of
     return fundamental;
 }
 
-float32_t signal_analyzer_api_calculate_sine_power(sine_t sine) {
-    float32_t power = sine.amplitude * sine.amplitude / 2;
-    return power;
-}
-
-uint8_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t signal_power) {
-    uint32_t thd = (signal_power - fund_power) * 100 / fund_power;
-    return (uint8_t)thd;
-}
-
 cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset) {
     // Save the cycle length to inject
     uint32_t len = ave_cycle.len;
@@ -243,7 +235,7 @@ cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_
     // Generate array with the fundamental sine
     float32_t *ptr_fund = (float32_t*) calloc (len, sizeof(float32_t));
     for (int i = 0; i < len; i++) {
-        ptr_fund[i] = fundamental.amplitude * arm_sin_f32(2 * PI * i / len);
+        ptr_fund[i] = fundamental.amplitude * arm_sin_f32(2 * PI * i / len) + zero_offset*2;
     }
 
     // Calculate cycle to inject
@@ -251,7 +243,7 @@ cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_
     // inject_cycle = fundamental_cycle - distorted_cycle
     cycle_t cycle_to_inject;
     for(uint32_t i = 0; i < len; i++) {
-        cycle_to_inject.buffer[i] = (uint16_t) (ptr_fund[i] - ave_cycle.buffer[i] + zero_offset);
+        cycle_to_inject.buffer[i] = (uint16_t) (ptr_fund[i] - ave_cycle.buffer[i]);
     }
 
     free(ptr_fund);
@@ -272,34 +264,16 @@ void signal_analyzer_api_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_
 }
 
 status_processing_t signal_analyzer_api_analyze_loop() {
-    static float32_t current_power;
     static sine_t fundamental;
-    static float32_t fundamental_power;
-
     /**
      * Some operations take too much time,
      * So I divide them into a state machine to proceed in stages
      * and refresh the rest of the functionalities within the main loop
      */
     switch(g_state) {
-    	case STATE_AVERAGE_POWER:
-    		//aca llega mal el avg cycle
-    		current_power = signal_analyzer_api_calculate_sig_power(g_ave_cycle, g_zero_offset);
-    		g_state = STATE_FUNDAMENTAL;
-    		break;
-
-    	case STATE_FUNDAMENTAL:
-    		fundamental = signal_analyzer_api_calculate_fundamental(g_ave_cycle, g_zero_offset);
-    		g_state = STATE_FUND_POWER;
-    		break;
-
-    	case STATE_FUND_POWER:
-    		fundamental_power = signal_analyzer_api_calculate_sine_power(fundamental);
-    		g_state = STATE_THD;
-    		break;
-
-    	case STATE_THD:
-    		g_thd = signal_analyzer_api_calculate_thd(fundamental_power, current_power);
+		default:
+		case STATE_FFT:
+    		fundamental = signal_analyzer_api_calculate_fft(g_ave_cycle, g_zero_offset);
     		g_state = STATE_SIGNAL_TO_INJECT;
     		break;
 
@@ -321,7 +295,7 @@ cycle_t signal_analyzer_api_get_cycle_to_inject(void) {
     return g_inject_cycle;
 }
 
-uint8_t signal_analyzer_api_get_thd(void) {
+uint16_t signal_analyzer_api_get_thd(void) {
     return g_thd;
 }
 

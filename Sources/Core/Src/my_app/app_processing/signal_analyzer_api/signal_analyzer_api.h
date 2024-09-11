@@ -51,7 +51,7 @@ status_processing_t signal_analyzer_api_analyze_loop();
  * @brief Retrieves the Total Harmonic Distortion (THD)
  * @retval THD [%]
  */
-uint8_t signal_analyzer_api_get_thd();
+uint16_t signal_analyzer_api_get_thd();
 
 /**
  * @brief Retrieves the injected current
