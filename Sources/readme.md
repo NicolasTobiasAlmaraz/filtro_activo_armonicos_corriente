@@ -60,6 +60,4 @@ Por otro lado, es importante verificar las configuraciones de sistema hechas en 
 
 # Video del funcionamiento:
 
-# Video de YouTube
-
 [![Video de TP3](https://img.youtube.com/vi/SaUtxi-bsFg/0.jpg)](https://www.youtube.com/watch?v=SaUtxi-bsFg)
