@@ -59,4 +59,4 @@ El resto de archivos fuente son generados por STM32 Cube IDE
 Por otro lado, es importante verificar las configuraciones de sistema hechas en el IOC
 
 # Video del funcionamiento:
-[![TP3]([https://www.youtube.com/watch?v=SaUtxi-bsFg&ab_channel=NicolasAlmaraz](https://youtu.be/SaUtxi-bsFg?si=VIxRSHYUlaQg5VOo))
+[![TP3]([https://www.youtube.com/watch?v=SaUtxi-bsFg&ab_channel=NicolasAlmaraz](https://youtu.be/SaUtxi-bsFg?si=VIxRSHYUlaQg5VOo)])
