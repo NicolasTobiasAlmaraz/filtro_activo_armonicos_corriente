@@ -134,6 +134,7 @@ void app_processing_loop() {
 				g_state = STATE_SAMPLING;
 				display_api_set_msg_THD();
 				current_sensor_api_start_sampling();
+				inject_simulator_api_set_enable(true);
 			}
 			break;
 

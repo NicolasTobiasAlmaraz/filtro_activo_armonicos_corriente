@@ -21,10 +21,12 @@
 //======================================
 #include "main.h"
 
-#include "app_processing/push_button_driver/push_button_driver.h"
-#include "app_processing/current_sensor_api/current_sensor_api.h"
 #include "common_apis/timer_api/timer_api.h"
 #include "common_apis/cycle_detector_api/cycle_detector_api.h"
+
+#include "app_processing/push_button_driver/push_button_driver.h"
+#include "app_processing/current_sensor_api/current_sensor_api.h"
+#include "app_inject_simulator/inject_simulator_api.h"
 
 //======================================
 // Callbacks - GPIO
@@ -57,6 +59,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim->Instance == TIM3) {
         current_sensor_api_timer_callback();
+        inject_simulator_api_timer_callback();
     }
 }
 

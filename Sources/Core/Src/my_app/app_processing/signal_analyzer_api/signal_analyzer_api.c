@@ -57,42 +57,12 @@ static state_processing_t g_state = STATE_AVERAGE_POWER;
 //======================================
 
 /**
- * @brief Calculate signal power
- * @param cycle One cycle of the signal
- * @param offset Offset of the signal
- * @retval power
- *
- * Energy = Σ {first_sample, last_sample} {sample**2}
- * Power = Energy / samples
- */
-static float32_t signal_analyzer_api_calculate_sig_power(cycle_t cycle, uint16_t offset);
-
-/**
- * @brief Calculate Fundamental Harmonic
+ * @brief Calculate Fundamental Harmonic and THD with FFT method
  * @param cycle This is a cycle of the signal
  * @param zero_offset This is the offset
  * @retval Returns the characteristic values of the fundamental harmonic (amplitude, frequency, and phase)
  */
 static sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset);
-
-/**
- * @brief Calculate the power of a sine
- *
- * power = amplitude **2 / 2
- *
- * @param sine
- * @retval power of the sine
- */
-static float32_t signal_analyzer_api_calculate_sine_power(sine_t sine);
-
-/**
- * @brief Calculate THD
- * @param fund_power Power of the fundamental
- * @param signal_power Power of the signal
- *
- * THD% = 100% * power_harmonics / power_fundamental
- */
-static uint16_t signal_analyzer_api_calculate_thd(float32_t fund_power, float32_t signal_power);
 
 /**
  * @brief Calculate signal to inject

@@ -46,7 +46,7 @@ void my_app_init() {
 	cycle_detector_api_init();
 	current_sensor_api_init();
 	app_processing_init();
-	//inject_simulator_api_init();
+	inject_simulator_api_init();
 }
 
 void my_app_loop() {
@@ -54,6 +54,7 @@ void my_app_loop() {
 	app_processing_loop();
 
 	//Inject state machine
-	//By the way DMA DAC because there is not Power Electronics Stage yet (controlled by PWM signals)
-	//inject_simulator_api_loop();
+	// For now, this function is empty because there is no power stage yet.
+	// Once added, the PWM signal duty cycle values should be updated here.
+	app_inject_simulator_loop();
 }

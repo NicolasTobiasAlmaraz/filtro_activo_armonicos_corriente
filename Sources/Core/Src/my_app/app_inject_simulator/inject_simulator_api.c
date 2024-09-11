@@ -32,93 +32,111 @@
  */
 typedef enum {
 	STATE_INJECTION_DISABLED,  //!< Injection is disabled
-	STATE_INJECTION_WAITING,   //!< Waiting for a new cycle to start the injection
 	STATE_INJECTION_RUNNING,   //!< Injection is running and actively updating the DAC
+	STATE_INJECTION_WAITING_CYCLE
 } inject_state_t;
 
 //======================================
 // Private Variables
 //======================================
-static inject_state_t g_state = STATE_INJECTION_DISABLED;	//!< Current state of the injection (disabled, waiting, or running).
 static bool g_f_new_cycle = false;							//!< Flag to indicate the detection of a new cycle.
+static bool g_f_enable = false;								//!< Flag to indicate that the value must be updated.
+static cycle_t g_cycle;										//!< Cycle to inject
+static uint16_t g_cycle_index = 0;							//!< Index
+static inject_state_t g_state = STATE_INJECTION_DISABLED;	//!< State
 
 //======================================
 // STM32 Handlers
 //======================================
-//extern DAC_HandleTypeDef hdac;								//!< ADC handle for the DAC output
+extern DAC_HandleTypeDef hdac;								//!< ADC handle for the DAC output
 
 //======================================
 // Private Function Declarations
 //======================================
+static void inject_simulator_api_dac_update(uint16_t value);
 
 //======================================
 // Private Function Implementations
 //======================================
+void inject_simulator_api_dac_update(uint16_t value) {
+	HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, value);
+}
 
 //======================================
 // Public Function Implementations
 //======================================
 void inject_simulator_api_init() {
-	// todo
+	//Initialize Cycle in 0
+	for(uint32_t i=0; i<LEN_MAX ; i++) {
+		g_cycle.buffer[i]=0;
+	}
+
+	//Dac start
+	HAL_DAC_Start(&hdac, DAC_CHANNEL_1);
+
+	//Init 0 value
+	inject_simulator_api_dac_update(0);
 }
 
-void inject_simulator_api_loop() {
+void app_inject_simulator_loop() {
+    // For now, this function is empty because there is no power stage yet.
+    // Once added, the PWM signal duty cycle values should be updated here.
+}
 
+void inject_simulator_api_set_current_waveform(cycle_t cycle) {
+	g_cycle = cycle;
+}
+
+void inject_simulator_api_set_enable(bool enable) {
+	g_f_enable = enable;
+}
+
+void inject_simulator_api_cycle_callback() {
+	// Notify the system that a new cycle has started
+	g_f_new_cycle = true;
+}
+
+void inject_simulator_api_timer_callback() {
 	switch(g_state) {
+		default:
 		case STATE_INJECTION_DISABLED:
-			// Do nothing if the injection is disabled
-			break;
-
-		case STATE_INJECTION_WAITING:
-			// Wait for a new cycle to start the injection
-			if(g_f_new_cycle) {
-				g_f_new_cycle = false;
-				// Start DAC output with the current waveform buffer
-				//HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1, (uint32_t*)g_current_buffer, g_len_current / 2, DAC_ALIGN_12B_R);
+			if(g_f_enable) {
+				g_cycle_index = 0;
+				g_state = STATE_INJECTION_WAITING_CYCLE;
 			}
 			break;
 
 		case STATE_INJECTION_RUNNING:
-			// If a new cycle is detected, restart the DAC output
+			if(!g_f_enable) {
+				g_state = STATE_INJECTION_DISABLED;
+				inject_simulator_api_dac_update(0);
+				break;
+			}
 			if(g_f_new_cycle) {
-				g_f_new_cycle = false;
-				// Stop and restart DAC output to synchronize with the new cycle
-				//HAL_DAC_Stop_DMA(&hdac, DAC_CHANNEL_1);
-				//HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_1, (uint32_t*)g_current_buffer, g_len_current / 2, DAC_ALIGN_12B_R);
+				g_cycle_index=0;
+				g_f_new_cycle = 0;
+			}
+			uint16_t value = g_cycle.buffer[g_cycle_index];
+			inject_simulator_api_dac_update(value);
+			g_cycle_index++;
+			if(g_cycle_index >= g_cycle.len-1) {
+				g_state = STATE_INJECTION_WAITING_CYCLE;
+			}
+
+		case STATE_INJECTION_WAITING_CYCLE:
+			if(!g_f_enable) {
+				g_state = STATE_INJECTION_DISABLED;
+				inject_simulator_api_dac_update(0);
+				break;
+			}
+
+			if(g_f_new_cycle) {
+				uint16_t value = g_cycle.buffer[0];
+				inject_simulator_api_dac_update(value);
+				g_f_new_cycle = 0;
+				g_cycle_index++;
+				g_state = STATE_INJECTION_RUNNING;
 			}
 			break;
 	}
-}
-
-void inject_simulator_api_set_current_waveform(cycle_t cycle) {
-//	// Reallocate dynamic memory for the current waveform buffer
-//	g_current_buffer = realloc((void *) g_current_buffer, len * sizeof(uint16_t));
-//	if(g_current_buffer == NULL)
-//		return;
-//
-//	// Copy the new waveform into the buffer
-//	memcpy(g_current_buffer, buffer, len * sizeof(uint16_t));
-//
-//	// Update the current length of the buffer
-//	g_len_current = len;
-}
-
-void inject_simulator_api_set_enable(bool enable) {
-	if(enable) {
-		// If was enabled return
-		if(g_state == STATE_INJECTION_WAITING)
-			return;
-
-		// Enable the injection and wait for a new cycle to start
-		g_state = STATE_INJECTION_WAITING;
-		g_f_new_cycle = false;
-	} else {
-		// Disable the injection
-		g_state = STATE_INJECTION_DISABLED;
-	}
-}
-
-void inject_simulator_api_set_new_cycle() {
-	// Notify the system that a new cycle has started
-	g_f_new_cycle = true;
 }

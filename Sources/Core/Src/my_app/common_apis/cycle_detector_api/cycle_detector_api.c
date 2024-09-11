@@ -91,7 +91,7 @@ void cycle_detector_api_callback() {
 	current_sensor_api_cycle_callback();
 
 	//Inject Simulator API Notification
-	inject_simulator_api_set_new_cycle();
+	inject_simulator_api_cycle_callback();
 
 	//Calculate Line Period
 	uint32_t current_time = timer_api_get_ticks();
