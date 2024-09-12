@@ -4,8 +4,13 @@
 Nicolás Almaraz - nnico.almaraz@gmail.com
 
 # Estructura de Archivos Fuente
+La aplicación que desarrollé se encuentra en la estructura de directorios detallada más abajo.
 
-Mí aplicación se en los siguientes códigos fuente:
+Por otro lado, es importante verificar las configuraciones de sistema (periféricos, clocks, DMA, etc) hechas en el archivo ".ioc".
+
+Cabe destacar que el resto de archivos fuente son generados por STM32 Cube IDE correspondientes a drivers y bibliotecas de ARM.
+
+Finalmente, otra aclaración importante es que para la correcta compilación del proyecto fue necesario indicar al compilador la inclusión de la biblioteca [CMSIS-DSP](https://github.com/ARM-software/CMSIS-DSP), ya que es una biblioteca estática.
 
 ```
 /sources/Core/Src/
@@ -53,10 +58,6 @@ Mí aplicación se en los siguientes códigos fuente:
 |   |   |   |-- cycle_detector.h
 
 ```
-
-El resto de archivos fuente son generados por STM32 Cube IDE
-
-Por otro lado, es importante verificar las configuraciones de sistema hechas en el IOC
 
 # Video del funcionamiento:
 
