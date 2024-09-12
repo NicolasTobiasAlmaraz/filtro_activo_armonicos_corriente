@@ -48,11 +48,11 @@ Finalmente, otra aclaración importante es que para la correcta compilación del
 |   |
 |   |-- common_apis/
 |   |   |-- callback_functions_manager.c
-|   |
+|   |   |
 |   |   |-- timer_api/
 |   |   |   |-- timer_api.c
 |   |   |   |-- timer_api.h
-|   |
+|   |   |
 |   |   |-- cycle_detector_api/
 |   |   |   |-- cycle_detector_api.c
 |   |   |   |-- cycle_detector_api.h
