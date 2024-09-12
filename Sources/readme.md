@@ -53,9 +53,9 @@ Finalmente, otra aclaración importante es que para la correcta compilación del
 |   |   |   |-- timer_api.c
 |   |   |   |-- timer_api.h
 |   |
-|   |   |-- cycle_detector/
-|   |   |   |-- cycle_detector.c
-|   |   |   |-- cycle_detector.h
+|   |   |-- cycle_detector_api/
+|   |   |   |-- cycle_detector_api.c
+|   |   |   |-- cycle_detector_api.h
 
 ```
 
