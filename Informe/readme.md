@@ -729,7 +729,7 @@ Se puede observar que la relación entre amplitudes es la correcta.
 
 ### 4.3.1 current_sensor
 
-En la Figura 4.5 se observa el ploteo de los primeros 5 ciclos de la señal adquirida con el ADC.
+En la Figura 4.5 se observa el ploteo de los primeros 5 ciclos de la señal adquirida con el ADC. Como se puede observar la señal es muy ruidosa y tiene muchos glitches. Por eso es necesario aplicar un filtrado antes de procesarla. En este caso particular se optó hacer un promediado similar a la función "average" del osciloscopio.
 
 <div style="text-align: center;">
     <img src="img/figura4.5.png" width="1000"/>
