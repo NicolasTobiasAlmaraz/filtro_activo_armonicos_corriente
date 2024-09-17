@@ -549,7 +549,7 @@ En la Figura 3.10 se puede ver un diagrama de la modularización propuesta para 
 <div style="text-align: center;">
     <img src="img/figura3.10.png" width="1000"/>
 
-***Figura 3.10:** Diagrama de modularización.*
+***Figura 3.10:** Diagrama: modularización y capas de software.*
 </div>
 
 Por otro lado, en la Figura 3.11 se puede ver la división en directorios de la solución de firmware.
@@ -602,7 +602,7 @@ Por otro lado, en la Figura 3.11 se puede ver la división en directorios de la 
 
 <div style="text-align: center;">
 
-***Figura 3.11:** Diagrama de modularización.*
+***Figura 3.11:** Estructura de directorios: modularización y capas de software*
 </div>
 
 En las siguientes secciones se desarrollarán las máquinas de estados y módulos más importantes de la solución.
