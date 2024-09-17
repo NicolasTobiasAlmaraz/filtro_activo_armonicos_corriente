@@ -44,6 +44,7 @@ El sistema embebido está preparado para trabajar con STM32Cube IDE.
 Por otro lado, la documentación Doxygen específica del firmware se encuentra en el siguiente enlace: [Documentacion de Firmware](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/f0b310a257695a51c3d5514fda7a39055b74244a/Doc%20Firmware/html/index.html)
 
 En el siguiente enlace encontrarán un video de funcionamiento:
+
 <a href="https://www.youtube.com/watch?v=SaUtxi-bsFg&t=262s&ab_channel=NicolasAlmaraz">
   <img src="https://img.youtube.com/vi/SaUtxi-bsFg/0.jpg?timestamp=1" alt="Video de Funcionamiento" width="500"/>
 </a>
