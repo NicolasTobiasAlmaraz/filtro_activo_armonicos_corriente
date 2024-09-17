@@ -78,7 +78,7 @@ void m_check_stop_button() {
 
 void my_system_init() {
 	//Init Timer
-	timer_api_init();
+	timer_driver_init();
 
 	//Init Cycle detector
 	cycle_detector_init();
@@ -180,7 +180,7 @@ void my_system_state_machine() {
 
 			//Start timer to wait setting time
 			m_state = STATE_WAITING_SETTING_TIME;
-			timer_api_set_count(TIMER_SETTING, SETTING_TIME_US);
+			timer_driver_start(TIMER_SETTING, SETTING_TIME_US);
 			break;
 
 		case STATE_WAITING_SETTING_TIME:
@@ -188,7 +188,7 @@ void my_system_state_machine() {
 			m_check_stop_button();
 
 			//Check setting time
-			if( timer_api_check_timer(TIMER_SETTING)!= TIMER_FINISHED)
+			if( timer_driver_check_timer(TIMER_SETTING)!= TIMER_FINISHED)
 				return;
 
 			//Repeat the process

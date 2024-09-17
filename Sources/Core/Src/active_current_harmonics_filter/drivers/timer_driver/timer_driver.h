@@ -1,5 +1,5 @@
 /**
- * @file timer_api.h
+ * @file timer_driver.h
  * @author Nicolás Almaraz
  * @brief Timer functions and time management
  */
@@ -25,20 +25,20 @@
  * @brief Timer IDs
  */
 typedef enum {
-    TIMER_SAMPLING,
-    TIMER_DISPLAY,
-    TIMER_SETTING,
-    TIMER_DEBOUNCE_BUTTON,
-	TIMER_DEBOUNCE_CYCLES_DETECTION,
+    TIMER_SAMPLING,						//<! Timer for sampling
+    TIMER_DISPLAY,						//<! Timer for display
+    TIMER_SETTING,						//<! Timer for setting time
+    TIMER_DEBOUNCE_BUTTON,				//<! Timer for debounce button
+	TIMER_DEBOUNCE_CYCLES_DETECTION,	//<! Timer for debounce cycles
 } timer_id_t;
 
 /**
  * @brief Timer states
  */
 typedef enum {
-    TIMER_RUNNING,
-    TIMER_FINISHED,
-    TIMER_NOT_CONFIGURED,
+    TIMER_RUNNING,			//<! Running
+    TIMER_FINISHED,			//<! Stopped
+    TIMER_NOT_CONFIGURED,	//<! Not configured
 } status_timer_t;
 
 //======================================
@@ -52,35 +52,25 @@ typedef enum {
 /**
  * @brief Initialize the Timer API
  */
-void timer_api_init();
+void timer_driver_init();
 
 /**
  * @brief Check the state of a timer
  * @param id Timer ID
  * @retval Timer state
  */
-status_timer_t timer_api_check_timer(timer_id_t id);
+status_timer_t timer_driver_check_timer(timer_id_t id);
 
 /**
  * @brief Start a timer
  * @param id Timer ID to start
  * @param time_us Time in microseconds
  */
-void timer_api_set_count(timer_id_t id, uint32_t time_us);
+void timer_driver_start(timer_id_t id, uint32_t time_us);
 
 /**
  * @brief Returns the timer ticks (1tick = 1useg)
  */
-uint32_t timer_api_get_ticks();
-
-/**
- * @brief Enables timer interrupt
- */
-void timer_api_enable_interrupts();
-
-/**
- * @brief Disable timer interrupt
- */
-void timer_api_disable_interrupts();
+uint32_t timer_driver_get_ticks();
 
 #endif /* SRC_MY_APP_TIMER_API_TIMER_API_H_ */

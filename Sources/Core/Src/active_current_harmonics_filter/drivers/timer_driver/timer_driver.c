@@ -1,5 +1,5 @@
 /**
- * @file timer_api.c
+ * @file timer_driver.c
  * @author Nicolás Almaraz
  * @brief Timer functions and time management
  */
@@ -14,27 +14,31 @@
 //======================================
 // Private Defines
 //======================================
-#define TICK_TIME 	1
-#define NUM_TIMERS 	5
+#define TICK_TIME 	1 //!< Ticks for 1 us
+#define NUM_TIMERS 	5 //!< Number of timers
 
 //======================================
 // Private Data Structures and Types
 //======================================
+
+/**
+ * @brief Handler of polling timers
+ */
 typedef struct {
-    uint32_t end_count;
-    status_timer_t state;
+    uint32_t end_count;		//!< Count for timeout
+    status_timer_t state;	//!< State of timer
 } polling_timer_t;
 
 //======================================
 // STM32 Handlers
 //======================================
-extern TIM_HandleTypeDef htim2;
-extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim2;	//!< Timer 2 Handler (timer by polling)
+extern TIM_HandleTypeDef htim3; //!< Timer 3 Handler (timer by interrupt)
 
 //======================================
 // Private Variables
 //======================================
-static polling_timer_t g_timers[NUM_TIMERS];
+static polling_timer_t m_timers[NUM_TIMERS];
 static bool f_init = false;
 
 //======================================
@@ -49,13 +53,13 @@ static bool f_init = false;
 // Public Function Implementations
 //======================================
 
-void timer_api_init() {
+void timer_driver_init() {
 	//Flag init
 	f_init = true;
 
 	// Initialize timers
     for(uint8_t i = 0; i < NUM_TIMERS; i++)
-        g_timers[i].state = TIMER_NOT_CONFIGURED;
+        m_timers[i].state = TIMER_NOT_CONFIGURED;
 
     // Start timer
     HAL_TIM_Base_Start(&htim2);
@@ -63,30 +67,30 @@ void timer_api_init() {
 
 }
 
-status_timer_t timer_api_check_timer(timer_id_t id) {
+status_timer_t timer_driver_check_timer(timer_id_t id) {
 	//Init check
 	if(!f_init)
 		return TIMER_NOT_CONFIGURED;
 
 	// Verify if the timer was configured
-    if(g_timers[id].state == TIMER_NOT_CONFIGURED)
+    if(m_timers[id].state == TIMER_NOT_CONFIGURED)
         return TIMER_NOT_CONFIGURED;
 
     // Get current count and end time
     uint32_t tim_count = __HAL_TIM_GET_COUNTER(&htim2);
-    uint32_t tim_end = g_timers[id].end_count;
+    uint32_t tim_end = m_timers[id].end_count;
 
     // Check for timeout
     if(tim_count >= tim_end) {
-        g_timers[id].state = TIMER_FINISHED;
-        g_timers[id].state = TIMER_NOT_CONFIGURED;
+        m_timers[id].state = TIMER_FINISHED;
+        m_timers[id].state = TIMER_NOT_CONFIGURED;
         return TIMER_FINISHED;
     } else {
         return TIMER_RUNNING;
     }
 }
 
-void timer_api_set_count(timer_id_t id, uint32_t time_us) {
+void timer_driver_start(timer_id_t id, uint32_t time_us) {
 	//Init check
 	if(!f_init)
 		return;
@@ -100,18 +104,9 @@ void timer_api_set_count(timer_id_t id, uint32_t time_us) {
     timer.state = TIMER_RUNNING;
 
     // Assign the timer to the global array
-    g_timers[id] = timer;
+    m_timers[id] = timer;
 }
 
-uint32_t timer_api_get_ticks() {
+uint32_t timer_driver_get_ticks() {
 	return __HAL_TIM_GET_COUNTER(&htim2);
-}
-
-void timer_api_enable_interrupts() {
-	__HAL_TIM_ENABLE_IT(&htim3, TIM_IT_UPDATE);
-}
-
-
-void timer_api_disable_interrupts(){
-	__HAL_TIM_DISABLE_IT(&htim3, TIM_IT_UPDATE);
 }

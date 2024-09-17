@@ -76,17 +76,17 @@ void cycle_detector_GPIO_IRQHandler() {
 	static bool f_first_time = true;
 	if(f_first_time) {
 		f_first_time = false;
-		time_mem = timer_api_get_ticks();
+		time_mem = timer_driver_get_ticks();
 	}
 
 	//Check debounce timeout
-	status_timer_t timeout = timer_api_check_timer(TIMER_DEBOUNCE_CYCLES_DETECTION);
+	status_timer_t timeout = timer_driver_check_timer(TIMER_DEBOUNCE_CYCLES_DETECTION);
 
 	//If timer was running, it means a bounce was detected
 	if(timeout == TIMER_RUNNING)
 		return;
 
-	timer_api_set_count(TIMER_DEBOUNCE_CYCLES_DETECTION, TIME_CYCLE_DETECTION_US);
+	timer_driver_start(TIMER_DEBOUNCE_CYCLES_DETECTION, TIME_CYCLE_DETECTION_US);
 
 	//Current Sensor API Notification
 	current_sensor_api_set_new_cycle();
@@ -95,7 +95,7 @@ void cycle_detector_GPIO_IRQHandler() {
 	inject_simulator_cycle_IRQHandler();
 
 	//Calculate Line Period
-	uint32_t current_time = timer_api_get_ticks();
+	uint32_t current_time = timer_driver_get_ticks();
 	uint32_t period = current_time - time_mem;
 	time_mem = current_time;
 	m_append_period(period);

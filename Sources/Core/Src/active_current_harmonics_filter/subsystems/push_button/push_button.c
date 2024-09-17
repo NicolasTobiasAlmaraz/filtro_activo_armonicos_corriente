@@ -36,12 +36,12 @@
 //======================================
 void push_button_GPIO_IRQHandler() {
 	//Check debounce timeout
-	status_timer_t timeout = timer_api_check_timer(TIMER_DEBOUNCE_BUTTON);
+	status_timer_t timeout = timer_driver_check_timer(TIMER_DEBOUNCE_BUTTON);
 
 	//If timer was running, it means a bounce was detected
 	if(timeout == TIMER_RUNNING)
 		return;
 
-	timer_api_set_count(TIMER_DEBOUNCE_BUTTON, TIME_DEBOUNCE);
+	timer_driver_start(TIMER_DEBOUNCE_BUTTON, TIME_DEBOUNCE);
 	my_system_set_user_button();
 }
