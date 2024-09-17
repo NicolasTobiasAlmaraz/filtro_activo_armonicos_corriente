@@ -7,7 +7,7 @@
 //======================================
 // Dependencies
 //======================================
-#include <app_processing/display_api/display_driver/display_driver.h>
+#include "display_i2c.h"
 
 //======================================
 // Private Defines

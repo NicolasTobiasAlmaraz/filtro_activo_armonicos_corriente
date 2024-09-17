@@ -7,13 +7,14 @@
 //======================================
 // Dependencies
 //======================================
-#include <app_processing/current_sensor_api/current_sensor_api.h>
-#include <app_processing/signal_analyzer_api/CMSIS_DSP/Include/arm_math.h>
-#include <app_processing/signal_analyzer_api/signal_analyzer_api.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "my_app.h"
+#include "arm_math.h"
+
+#include "active_current_harmonics_filter.h"
+
+#include "signal_analyzer.h"
 
 
 //======================================
@@ -49,7 +50,7 @@ typedef enum {
 static cycle_t g_ave_cycle;
 static uint16_t g_zero_offset;
 static cycle_t g_inject_cycle;
-static int8_t g_thd;
+static uint16_t g_thd;
 static state_processing_t g_state = STATE_AVERAGE_POWER;
 
 //======================================
@@ -83,20 +84,23 @@ static cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle
  * @note data will be modified
  * @param len length of the vector
  */
-void signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len);
+float32_t signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len);
 
 //======================================
 // Private Function Implementations
 //======================================
 
-void signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len) {
-    for (uint32_t n = 0; n < len; n++) {
+float32_t signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len) {
+	float32_t correction_factor = 0;
+	for (uint32_t n = 0; n < len; n++) {
         float32_t w = 1.0f - 1.93f * cosf(2.0f * M_PI * n / (len - 1)) +
                       1.29f * cosf(4.0f * M_PI * n / (len - 1)) -
                       0.388f * cosf(6.0f * M_PI * n / (len - 1)) +
                       0.032f * cosf(8.0f * M_PI * n / (len - 1));
         data[n] *= w;
+        correction_factor += w;
     }
+	return correction_factor / len;
 }
 
 
@@ -157,12 +161,12 @@ sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
         	free(fft_output);
         if (magnitude)
         	free(magnitude);
-        HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, true); //debug
+        //HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, true); //debug
         return error_result;
 	}
 
     //Apply a flat top window for better accuracy in amplitude
-    signal_analyzer_api_apply_flat_top_window(fft_input, padded_len);
+    float32_t correction = signal_analyzer_api_apply_flat_top_window(fft_input, padded_len);
 
     // Calculate FFT
     uint8_t ifftFlag = 0;
@@ -176,7 +180,7 @@ sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
 
     // Fill the return structure
     sine_t fundamental;
-    fundamental.amplitude = sqrt(fund_power*2);			// P = maxValue = A**2/2 --> A = sqrt(maxValue*2)
+    fundamental.amplitude = sqrt(fund_power/correction)/2;			// P = maxValue = A**2/2 --> A = sqrt(maxValue*2)
     fundamental.period_us = len * SAMPLING_PERIOD_US;   // Period in microseconds
     fundamental.phase_us = 0.0f;                        // Assuming no phase shift
 
@@ -184,7 +188,7 @@ sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
     for(uint32_t i=fund_index*2; i<padded_len/2; i++) {
     	//Add Harm k*fundamental_freq
     	if(i%fund_index==0)
-    		harm_power += magnitude[i]*magnitude[i];
+    		harm_power += (magnitude[i]/correction)*(magnitude[i]/correction);
     }
 
     // Calculate THD in base of the harmonics (k*F0)
@@ -268,5 +272,4 @@ cycle_t signal_analyzer_api_get_cycle_to_inject(void) {
 uint16_t signal_analyzer_api_get_thd(void) {
     return g_thd;
 }
-
 

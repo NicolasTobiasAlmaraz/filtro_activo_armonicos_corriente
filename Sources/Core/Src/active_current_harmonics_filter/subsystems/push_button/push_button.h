@@ -4,8 +4,8 @@
  * @brief User Push Button Processing
  */
 
-#ifndef SRC_MY_APP_PUSH_BUTTON_PUSH_BUTTON_DRIVER_H_
-#define SRC_MY_APP_PUSH_BUTTON_PUSH_BUTTON_DRIVER_H_
+#ifndef PUSH_BUTTON_H_
+#define PUSH_BUTTON_H_
 //======================================
 // Dependencies
 //======================================
@@ -27,14 +27,9 @@
 //======================================
 
 /**
- * @biref Init driver
- */
-void push_button_driver_init();
-
-/**
  * @biref Function Callback
  * This callback must be called in the button interrupt
  */
-void push_button_driver_callback();
+void user_button_GPIO_IRQHandler();
 
 #endif /* SRC_MY_APP_PUSH_BUTTON_PUSH_BUTTON_DRIVER_H_ */

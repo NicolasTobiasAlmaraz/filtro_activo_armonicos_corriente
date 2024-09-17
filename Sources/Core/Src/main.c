@@ -13,7 +13,7 @@
 
 
 
-#include "my_app/my_app.h"
+#include "active_current_harmonics_filter/active_current_harmonics_filter.h"
 
 
 
@@ -86,8 +86,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init()
-		  ;
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -112,8 +111,15 @@ int main(void)
   MX_DAC_Init();
   /* USER CODE BEGIN 2 */
 
+
+
+
   //Init de la aplicacion
-  my_app_init();
+  my_system_init();
+
+
+
+
 
   /* USER CODE END 2 */
 
@@ -123,7 +129,7 @@ int main(void)
   {
 
 	  //Loop
-	  my_app_loop();
+	  my_system_state_machine();
 
 
     /* USER CODE END WHILE */

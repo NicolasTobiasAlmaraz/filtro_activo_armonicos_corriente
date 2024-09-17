@@ -7,8 +7,8 @@
 //======================================
 // Dependencies
 //======================================
-#include <app_processing/app_processing.h>
-#include "common_apis/timer_api/timer_api.h"
+#include "active_current_harmonics_filter.h"
+#include "timer_driver.h"
 
 //======================================
 // Private Defines
@@ -34,12 +34,7 @@
 //======================================
 // Public Function Implementations
 //======================================
-
-void push_button_driver_init() {
-
-}
-
-void push_button_driver_callback() {
+void user_button_GPIO_IRQHandler() {
 	//Check debounce timeout
 	status_timer_t timeout = timer_api_check_timer(TIMER_DEBOUNCE_BUTTON);
 
@@ -48,5 +43,5 @@ void push_button_driver_callback() {
 		return;
 
 	timer_api_set_count(TIMER_DEBOUNCE_BUTTON, TIME_DEBOUNCE);
-	data_processing_api_set_edge_button();
+	my_system_set_user_button();
 }

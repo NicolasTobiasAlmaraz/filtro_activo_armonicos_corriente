@@ -11,6 +11,7 @@
 // Dependencies
 //======================================
 #include <stdbool.h>
+
 #include "main.h"
 
 //======================================
@@ -58,7 +59,7 @@ void display_api_set_msg_THD();
 /**
  * @brief Updates only THD value
  */
-void display_api_update_THD(uint8_t thd);
+void display_api_update_THD(uint16_t thd);
 
 /**
  * @brief Set stand by msg

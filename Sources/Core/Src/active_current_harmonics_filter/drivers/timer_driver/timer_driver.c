@@ -7,8 +7,9 @@
 //======================================
 // Dependencies
 //======================================
-#include "common_apis/timer_api/timer_api.h"
 #include "main.h"
+
+#include "timer_driver.h"
 
 //======================================
 // Private Defines

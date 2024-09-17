@@ -7,12 +7,13 @@
 //======================================
 // Dependencies
 //======================================
-#include <app_inject_simulator/inject_simulator_api.h>
-#include "cycle_detector_api.h"
+#include "timer_driver.h"
 
-#include "common_apis/timer_api/timer_api.h"
+#include "cycle_detector.h"
 
-#include "app_processing/current_sensor_api/current_sensor_api.h"
+#include "inject_simulator.h"
+#include "current_sensor.h"
+#include "timer_driver.h"
 
 //======================================
 // Private Defines
@@ -70,7 +71,7 @@ uint32_t cycle_detector_api_get_period() {
 	return (uint32_t) suma / LEN_MED_MOV;
 }
 
-void cycle_detector_api_callback() {
+void cycle_detector_GPIO_IRQHandler() {
 	static uint32_t time_mem = 0;
 	static bool f_first_time = true;
 	if(f_first_time) {
@@ -91,7 +92,7 @@ void cycle_detector_api_callback() {
 	current_sensor_api_cycle_callback();
 
 	//Inject Simulator API Notification
-	inject_simulator_api_cycle_callback();
+	inject_simulator_cycle_IRQHandler();
 
 	//Calculate Line Period
 	uint32_t current_time = timer_api_get_ticks();

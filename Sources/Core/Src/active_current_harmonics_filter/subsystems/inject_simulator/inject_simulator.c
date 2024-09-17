@@ -12,7 +12,8 @@
 // Dependencies
 //======================================
 
-#include <app_inject_simulator/inject_simulator_api.h>
+#include "inject_simulator.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -65,7 +66,7 @@ void inject_simulator_api_dac_update(uint16_t value) {
 //======================================
 // Public Function Implementations
 //======================================
-void inject_simulator_api_init() {
+void inject_simulator_init() {
 	//Initialize Cycle in 0
 	for(uint32_t i=0; i<LEN_MAX ; i++) {
 		g_cycle.buffer[i]=0;
@@ -78,12 +79,12 @@ void inject_simulator_api_init() {
 	inject_simulator_api_dac_update(0);
 }
 
-void app_inject_simulator_loop() {
+void app_inject_simulator_state_machine() {
     // For now, this function is empty because there is no power stage yet.
     // Once added, the PWM signal duty cycle values should be updated here.
 }
 
-void inject_simulator_api_set_current_waveform(cycle_t cycle) {
+void inject_simulator_set_waveform(cycle_t cycle) {
 	g_cycle = cycle;
 }
 
@@ -91,12 +92,12 @@ void inject_simulator_api_set_enable(bool enable) {
 	g_f_enable = enable;
 }
 
-void inject_simulator_api_cycle_callback() {
+void inject_simulator_cycle_IRQHandler() {
 	// Notify the system that a new cycle has started
 	g_f_new_cycle = true;
 }
 
-void inject_simulator_api_timer_callback() {
+void inject_simulator_timer_IRQHandler() {
 	switch(g_state) {
 		default:
 		case STATE_INJECTION_DISABLED:

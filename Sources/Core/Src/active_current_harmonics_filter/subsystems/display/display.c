@@ -7,8 +7,9 @@
 //======================================
 // Dependencies
 //======================================
-#include <app_processing/display_api/display_api.h>
-#include <app_processing/display_api/display_driver/display_driver.h>
+#include "display.h"
+
+#include "display_i2c.h"
 
 //======================================
 // Private Defines
@@ -128,16 +129,17 @@ void display_api_set_msg_THD() {
 	display_driver_send_string("THD: -- %           ");
 }
 
-void display_api_update_THD(uint8_t thd) {
+void display_api_update_THD(uint16_t thd) {
 	//Check ranges
-	if (thd >= 100)
-		thd = 99;
-
+	if (thd >= 1000)
+		thd = 999;
 	//Write THD value on display
 	display_driver_set_cursor(3,5);
-	char number[2];
-	number[0] = '0' + thd / 10;
-	number[1] = '0' + thd % 10;
+	char number[4];
+	number[2] = '0' + (thd % 10);
+	number[1] = '0' + (thd % 100) /10;
+	number[0] = '0' + (thd % 1000)/100;
+	number[3] = 0;
 	display_driver_send_string(number);
 }
 

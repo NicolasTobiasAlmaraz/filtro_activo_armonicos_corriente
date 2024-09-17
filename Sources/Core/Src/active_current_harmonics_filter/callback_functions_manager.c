@@ -21,12 +21,11 @@
 //======================================
 #include "main.h"
 
-#include "common_apis/timer_api/timer_api.h"
-#include "common_apis/cycle_detector_api/cycle_detector_api.h"
-
-#include "app_processing/push_button_driver/push_button_driver.h"
-#include "app_processing/current_sensor_api/current_sensor_api.h"
-#include "app_inject_simulator/inject_simulator_api.h"
+#include "inject_simulator.h"
+#include "current_sensor.h"
+#include "push_button.h"
+#include "cycle_detector.h"
+#include "timer_driver.h"
 
 //======================================
 // Callbacks - GPIO
@@ -39,10 +38,10 @@
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	switch(GPIO_Pin) {
 		case CYCLE_DETECTOR_Pin:
-			cycle_detector_api_callback();
+			cycle_detector_GPIO_IRQHandler();
 			break;
 		case USER_BUTTON_Pin:
-			push_button_driver_callback();
+			user_button_GPIO_IRQHandler();
 			break;
 	}
 }
@@ -58,8 +57,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim->Instance == TIM3) {
-        current_sensor_api_timer_callback();
-        inject_simulator_api_timer_callback();
+        current_sensor_Timer_IRQHandler();
+        inject_simulator_timer_IRQHandler();
     }
 }
 
@@ -71,12 +70,5 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  * @retval None
  */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
-    current_sensor_api_dma_callback();
+    current_sensor_ADC_DMA_IRQHandler();
 }
-
-/**
- * @brief  Redefinition of WEAK function. DAC DMA Tx complete
- */
-//void HAL_DAC_ConvCpltCallbackCh1(DAC_HandleTypeDef *hdac) {
-	//Do nothing
-//}

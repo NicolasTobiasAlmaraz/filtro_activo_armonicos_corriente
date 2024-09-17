@@ -4,8 +4,8 @@
  * @brief Timer functions and time management
  */
 
-#ifndef SRC_MY_APP_TIMER_API_TIMER_API_H_
-#define SRC_MY_APP_TIMER_API_TIMER_API_H_
+#ifndef TIMER_DRIVER_H_
+#define TIMER_DRIVER_H_
 
 //======================================
 // Dependencies

@@ -11,8 +11,7 @@
 //======================================
 // Dependencies
 //======================================
-#include "main.h"
-#include "app_processing/current_sensor_api/current_sensor_api.h"
+#include "active_current_harmonics_filter.h"
 
 //======================================
 // Public Defines

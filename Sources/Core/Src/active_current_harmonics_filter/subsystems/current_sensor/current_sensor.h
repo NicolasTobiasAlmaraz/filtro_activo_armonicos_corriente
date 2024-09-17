@@ -4,8 +4,8 @@
  * @brief Implements the functionalities for current sensor reading
  */
 
-#ifndef SRC_MY_APP_CURRENT_SENSOR_CURRENT_SENSOR_H_
-#define SRC_MY_APP_CURRENT_SENSOR_CURRENT_SENSOR_H_
+#ifndef CURRENT_SENSOR_H_
+#define CURRENT_SENSOR_H_
 
 //======================================
 // Dependencies
@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "my_app.h"
+#include "active_current_harmonics_filter.h"
 
 //======================================
 // Public Defines
@@ -92,12 +92,12 @@ void current_sensor_api_get_average_cycle(cycle_t *buffer);
 /**
  * @brief This function must be called on Timer Interrupt callback
  */
-void current_sensor_api_timer_callback();
+void current_sensor_Timer_IRQHandler();
 
 /**
  * @brief This function must be called on ADC DMA Conversion Complete callback
  */
-void current_sensor_api_dma_callback();
+void current_sensor_ADC_DMA_IRQHandler();
 
 /**
  * @brief This function must be called on Cycle Detection callback

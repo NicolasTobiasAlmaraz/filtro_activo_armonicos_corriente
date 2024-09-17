@@ -20,13 +20,13 @@
 //======================================
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <app_processing/current_sensor_api/current_sensor_api.h>
 #include <string.h>
 
 #include "main.h"
-#include "common_apis/timer_api/timer_api.h"
-#include "common_apis/cycle_detector_api/cycle_detector_api.h"
+
+#include "current_sensor.h"
+#include "cycle_detector.h"
+#include "timer_driver.h"
 
 //======================================
 // Private Defines
@@ -191,11 +191,11 @@ void current_sensor_api_set_period_220(uint32_t period_us) {
 	g_period_AC_sig_us = period_us;
 }
 
-void current_sensor_api_dma_callback() {
+void current_sensor_ADC_DMA_IRQHandler() {
 	g_f_eoc_dma = true;
 }
 
-void current_sensor_api_timer_callback() {
+void current_sensor_Timer_IRQHandler() {
 	static state_current_sensor_t state;
 
 	switch(state) {

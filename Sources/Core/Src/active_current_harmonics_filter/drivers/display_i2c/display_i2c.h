@@ -4,8 +4,8 @@
  * @author Nicolás Almaraz
  */
 
-#ifndef _DISPLAY_DRIVER_H_
-#define _DISPLAY_DRIVER_H_
+#ifndef DISPLAY_I2C_H_
+#define DISPLAY_I2C_H_
 
 //======================================
 // Dependencies
