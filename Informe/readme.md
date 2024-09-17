@@ -59,6 +59,7 @@ Quiero expresar mi más profundo agradecimiento a los docentes del Curso de Sist
    - [1.5 DSP](#15-dsp)
        - [1.5.1 DMA](#151-dma)
        - [1.5.2 FFT](#152-fft)
+
 [2 Introducción específica](#2-introducción-específica)
    - [2.1 Requisitos](#21-requisitos)
    - [2.2 Casos de uso](#22-casos-de-uso)
@@ -66,6 +67,7 @@ Quiero expresar mi más profundo agradecimiento a los docentes del Curso de Sist
    - [2.5 Biblioteca de ARM CMSIS - DSP](#25-biblioteca-de-arm-cmsis---dsp)
    - [2.6 STM32Cube IDE](#26-stm32cube-ide)
    - [2.7 Sensor de corriente ACS712-5A](#27-sensor-de-corriente-acs712-5a)
+
 [3 Diseño e implementación](#3-diseño-e-implementación)
    - [3.1 Hardware del filtro activo de armónicos de corriente](#31-hardware-del-filtro-activo-de-armónicos-de-corriente)
        - [3.1.1 Diagrama en bloques general](#311-diagrama-en-bloques-general)
@@ -82,6 +84,7 @@ Quiero expresar mi más profundo agradecimiento a los docentes del Curso de Sist
        - [3.2.5 display](#325-display)
        - [3.2.6 inject_simulator](#326-inject_simulator)
        - [3.2.7 cycle_detector](#327-cycle_detector)
+
 [4 Ensayos y resultados](#4-ensayos-y-resultados)
    - [4.1 Prototipo](#41-prototipo)
    - [4.2 Pruebas funcionales del hardware](#42-pruebas-funcionales-del-hardware)
