@@ -89,7 +89,7 @@ void cycle_detector_GPIO_IRQHandler() {
 	timer_api_set_count(TIMER_DEBOUNCE_CYCLES_DETECTION, TIME_CYCLE_DETECTION_US);
 
 	//Current Sensor API Notification
-	current_sensor_api_cycle_callback();
+	current_sensor_api_set_new_cycle();
 
 	//Inject Simulator API Notification
 	inject_simulator_cycle_IRQHandler();

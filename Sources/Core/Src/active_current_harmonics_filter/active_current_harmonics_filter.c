@@ -84,7 +84,7 @@ void my_system_init() {
 	cycle_detector_api_init();
 
 	//Init current sensor
-	current_sensor_api_init();
+	current_sensor_init();
 
 	//Init inject simulator
 	inject_simulator_init();
@@ -110,24 +110,24 @@ void my_system_state_machine() {
 				display_api_set_msg_calibrating();
 
 				//Start ADC conversion
-				current_sensor_api_start_sampling();
+				current_sensor_start_sampling();
 			}
 			break;
 
 		case STATE_CALIBRATING:
 			//Checks EOC ADC
-			if( current_sensor_api_get_status()!=SAMPLING_COMPLETED )
+			if( current_sensor_get_sampling_status()!=SAMPLING_COMPLETED )
 				break;
 
 			//Get Calibration
-			status_calibration_t status = current_sensor_api_get_calibration();
+			status_calibration_t status = current_sensor_get_calibration_status();
 
 			status = CALIBRATE_OK; //todo Arreglar ruido eléctrico del sensor
 
 			if(status == CALIBRATE_OK) {
 				//Save offset, inform user by display to continue with the process
 				m_state = STATE_STAND_BY;
-				m_zero_offset = current_sensor_api_get_offset();
+				m_zero_offset = current_sensor_get_offset();
 				display_api_set_msg_calibration_ok();
 			}
 			else {
@@ -142,7 +142,7 @@ void my_system_state_machine() {
 				m_f_edge_button = false;
 				m_state = STATE_SAMPLING;
 				display_api_set_msg_THD();
-				current_sensor_api_start_sampling();
+				current_sensor_start_sampling();
 				inject_simulator_api_set_enable(true);
 			}
 			break;
@@ -152,11 +152,11 @@ void my_system_state_machine() {
 			m_check_stop_button();
 
 			//Wait conversion time
-			if(current_sensor_api_get_status()==SAMPLING_COMPLETED) {
+			if(current_sensor_get_sampling_status()==SAMPLING_COMPLETED) {
 				//Process the signal
 				m_state = STATE_PROCESSING;
 				cycle_t average_cycle;
-				current_sensor_api_get_average_cycle(&average_cycle);
+				current_sensor_get_average_cycle(&average_cycle);
 				signal_analyzer_api_set_signal_to_analyze(average_cycle, m_zero_offset); //Llega mal el avg cycle
 			}
 			break;
@@ -192,7 +192,7 @@ void my_system_state_machine() {
 				return;
 
 			//Repeat the process
-			current_sensor_api_start_sampling();
+			current_sensor_start_sampling();
 			m_state = STATE_SAMPLING;
 			break;
 	}

@@ -24,15 +24,15 @@
 //======================================
 
 /**
- * @brief Status code of the calibration process
+ * @brief Status code of the calibration process.
  */
 typedef enum {
-	CALIBRATE_OK,			//!<Calibration successful
-	CALIBRATE_ERROR,		//!<Calibration error
+	CALIBRATE_OK,			//!< Calibration successful.
+	CALIBRATE_ERROR,		//!< Calibration error.
 }status_calibration_t;
 
 /**
- * @brief Status code of the sampling process
+ * @brief Status code of the sampling process.
  */
 typedef enum {
 	SAMPLING_IN_PROGRESS,	//!< Sampling in progress
@@ -44,64 +44,53 @@ typedef enum {
 //======================================
 
 /**
- * @brief Initializes the Measurement API
+ * @brief Initializes the current measurements API.
  */
-void current_sensor_api_init();
+void current_sensor_init();
 
 /**
- * @brief Starts a new ADC conversion using DMA Controller
- * @note check the end of conversion with current_sensor_api_get_status() function
+ * @brief Starts a new ADC conversion using the DMA Controller every 50 microseconds.
+ * @note Check the end of conversion with the `current_sensor_get_status()` function.
  */
-void current_sensor_api_start_sampling();
-
-/**
- * @brief This function must be called on the DMA Complete Callback
- */
-void current_sensor_api_DMA_cplt_callback();
+void current_sensor_start_sampling();
 
 /**
  * @brief Returns the status of the sampling (in progress or completed)
- * @retval status
+ * @retval status Status of the sampling process.
  */
-status_sampling_t current_sensor_api_get_status();
+status_sampling_t current_sensor_get_sampling_status();
 
 /**
- * @brief Evaluates a correct zero offset value in base of the last DMA Transfer samples
- * @retval status
+ * @brief Evaluates a correct zero offset value in base of the last DMA Transfer samples.
+ * @retval status Status of the calibration process.
  */
-status_calibration_t current_sensor_api_get_calibration();
+status_calibration_t current_sensor_get_calibration_status();
 
 /**
- * @brief Returns the calibration offset for the sensor
- * @retval Calibration offset
+ * @brief Returns the calibration offset for the sensor.
+ * @retval offset Calibration offset value.
  */
-uint16_t current_sensor_api_get_offset();
+uint16_t current_sensor_get_offset();
 
 /**
- * @brief Set the 220V period time (theoretically 50Hz -> 20000 us)
- * @param period_us period in microseconds
+ * @brief Returns the average cycle in base of the last DMA Transfer samples.
+ * @retval cycle Average cycle.
  */
-void current_sensor_api_set_period_220(uint32_t period_us);
+void current_sensor_get_average_cycle(cycle_t *buffer);
 
 /**
- * @brief Returns the average cycle in base of the last DMA Transfer samples
- * @retval average cycle
- */
-void current_sensor_api_get_average_cycle(cycle_t *buffer);
-
-/**
- * @brief This function must be called on Timer Interrupt callback
+ * @brief This function must be called on Timer Interrupt Callback.
  */
 void current_sensor_Timer_IRQHandler();
 
 /**
- * @brief This function must be called on ADC DMA Conversion Complete callback
+ * @brief This function must be called on ADC DMA Conversion Complete Callback
  */
 void current_sensor_ADC_DMA_IRQHandler();
 
 /**
- * @brief This function must be called on Cycle Detection callback
+ * @brief This function must be called when a new Cycle starts
  */
-void current_sensor_api_cycle_callback();
+void current_sensor_api_set_new_cycle();
 
-#endif /* SRC_MY_APP_CURRENT_SENSOR_CURRENT_SENSOR_H_ */
+#endif
