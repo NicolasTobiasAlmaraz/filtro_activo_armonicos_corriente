@@ -68,7 +68,7 @@ void m_check_stop_button() {
 		inject_simulator_api_set_enable(false);
 
 		//Set display "Stand By Mode"
-		display_api_set_msg_stand_by();
+		display_set_msg_stand_by();
 	}
 }
 
@@ -91,8 +91,8 @@ void my_system_init() {
 	inject_simulator_api_set_enable(false); //Force disabled
 
 	//Display Init
-	display_api_init();
-	display_api_set_msg_start_calibration();
+	display_init();
+	display_set_msg_start_calibration();
 }
 
 void my_system_state_machine() {
@@ -107,7 +107,7 @@ void my_system_state_machine() {
 				m_state = STATE_CALIBRATING;
 
 				//Update Display -- "Calibrating ..."
-				display_api_set_msg_calibrating();
+				display_set_msg_calibrating();
 
 				//Start ADC conversion
 				current_sensor_start_sampling();
@@ -128,12 +128,12 @@ void my_system_state_machine() {
 				//Save offset, inform user by display to continue with the process
 				m_state = STATE_STAND_BY;
 				m_zero_offset = current_sensor_get_offset();
-				display_api_set_msg_calibration_ok();
+				display_set_msg_calibration_ok();
 			}
 			else {
 				//Come back to rest state and warn user by display "Calibration error, try again"
 				m_state = STATE_RESET;
-				display_api_set_msg_calibration_error();
+				display_set_msg_calibration_error();
 			}
 			break;
 
@@ -141,7 +141,7 @@ void my_system_state_machine() {
 			if(m_f_edge_button) {
 				m_f_edge_button = false;
 				m_state = STATE_SAMPLING;
-				display_api_set_msg_THD();
+				display_set_template_working();
 				current_sensor_start_sampling();
 				inject_simulator_api_set_enable(true);
 			}
@@ -172,7 +172,7 @@ void my_system_state_machine() {
 
 			//Update display
 			uint16_t thd = signal_analyzer_api_get_thd();
-			display_api_update_THD(thd);
+			display_update_THD(thd);
 
 			//Update DAC signal
 			cycle_t sig_to_inject = signal_analyzer_api_get_cycle_to_inject();

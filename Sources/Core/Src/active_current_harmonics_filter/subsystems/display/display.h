@@ -1,11 +1,11 @@
 /**
  * @file display.h
  * @author Nicolás Almaraz
- * @brief Display update with user messages
+ * @brief Display handler functions.
  */
 
-#ifndef SRC_SUBSYSTEMS_DISPLAY_LOGS_H_
-#define SRC_SUBSYSTEMS_DISPLAY_LOGS_H_
+#ifndef DISPLAY_H_
+#define DISPLAY_H_
 
 //======================================
 // Dependencies
@@ -27,43 +27,43 @@
 //======================================
 
 /**
- * @brief Initializes the display (peripherals and initial messages)
+ * @brief Initializes the display (peripherals and initial messages).
  */
-void display_api_init();
+void display_init();
 
 /**
- * @brief Show instructions about calibration
+ * @brief Show instructions about calibration.
  */
-void display_api_set_msg_start_calibration();
+void display_set_msg_start_calibration();
 
 /**
- * @brief Show: Calibrating...
+ * @brief Show: "Calibrating...".
  */
-void display_api_set_msg_calibrating();
+void display_set_msg_calibrating();
 
 /**
- * @brief Show instructions about start the process
+ * @brief Show instructions about start the process.
  */
-void display_api_set_msg_calibration_ok();
+void display_set_msg_calibration_ok();
 
 /**
- * @brief Show instructions about calibration error
+ * @brief Show instructions about calibration error.
  */
-void display_api_set_msg_calibration_error();
+void display_set_msg_calibration_error();
 
 /**
- * @brief Sets information about THD and working mode
+ * @brief Sets the working mode template.
  */
-void display_api_set_msg_THD();
+void display_set_template_working();
 
 /**
- * @brief Updates only THD value
+ * @brief Updates THD value in working template.
  */
-void display_api_update_THD(uint16_t thd);
+void display_update_THD(uint16_t thd);
 
 /**
- * @brief Set stand by msg
+ * @brief Sets stand by mode messages.
  */
-void display_api_set_msg_stand_by();
+void display_set_msg_stand_by();
 
 #endif /* SRC_SUBSYSTEMS_DISPLAY_LOGS_H_ */

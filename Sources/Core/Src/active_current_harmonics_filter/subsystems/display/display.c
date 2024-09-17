@@ -38,7 +38,7 @@
 
 //--- Initial messages
 
-void display_api_init() {
+void display_init() {
 	// Display Initialization
 	display_driver_init();
 
@@ -56,7 +56,7 @@ void display_api_init() {
 
 //--- Calibration messages
 
-void display_api_set_msg_start_calibration() {
+void display_set_msg_start_calibration() {
 	//Line 3
 	display_driver_set_cursor(2,0);
 	display_driver_send_string("Desconecte cargas y ");
@@ -66,7 +66,7 @@ void display_api_set_msg_start_calibration() {
 	display_driver_send_string("presione el pulsador");
 }
 
-void display_api_set_msg_calibrating() {
+void display_set_msg_calibrating() {
 	//Line 3
 	display_driver_set_cursor(2,0);
 	display_driver_send_string("Calibrando ...      ");
@@ -76,7 +76,7 @@ void display_api_set_msg_calibrating() {
 	display_driver_send_string("                    ");
 }
 
-void display_api_set_msg_calibration_ok() {
+void display_set_msg_calibration_ok() {
 	//Line 1
 	display_driver_set_cursor(0,0);
 	display_driver_send_string("Calibracion Exitosa!");
@@ -94,7 +94,7 @@ void display_api_set_msg_calibration_ok() {
 	display_driver_send_string("para iniciar proceso");
 }
 
-void display_api_set_msg_calibration_error() {
+void display_set_msg_calibration_error() {
 	//Line 2
 	display_driver_set_cursor(1,0);
 	display_driver_send_string("Error de calibracion!");
@@ -109,9 +109,9 @@ void display_api_set_msg_calibration_error() {
 }
 
 
-//--- THD messages
+//--- Working mode
 
-void display_api_set_msg_THD() {
+void display_set_template_working() {
 	//Line 1
 	display_driver_set_cursor(0,0);
 	display_driver_send_string("Nico Almaraz - TP3: ");
@@ -129,7 +129,7 @@ void display_api_set_msg_THD() {
 	display_driver_send_string("THD: -- %           ");
 }
 
-void display_api_update_THD(uint16_t thd) {
+void display_update_THD(uint16_t thd) {
 	//Check ranges
 	if (thd >= 1000)
 		thd = 999;
@@ -144,8 +144,8 @@ void display_api_update_THD(uint16_t thd) {
 }
 
 
-// -- State messages
-void display_api_set_msg_stand_by() {
+// -- Stand by mode
+void display_set_msg_stand_by() {
 	//Line 2
 	display_driver_set_cursor(1,0);
 	display_driver_send_string("State- Stand By Mode");
