@@ -557,9 +557,7 @@ Por otro lado, en la Figura 3.11 se puede ver la división en directorios de la 
 |-- active_current_harmonics_filter/
 |   |-- active_current_harmonics_filter.c
 |   |-- active_current_harmonics_filter.h
-|   |
-|   |--interrupts_events_stm32/
-|   |   |-- callback_functions_manager.c
+|   |-- callback_functions_manager.c
 |   |
 |   |-- subsystems/
 |   |   |-- push_button/
@@ -574,9 +572,9 @@ Por otro lado, en la Figura 3.11 se puede ver la división en directorios de la 
 |   |   |   |-- display.c
 |   |   |   |-- display.h
 |   |   |
-|   |   |-- signal_analyzer_api/
-|   |   |   |-- signal_analyzer_api.c
-|   |   |   |-- signal_analyzer_api.h
+|   |   |-- signal_analyzer/
+|   |   |   |-- signal_analyzer.c
+|   |   |   |-- signal_analyzer.h
 |   |   |
 |   |   |-- current_sensor/
 |   |   |   |-- current_sensor.c
@@ -591,9 +589,9 @@ Por otro lado, en la Figura 3.11 se puede ver la división en directorios de la 
 |   |   |   |-- display_i2c.c
 |   |   |   |-- display_i2c.h
 |   |   |
-|   |   | -- timer/
-|   |   |   |-- timer.c
-|   |   |   |-- timer.h
+|   |   | -- timer_driver/
+|   |   |   |-- timer_driver.c
+|   |   |   |-- timer_driver.h
 |   |
 |   |-- libraries/
 |   |   |-- CMSIS_DSP/
@@ -613,7 +611,7 @@ El módulo “active_current_harmonics_filter” es el sistema principal de la s
 <div style="text-align: center;">
     <img src="img/figura3.12.png" width="1000"/>
 
-***Figura 3.12:**  Máquina de estados de “app_processing”*
+***Figura 3.12:**  Máquina de estados de “active_current_harmonics_filter”*
 </div>
 
 Para comenzar, el sistema pide hacer una calibración, es decir, determinar el valor del sensor de corriente cuando no hay corriente. Para ello, mediante el display, se le va a pedir al usuario que desconecte todas las cargas y que presione el pulsador.  En este punto se le pide a “current_sensor” que inicie un proceso de muestreo. Cuando termina el proceso de muestreo, se analiza qué tanta variabilidad tuvieron las muestras. Si la variabilidad es baja se toma como calibración exitosa y se guarda el valor de la calibración (en caso de que haya salido mal, se le informa al usuario que debe hacer un reintento).
@@ -625,8 +623,8 @@ Una vez presionado el pulsador, entra en el “modo working”. Este modo es el 
 Esto último permite no tener restricción de tiempo para el procesamiento. La filosofía de trabajo es que el módulo “inject_simulator” empiece a inyectar la última señal configurada cada vez que llegue un nuevo ciclo (el encargado de notificar cuándo empieza un nuevo ciclo es “cycle_detector”). De esta manera, el procesador puede trabajar sin la necesidad de estar pendiente de cuánto tiempo tarda el procesamiento.
 
 Entonces el ciclo de trabajo que se realiza en “modo working” es:
-* SAMPLING: Tomar una muestra de una determinada cantidad de ciclos. Para esto se usa la “current_sensor_api”, quien retorna un ciclo promedio que sea representativo de la señal leída.
-* PROCESSING: Se le envía este ciclo promedio a “signal_analyzer_api”. Esta retorna el valor de THD medido y la forma de onda de la señal a inyectar. En este punto, la “app_processing” le actualiza la forma de onda que tiene que inyectar a “app_inject_simulator”.
+* SAMPLING: Tomar una muestra de una determinada cantidad de ciclos. Para esto se usa la “current_sensor”, quien retorna un ciclo promedio que sea representativo de la señal leída.
+* PROCESSING: Se le envía este ciclo promedio a “signal_analyzer”. Esta retorna el valor de THD medido y la forma de onda de la señal a inyectar. En este punto, la “active_current_harmonics_filter” le actualiza la forma de onda que tiene que inyectar a “inject_simulator”.
 * WAITING_SETTING_TIME: Se espera un tiempo de establecimiento del orden de los segundos.
 
 Cabe destacar que esta filosofía de trabajo no es eficiente para cargas que varían rápidamente en el tiempo. Para que funcione de manera adecuada las cargas deben variar con un período mayor a 5 segundos (tiempo correspondiente a la realización de un ciclo de “working”).
@@ -836,7 +834,9 @@ En el siguiente enlace se encuentra un video con un análisis de configuración 
 </a>
 
 ## Anexo 2: Notebook FFT
-En el siguiente enlace se encuentra un Notebook haciendo uso de la función FFT explicando sus limitaciones y cuidados frente al Spectral Leakage: link
+En el siguiente enlace se encuentra un Notebook haciendo uso de la función FFT explicando sus limitaciones y cuidados frente al Spectral Leakage:
+link (cuando haga el marge lo pongo, por ahora está en la carpeta Notebooks/)
+
 
 ## Anexo 3: STM32 F429ZI
 En el siguiente enlace se encuentra el reference manual, data sheets y notas de aplicación relacionadas al microcontrolador y la placa Nucleo: https://www.st.com/en/evaluation-tools/nucleo-f429zi.html#documentation
@@ -853,12 +853,12 @@ En el siguiente enlace se encuentra el sitio oficial de ST Electronics con el ID
 En el siguiente enlace se encuentra el enlace a la hoja de datos del sensor ACS712-5A: https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf 
 
 ## Anexo 7: Validación del módulo de firmware signal_analyzer
-Notebook: link
+Notebook: link (cuando haga el marge lo pongo, por ahora está en la carpeta Notebooks/)
 
 ## Anexo 8: Códigos fuente y Documentación
-Códigos fuente: link
+Códigos fuente: link (cuando haga el marge lo pongo, por ahora está en la carpeta Sources/)
 
-Documentación del código fuente: link
+Documentación del código fuente: [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/f0b310a257695a51c3d5514fda7a39055b74244a/Doc%20Firmware/html/index.html)
 
 Video de Funcionamiento:
 
