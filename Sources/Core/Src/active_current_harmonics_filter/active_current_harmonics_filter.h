@@ -1,7 +1,7 @@
 /**
- * @file data_processing_api.h
+ * @file active_current_harmonics_filter.h
  * @author Nicolás Almaraz
- * @brief This API resolves the data processing
+ * @brief Header of the main module
  */
 
 #ifndef ACTIVE_CURRENT_HARMONICS_FILTER_H_
@@ -16,11 +16,11 @@
 // Public Defines
 //======================================
 //Common defines
-#define SAMPLING_FREQUENCY_HZ 	20000	//fs = 20kHz
-#define SAMPLING_PERIOD_US 		50		//fs = 20kHz -> TS = 50 useg
-#define CYCLES_TO_PROCESS		10		//Processing 10 cycles
-#define SETTING_TIME_US 		5000000 //5 seg
-#define LEN_MAX             	450		//Max samples on 50Hz cycle
+#define SAMPLING_FREQUENCY_HZ 	20000	//<! fs [Hz]
+#define SAMPLING_PERIOD_US 		50		//<! 1/fs [us]
+#define CYCLES_TO_PROCESS		10		//<! Number of cycles to process
+#define SETTING_TIME_US 		5000000 //<! Setting time for working cycle
+#define LEN_MAX             	450		//<! Maximum number of samples per cycle
 
 //======================================
 // Public Data Structures and Types

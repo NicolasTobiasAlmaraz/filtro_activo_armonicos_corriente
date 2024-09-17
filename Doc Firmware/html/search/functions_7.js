@@ -1,0 +1,7 @@
+var searchData=
+[
+  ['signal_5fanalyzer_5fget_5fcycle_5fto_5finject_0',['signal_analyzer_get_cycle_to_inject',['../signal__analyzer_8c.html#aac328418d9c533f05e3e318688f62f44',1,'signal_analyzer_get_cycle_to_inject(void):&#160;signal_analyzer.c'],['../signal__analyzer_8h.html#a15aa7983028fc272fcc2729c6a80a6bc',1,'signal_analyzer_get_cycle_to_inject():&#160;signal_analyzer.c']]],
+  ['signal_5fanalyzer_5fget_5fthd_1',['signal_analyzer_get_thd',['../signal__analyzer_8c.html#a45b681ded76ec5031be1dd34b96e1151',1,'signal_analyzer_get_thd(void):&#160;signal_analyzer.c'],['../signal__analyzer_8h.html#a68e5fe4de0eb52c4952ca06c45dbeeea',1,'signal_analyzer_get_thd():&#160;signal_analyzer.c']]],
+  ['signal_5fanalyzer_5fset_5fsignal_5fto_5fanalyze_2',['signal_analyzer_set_signal_to_analyze',['../signal__analyzer_8c.html#aef73f1d67024417dd284eff4c37ba542',1,'signal_analyzer_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_offset):&#160;signal_analyzer.c'],['../signal__analyzer_8h.html#aef73f1d67024417dd284eff4c37ba542',1,'signal_analyzer_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_offset):&#160;signal_analyzer.c']]],
+  ['signal_5fanalyzer_5fstate_5fmachine_3',['signal_analyzer_state_machine',['../signal__analyzer_8c.html#a89b6343474525d0c05297bb588dabf2a',1,'signal_analyzer_state_machine():&#160;signal_analyzer.c'],['../signal__analyzer_8h.html#a89b6343474525d0c05297bb588dabf2a',1,'signal_analyzer_state_machine():&#160;signal_analyzer.c']]]
+];

@@ -1,0 +1,195 @@
+\doxysection{C\+:/\+Users/\+User/\+Desktop/filtro\+\_\+activo\+\_\+armonicos\+\_\+corriente/\+Sources/\+Core/\+Src/active\+\_\+current\+\_\+harmonics\+\_\+filter/subsystems/current\+\_\+sensor/current\+\_\+sensor.c File Reference}
+\hypertarget{current__sensor_8c}{}\label{current__sensor_8c}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/current\_sensor/current\_sensor.c@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/current\_sensor/current\_sensor.c}}
+
+
+Implements functionality for reading the current sensor.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include "{}main.\+h"{}}\newline
+{\ttfamily \#include "{}current\+\_\+sensor.\+h"{}}\newline
+{\ttfamily \#include "{}cycle\+\_\+detector.\+h"{}}\newline
+{\ttfamily \#include "{}timer\+\_\+driver.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcycle__limits__t}{cycle\+\_\+limits\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Structure to save the limits of each cycle inside the ADC buffer. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structhandler__cycle__lmits__t}{handler\+\_\+cycle\+\_\+lmits\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Structure to save a conjunct of cycles per sampling process. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{current__sensor_8c_a5e73b3a4f71a0c1b84e6b3948266dec9}\label{current__sensor_8c_a5e73b3a4f71a0c1b84e6b3948266dec9} 
+\#define {\bfseries MAX\+\_\+\+UINT16\+\_\+t}~65535
+\begin{DoxyCompactList}\small\item\em Maximum value of a 16-\/bit unsigned integer. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_a499615e1e4009e8cee2b1f87ede4010c}\label{current__sensor_8c_a499615e1e4009e8cee2b1f87ede4010c} 
+\#define {\bfseries CALIBRATION\+\_\+\+TOLERANCE\+\_\+\+MA}~1
+\begin{DoxyCompactList}\small\item\em Calibration tolerance in milliamps. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_ab41d2b2d4c5ba6170298b8acecb08f3b}\label{current__sensor_8c_ab41d2b2d4c5ba6170298b8acecb08f3b} 
+\#define {\bfseries CURRENT\+\_\+\+SENSIBILITY}~(float) 4.\+356004
+\begin{DoxyCompactList}\small\item\em Current slope in \mbox{[}m\+A/counts\mbox{]}. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_a1720ab1f9178f1336f5559f9d46cef4e}\label{current__sensor_8c_a1720ab1f9178f1336f5559f9d46cef4e} 
+\#define {\bfseries ADC\+\_\+\+BUF\+\_\+\+LEN}~40000
+\begin{DoxyCompactList}\small\item\em ADC Buffer Len DMA. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_aee6f277892227c70a59c554e7bc66540}\label{current__sensor_8c_aee6f277892227c70a59c554e7bc66540} 
+\#define {\bfseries SAMPLING\+\_\+\+PERIOD\+\_\+\+US}~50
+\begin{DoxyCompactList}\small\item\em ADC SAMPLING PERIOD (Ts) \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_adf0a79ac7474cffa186f97a97b722de5}\label{current__sensor_8c_adf0a79ac7474cffa186f97a97b722de5} 
+\#define {\bfseries MIN\+\_\+\+SAMPLES\+\_\+\+CYCLE}~375
+\begin{DoxyCompactList}\small\item\em Minimum validate samples in one cycle. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_a992ed6f8f21b20de7df572e6abeb9917}\label{current__sensor_8c_a992ed6f8f21b20de7df572e6abeb9917} 
+\#define {\bfseries MAX\+\_\+\+SAMPLES\+\_\+\+CYCLE}~415
+\begin{DoxyCompactList}\small\item\em Maximum validate samples in one cycle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724}{state\+\_\+current\+\_\+sensor\+\_\+t}} \{ \mbox{\hyperlink{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724a876bf84fec67ea51d517204b2903d5d4}{STATE\+\_\+\+RESET}}
+, \mbox{\hyperlink{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724a2769575b5b3b85b27dfec08f42c588cd}{STATE\+\_\+\+SAMPLING}}
+ \}
+\begin{DoxyCompactList}\small\item\em State machine for the current sensor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{current__sensor_8c_a151b1c6a85460e6b6802ec3443610c53}\label{current__sensor_8c_a151b1c6a85460e6b6802ec3443610c53} 
+void {\bfseries current\+\_\+sensor\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Initializes the current measurements API. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{current__sensor_8c_a336bc1b9b7678e85ea72da14d847f563}{current\+\_\+sensor\+\_\+start\+\_\+sampling}} ()
+\begin{DoxyCompactList}\small\item\em Starts a new ADC conversion using the DMA Controller every 50 microseconds. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}{status\+\_\+sampling\+\_\+t}} \mbox{\hyperlink{current__sensor_8c_a526e80066c73cd8a42b48f55c2b518bf}{current\+\_\+sensor\+\_\+get\+\_\+sampling\+\_\+status}} ()
+\begin{DoxyCompactList}\small\item\em Returns the status of the sampling (in progress or completed) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}{status\+\_\+calibration\+\_\+t}} \mbox{\hyperlink{current__sensor_8c_ad7b56b5dc651d4eb11721746bd168fa6}{current\+\_\+sensor\+\_\+get\+\_\+calibration\+\_\+status}} ()
+\begin{DoxyCompactList}\small\item\em Evaluates a correct zero offset value in base of the last DMA Transfer samples. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{current__sensor_8c_acfb93d89683b45db29447ad4e687007f}{current\+\_\+sensor\+\_\+get\+\_\+offset}} ()
+\begin{DoxyCompactList}\small\item\em Returns the calibration offset for the sensor. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_ade8f49038a2c05db1cbef181ef82736b}\label{current__sensor_8c_ade8f49038a2c05db1cbef181ef82736b} 
+void {\bfseries current\+\_\+sensor\+\_\+api\+\_\+set\+\_\+period\+\_\+220} (uint32\+\_\+t period\+\_\+us)
+\item 
+\Hypertarget{current__sensor_8c_a49ac92ccc31832ff18d72493a2b62b34}\label{current__sensor_8c_a49ac92ccc31832ff18d72493a2b62b34} 
+void {\bfseries current\+\_\+sensor\+\_\+\+ADC\+\_\+\+DMA\+\_\+\+IRQHandler} ()
+\begin{DoxyCompactList}\small\item\em This function must be called on ADC DMA Conversion Complete Callback. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_ab6f21ddc809efae84f222b946ff24eec}\label{current__sensor_8c_ab6f21ddc809efae84f222b946ff24eec} 
+void {\bfseries current\+\_\+sensor\+\_\+\+Timer\+\_\+\+IRQHandler} ()
+\begin{DoxyCompactList}\small\item\em This function must be called on Timer Interrupt Callback. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{current__sensor_8c_a52b126ff4b0d7836ec64a7145be056df}{current\+\_\+sensor\+\_\+get\+\_\+average\+\_\+cycle}} (\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}} \texorpdfstring{$\ast$}{*}buffer)
+\begin{DoxyCompactList}\small\item\em Returns the average cycle in base of the last DMA Transfer samples. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8c_a314f7dafbc23ae454ff8028566095269}\label{current__sensor_8c_a314f7dafbc23ae454ff8028566095269} 
+void {\bfseries current\+\_\+sensor\+\_\+api\+\_\+set\+\_\+new\+\_\+cycle} ()
+\begin{DoxyCompactList}\small\item\em This function must be called when a new Cycle starts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{current__sensor_8c_a22b804736f5648d52f639b2647d4ed13}\label{current__sensor_8c_a22b804736f5648d52f639b2647d4ed13} 
+ADC\+\_\+\+Handle\+Type\+Def {\bfseries hadc1}
+\begin{DoxyCompactList}\small\item\em ADC handle for the current sensor (defined in main.\+c) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implements functionality for reading the current sensor. 
+
+\begin{DoxyAuthor}{Author}
+Nicolás Almaraz 
+\end{DoxyAuthor}
+Current Sensor Calculations\+: Sensitivity\+: S = 185m\+V/A \texorpdfstring{$\vert$}{|}-\/-\/\texorpdfstring{$>$}{>} 1mV = 1.\+2409 counts \texorpdfstring{$\vert$}{|}-\/-\/\texorpdfstring{$>$}{>} S = 229.\+5681 counts / A
+
+counts = S \texorpdfstring{$\ast$}{*} current \texorpdfstring{$\vert$}{|}-\/-\/\texorpdfstring{$>$}{>} current = counts \texorpdfstring{$\ast$}{*} 1/S \texorpdfstring{$\vert$}{|}-\/-\/\texorpdfstring{$>$}{>} 1/S = 0.\+004356004 A / counts \texorpdfstring{$\vert$}{|}-\/-\/\texorpdfstring{$>$}{>} 1/S = 4.\+356004 mA / counts 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724}\index{current\_sensor.c@{current\_sensor.c}!state\_current\_sensor\_t@{state\_current\_sensor\_t}}
+\index{state\_current\_sensor\_t@{state\_current\_sensor\_t}!current\_sensor.c@{current\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{state\_current\_sensor\_t}{state\_current\_sensor\_t}}
+{\footnotesize\ttfamily \label{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724} 
+enum \mbox{\hyperlink{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724}{state\+\_\+current\+\_\+sensor\+\_\+t}}}
+
+
+
+State machine for the current sensor. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_RESET@{STATE\_RESET}!current\_sensor.c@{current\_sensor.c}}\index{current\_sensor.c@{current\_sensor.c}!STATE\_RESET@{STATE\_RESET}}}\Hypertarget{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724a876bf84fec67ea51d517204b2903d5d4}\label{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724} 
+STATE\+\_\+\+RESET&Sampling completed. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STATE\_SAMPLING@{STATE\_SAMPLING}!current\_sensor.c@{current\_sensor.c}}\index{current\_sensor.c@{current\_sensor.c}!STATE\_SAMPLING@{STATE\_SAMPLING}}}\Hypertarget{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724a2769575b5b3b85b27dfec08f42c588cd}\label{current__sensor_8c_a05897c0edf9a27ef1e0e48a80bfeb724} 
+STATE\+\_\+\+SAMPLING&Sampling in progress. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{current__sensor_8c_a52b126ff4b0d7836ec64a7145be056df}\index{current\_sensor.c@{current\_sensor.c}!current\_sensor\_get\_average\_cycle@{current\_sensor\_get\_average\_cycle}}
+\index{current\_sensor\_get\_average\_cycle@{current\_sensor\_get\_average\_cycle}!current\_sensor.c@{current\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_get\_average\_cycle()}{current\_sensor\_get\_average\_cycle()}}
+{\footnotesize\ttfamily \label{current__sensor_8c_a52b126ff4b0d7836ec64a7145be056df} 
+void current\+\_\+sensor\+\_\+get\+\_\+average\+\_\+cycle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{buffer}{}\end{DoxyParamCaption})}
+
+
+
+Returns the average cycle in base of the last DMA Transfer samples. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em cycle} & Average cycle. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{current__sensor_8c_ad7b56b5dc651d4eb11721746bd168fa6}\index{current\_sensor.c@{current\_sensor.c}!current\_sensor\_get\_calibration\_status@{current\_sensor\_get\_calibration\_status}}
+\index{current\_sensor\_get\_calibration\_status@{current\_sensor\_get\_calibration\_status}!current\_sensor.c@{current\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_get\_calibration\_status()}{current\_sensor\_get\_calibration\_status()}}
+{\footnotesize\ttfamily \label{current__sensor_8c_ad7b56b5dc651d4eb11721746bd168fa6} 
+\mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}{status\+\_\+calibration\+\_\+t}} current\+\_\+sensor\+\_\+get\+\_\+calibration\+\_\+status (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Evaluates a correct zero offset value in base of the last DMA Transfer samples. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em status} & Status of the calibration process. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{current__sensor_8c_acfb93d89683b45db29447ad4e687007f}\index{current\_sensor.c@{current\_sensor.c}!current\_sensor\_get\_offset@{current\_sensor\_get\_offset}}
+\index{current\_sensor\_get\_offset@{current\_sensor\_get\_offset}!current\_sensor.c@{current\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_get\_offset()}{current\_sensor\_get\_offset()}}
+{\footnotesize\ttfamily \label{current__sensor_8c_acfb93d89683b45db29447ad4e687007f} 
+uint16\+\_\+t current\+\_\+sensor\+\_\+get\+\_\+offset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the calibration offset for the sensor. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em offset} & Calibration offset value. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{current__sensor_8c_a526e80066c73cd8a42b48f55c2b518bf}\index{current\_sensor.c@{current\_sensor.c}!current\_sensor\_get\_sampling\_status@{current\_sensor\_get\_sampling\_status}}
+\index{current\_sensor\_get\_sampling\_status@{current\_sensor\_get\_sampling\_status}!current\_sensor.c@{current\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_get\_sampling\_status()}{current\_sensor\_get\_sampling\_status()}}
+{\footnotesize\ttfamily \label{current__sensor_8c_a526e80066c73cd8a42b48f55c2b518bf} 
+\mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}{status\+\_\+sampling\+\_\+t}} current\+\_\+sensor\+\_\+get\+\_\+sampling\+\_\+status (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the status of the sampling (in progress or completed) 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em status} & Status of the sampling process. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{current__sensor_8c_a336bc1b9b7678e85ea72da14d847f563}\index{current\_sensor.c@{current\_sensor.c}!current\_sensor\_start\_sampling@{current\_sensor\_start\_sampling}}
+\index{current\_sensor\_start\_sampling@{current\_sensor\_start\_sampling}!current\_sensor.c@{current\_sensor.c}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_start\_sampling()}{current\_sensor\_start\_sampling()}}
+{\footnotesize\ttfamily \label{current__sensor_8c_a336bc1b9b7678e85ea72da14d847f563} 
+void current\+\_\+sensor\+\_\+start\+\_\+sampling (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Starts a new ADC conversion using the DMA Controller every 50 microseconds. 
+
+\begin{DoxyNote}{Note}
+Check the end of conversion with the {\ttfamily current\+\_\+sensor\+\_\+get\+\_\+status()} function. 
+\end{DoxyNote}

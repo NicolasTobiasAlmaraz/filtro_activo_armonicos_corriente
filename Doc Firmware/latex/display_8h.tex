@@ -1,0 +1,46 @@
+\doxysection{C\+:/\+Users/\+User/\+Desktop/filtro\+\_\+activo\+\_\+armonicos\+\_\+corriente/\+Sources/\+Core/\+Src/active\+\_\+current\+\_\+harmonics\+\_\+filter/subsystems/display/display.h File Reference}
+\hypertarget{display_8h}{}\label{display_8h}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/display/display.h@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/display/display.h}}
+
+
+Display update with user messages.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}main.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{display_8h_a8d41c12af4f6e6faad84e1f21f99b3e1}\label{display_8h_a8d41c12af4f6e6faad84e1f21f99b3e1} 
+void {\bfseries display\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Initializes the display (peripherals and initial messages). \end{DoxyCompactList}\item 
+\Hypertarget{display_8h_a0064074e05e587eefc1ebf3e099076f0}\label{display_8h_a0064074e05e587eefc1ebf3e099076f0} 
+void {\bfseries display\+\_\+set\+\_\+msg\+\_\+start\+\_\+calibration} ()
+\begin{DoxyCompactList}\small\item\em Show instructions about calibration. \end{DoxyCompactList}\item 
+\Hypertarget{display_8h_ab290531163d9be4f991ec2d79f1e33d2}\label{display_8h_ab290531163d9be4f991ec2d79f1e33d2} 
+void {\bfseries display\+\_\+set\+\_\+msg\+\_\+calibrating} ()
+\begin{DoxyCompactList}\small\item\em Show\+: "{}\+Calibrating..."{}. \end{DoxyCompactList}\item 
+\Hypertarget{display_8h_a20a824685ef66dfb66da23ac4ece29aa}\label{display_8h_a20a824685ef66dfb66da23ac4ece29aa} 
+void {\bfseries display\+\_\+set\+\_\+msg\+\_\+calibration\+\_\+ok} ()
+\begin{DoxyCompactList}\small\item\em Show instructions about start the process. \end{DoxyCompactList}\item 
+\Hypertarget{display_8h_a22639c84f6dc985aa29147cb55512fc7}\label{display_8h_a22639c84f6dc985aa29147cb55512fc7} 
+void {\bfseries display\+\_\+set\+\_\+msg\+\_\+calibration\+\_\+error} ()
+\begin{DoxyCompactList}\small\item\em Show instructions about calibration error. \end{DoxyCompactList}\item 
+\Hypertarget{display_8h_afe200e04117e4f52d0d10ea2d708b5f1}\label{display_8h_afe200e04117e4f52d0d10ea2d708b5f1} 
+void {\bfseries display\+\_\+set\+\_\+template\+\_\+working} ()
+\begin{DoxyCompactList}\small\item\em Sets the working mode template. \end{DoxyCompactList}\item 
+\Hypertarget{display_8h_adecf34abeae5897b4713a6e5bd05a72a}\label{display_8h_adecf34abeae5897b4713a6e5bd05a72a} 
+void {\bfseries display\+\_\+update\+\_\+\+THD} (uint16\+\_\+t thd)
+\begin{DoxyCompactList}\small\item\em Updates THD value in working template. \end{DoxyCompactList}\item 
+\Hypertarget{display_8h_a1d28f58ae9d909b5f44275495062bc51}\label{display_8h_a1d28f58ae9d909b5f44275495062bc51} 
+void {\bfseries display\+\_\+set\+\_\+msg\+\_\+stand\+\_\+by} ()
+\begin{DoxyCompactList}\small\item\em Sets stand by mode messages. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Display update with user messages. 
+
+Display handler functions.
+
+\begin{DoxyAuthor}{Author}
+Nicolás Almaraz 
+\end{DoxyAuthor}

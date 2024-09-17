@@ -1,0 +1,45 @@
+\doxysection{signal\+\_\+analyzer.\+h}
+\hypertarget{signal__analyzer_8h_source}{}\label{signal__analyzer_8h_source}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/signal\_analyzer/signal\_analyzer.h@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/signal\_analyzer/signal\_analyzer.h}}
+\mbox{\hyperlink{signal__analyzer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#ifndef\ SIGNAL\_ANALYZER\_H\_}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ SIGNAL\_ANALYZER\_H\_}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ Dependencies}}
+\DoxyCodeLine{00015\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{active__current__harmonics__filter_8h}{active\_current\_harmonics\_filter.h}}"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ Public\ Defines}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ Public\ Structures\ and\ Data\ Types}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3aee6ce3345e23964a21b0297102d2a63d}{PROCESSING\_IN\_PROGRESS}},\ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3aa31d2ce998486039cb3507c89f93c0f7}{PROCESSING\_COMPLETED}},\ \ \ }
+\DoxyCodeLine{00032\ \}\ \mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3}{status\_processing\_t}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00035\ \textcolor{comment}{//\ Global\ Variables}}
+\DoxyCodeLine{00036\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00039\ \textcolor{comment}{//\ Public\ Function\ Declarations}}
+\DoxyCodeLine{00040\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00047\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{signal__analyzer_8h_aef73f1d67024417dd284eff4c37ba542}{signal\_analyzer\_set\_signal\_to\_analyze}}(\mbox{\hyperlink{structcycle__t}{cycle\_t}}\ ave\_cycle,\ uint16\_t\ zero\_offset);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00053\ \mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3}{status\_processing\_t}}\ \mbox{\hyperlink{signal__analyzer_8h_a89b6343474525d0c05297bb588dabf2a}{signal\_analyzer\_state\_machine}}();}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00059\ uint16\_t\ \mbox{\hyperlink{signal__analyzer_8h_a68e5fe4de0eb52c4952ca06c45dbeeea}{signal\_analyzer\_get\_thd}}();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00065\ \mbox{\hyperlink{structcycle__t}{cycle\_t}}\ \mbox{\hyperlink{signal__analyzer_8h_a15aa7983028fc272fcc2729c6a80a6bc}{signal\_analyzer\_get\_cycle\_to\_inject}}();}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ SIGNAL\_ANALYZER\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

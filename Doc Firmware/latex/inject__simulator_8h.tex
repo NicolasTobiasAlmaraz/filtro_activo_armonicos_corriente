@@ -1,0 +1,70 @@
+\doxysection{C\+:/\+Users/\+User/\+Desktop/filtro\+\_\+activo\+\_\+armonicos\+\_\+corriente/\+Sources/\+Core/\+Src/active\+\_\+current\+\_\+harmonics\+\_\+filter/subsystems/inject\+\_\+simulator/inject\+\_\+simulator.h File Reference}
+\hypertarget{inject__simulator_8h}{}\label{inject__simulator_8h}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/inject\_simulator/inject\_simulator.h@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/inject\_simulator/inject\_simulator.h}}
+
+
+Current injection simulator.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}active\+\_\+current\+\_\+harmonics\+\_\+filter.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{inject__simulator_8h_a94a9c4e267870841972897eaf60e1546}\label{inject__simulator_8h_a94a9c4e267870841972897eaf60e1546} 
+void {\bfseries inject\+\_\+simulator\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Initializes the API. \end{DoxyCompactList}\item 
+\Hypertarget{inject__simulator_8h_a68ad9d61a900c548673acaf7d1cfee7c}\label{inject__simulator_8h_a68ad9d61a900c548673acaf7d1cfee7c} 
+void {\bfseries app\+\_\+inject\+\_\+simulator\+\_\+state\+\_\+machine} ()
+\begin{DoxyCompactList}\small\item\em Manages the start of a new transmission. This function should run in the main loop. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{inject__simulator_8h_a1a48ec8c3d96e3cb522b3b3c9fcb2600}{inject\+\_\+simulator\+\_\+set\+\_\+waveform}} (\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}} cycle)
+\begin{DoxyCompactList}\small\item\em Sets the current waveform to inject on each new cycle detection. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{inject__simulator_8h_a6208557d4cf3f6ac4e9cf0461e9f4d43}{inject\+\_\+simulator\+\_\+set\+\_\+enable}} (bool enable)
+\begin{DoxyCompactList}\small\item\em Enable or disable the injection. \end{DoxyCompactList}\item 
+\Hypertarget{inject__simulator_8h_ad34e07c17ebf5818992b73fe37f5c4e7}\label{inject__simulator_8h_ad34e07c17ebf5818992b73fe37f5c4e7} 
+void {\bfseries inject\+\_\+simulator\+\_\+cycle\+\_\+\+IRQHandler} ()
+\begin{DoxyCompactList}\small\item\em Notifies the API that a new cycle has started This function should be called whenever a new cycle is detected on the power line. \end{DoxyCompactList}\item 
+\Hypertarget{inject__simulator_8h_a7fb5bfe41c10e9e35bd851b32feb4a87}\label{inject__simulator_8h_a7fb5bfe41c10e9e35bd851b32feb4a87} 
+void {\bfseries inject\+\_\+simulator\+\_\+timer\+\_\+\+IRQHandler} ()
+\begin{DoxyCompactList}\small\item\em Notifies the API that the current value must be updated This function should be called in timer interrupt callback. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Current injection simulator. 
+
+\begin{DoxyAuthor}{Author}
+Nicolás Almaraz 
+\end{DoxyAuthor}
+This API is responsible for simulating what would be a current injection into the power line. Each time it receives the notification that a new cycle has started, it injects the pre-\/loaded waveform via DAC. This allows the waveform calculated by the microcontroller to be measured with an oscilloscope at the DAC output. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{inject__simulator_8h_a6208557d4cf3f6ac4e9cf0461e9f4d43}\index{inject\_simulator.h@{inject\_simulator.h}!inject\_simulator\_set\_enable@{inject\_simulator\_set\_enable}}
+\index{inject\_simulator\_set\_enable@{inject\_simulator\_set\_enable}!inject\_simulator.h@{inject\_simulator.h}}
+\doxysubsubsection{\texorpdfstring{inject\_simulator\_set\_enable()}{inject\_simulator\_set\_enable()}}
+{\footnotesize\ttfamily \label{inject__simulator_8h_a6208557d4cf3f6ac4e9cf0461e9f4d43} 
+void inject\+\_\+simulator\+\_\+set\+\_\+enable (\begin{DoxyParamCaption}\item[{bool}]{enable}{}\end{DoxyParamCaption})}
+
+
+
+Enable or disable the injection. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em enable} & (true\+: Enable) -- (false\+: Disable) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{inject__simulator_8h_a1a48ec8c3d96e3cb522b3b3c9fcb2600}\index{inject\_simulator.h@{inject\_simulator.h}!inject\_simulator\_set\_waveform@{inject\_simulator\_set\_waveform}}
+\index{inject\_simulator\_set\_waveform@{inject\_simulator\_set\_waveform}!inject\_simulator.h@{inject\_simulator.h}}
+\doxysubsubsection{\texorpdfstring{inject\_simulator\_set\_waveform()}{inject\_simulator\_set\_waveform()}}
+{\footnotesize\ttfamily \label{inject__simulator_8h_a1a48ec8c3d96e3cb522b3b3c9fcb2600} 
+void inject\+\_\+simulator\+\_\+set\+\_\+waveform (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}}}]{cycle}{}\end{DoxyParamCaption})}
+
+
+
+Sets the current waveform to inject on each new cycle detection. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & with the cycle to inject \\
+\hline
+\end{DoxyParams}

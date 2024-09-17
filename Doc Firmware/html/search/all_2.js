@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['calibrate_5ferror_0',['CALIBRATE_ERROR',['../current__sensor_8h.html#a9c3d78575db42ec474bc658735ace026a5dd3752ef2858b51214883f41fda6bdd',1,'current_sensor.h']]],
+  ['calibrate_5fok_1',['CALIBRATE_OK',['../current__sensor_8h.html#a9c3d78575db42ec474bc658735ace026a6d00187f474665f290621a0e6c0cce52',1,'current_sensor.h']]],
+  ['calibration_5ftolerance_5fma_2',['CALIBRATION_TOLERANCE_MA',['../current__sensor_8c.html#a499615e1e4009e8cee2b1f87ede4010c',1,'current_sensor.c']]],
+  ['callback_5ffunctions_5fmanager_2ec_3',['callback_functions_manager.c',['../callback__functions__manager_8c.html',1,'']]],
+  ['current_5fsensibility_4',['CURRENT_SENSIBILITY',['../current__sensor_8c.html#ab41d2b2d4c5ba6170298b8acecb08f3b',1,'current_sensor.c']]],
+  ['current_5fsensor_2ec_5',['current_sensor.c',['../current__sensor_8c.html',1,'']]],
+  ['current_5fsensor_2eh_6',['current_sensor.h',['../current__sensor_8h.html',1,'']]],
+  ['current_5fsensor_5fadc_5fdma_5firqhandler_7',['current_sensor_ADC_DMA_IRQHandler',['../current__sensor_8c.html#a49ac92ccc31832ff18d72493a2b62b34',1,'current_sensor_ADC_DMA_IRQHandler():&#160;current_sensor.c'],['../current__sensor_8h.html#a49ac92ccc31832ff18d72493a2b62b34',1,'current_sensor_ADC_DMA_IRQHandler():&#160;current_sensor.c']]],
+  ['current_5fsensor_5fapi_5fset_5fnew_5fcycle_8',['current_sensor_api_set_new_cycle',['../current__sensor_8c.html#a314f7dafbc23ae454ff8028566095269',1,'current_sensor_api_set_new_cycle():&#160;current_sensor.c'],['../current__sensor_8h.html#a314f7dafbc23ae454ff8028566095269',1,'current_sensor_api_set_new_cycle():&#160;current_sensor.c']]],
+  ['current_5fsensor_5fget_5faverage_5fcycle_9',['current_sensor_get_average_cycle',['../current__sensor_8c.html#a52b126ff4b0d7836ec64a7145be056df',1,'current_sensor_get_average_cycle(cycle_t *buffer):&#160;current_sensor.c'],['../current__sensor_8h.html#a52b126ff4b0d7836ec64a7145be056df',1,'current_sensor_get_average_cycle(cycle_t *buffer):&#160;current_sensor.c']]],
+  ['current_5fsensor_5fget_5fcalibration_5fstatus_10',['current_sensor_get_calibration_status',['../current__sensor_8c.html#ad7b56b5dc651d4eb11721746bd168fa6',1,'current_sensor_get_calibration_status():&#160;current_sensor.c'],['../current__sensor_8h.html#ad7b56b5dc651d4eb11721746bd168fa6',1,'current_sensor_get_calibration_status():&#160;current_sensor.c']]],
+  ['current_5fsensor_5fget_5foffset_11',['current_sensor_get_offset',['../current__sensor_8c.html#acfb93d89683b45db29447ad4e687007f',1,'current_sensor_get_offset():&#160;current_sensor.c'],['../current__sensor_8h.html#acfb93d89683b45db29447ad4e687007f',1,'current_sensor_get_offset():&#160;current_sensor.c']]],
+  ['current_5fsensor_5fget_5fsampling_5fstatus_12',['current_sensor_get_sampling_status',['../current__sensor_8c.html#a526e80066c73cd8a42b48f55c2b518bf',1,'current_sensor_get_sampling_status():&#160;current_sensor.c'],['../current__sensor_8h.html#a526e80066c73cd8a42b48f55c2b518bf',1,'current_sensor_get_sampling_status():&#160;current_sensor.c']]],
+  ['current_5fsensor_5finit_13',['current_sensor_init',['../current__sensor_8c.html#a151b1c6a85460e6b6802ec3443610c53',1,'current_sensor_init():&#160;current_sensor.c'],['../current__sensor_8h.html#a151b1c6a85460e6b6802ec3443610c53',1,'current_sensor_init():&#160;current_sensor.c']]],
+  ['current_5fsensor_5fstart_5fsampling_14',['current_sensor_start_sampling',['../current__sensor_8c.html#a336bc1b9b7678e85ea72da14d847f563',1,'current_sensor_start_sampling():&#160;current_sensor.c'],['../current__sensor_8h.html#a336bc1b9b7678e85ea72da14d847f563',1,'current_sensor_start_sampling():&#160;current_sensor.c']]],
+  ['current_5fsensor_5ftimer_5firqhandler_15',['current_sensor_Timer_IRQHandler',['../current__sensor_8c.html#ab6f21ddc809efae84f222b946ff24eec',1,'current_sensor_Timer_IRQHandler():&#160;current_sensor.c'],['../current__sensor_8h.html#ab6f21ddc809efae84f222b946ff24eec',1,'current_sensor_Timer_IRQHandler():&#160;current_sensor.c']]],
+  ['cycle_5fdetector_2ec_16',['cycle_detector.c',['../cycle__detector_8c.html',1,'']]],
+  ['cycle_5fdetector_2eh_17',['cycle_detector.h',['../cycle__detector_8h.html',1,'']]],
+  ['cycle_5fdetector_5fget_5fperiod_18',['cycle_detector_get_period',['../cycle__detector_8c.html#aca3f7d657036aa4ded09b52e8af9e296',1,'cycle_detector_get_period():&#160;cycle_detector.c'],['../cycle__detector_8h.html#aca3f7d657036aa4ded09b52e8af9e296',1,'cycle_detector_get_period():&#160;cycle_detector.c']]],
+  ['cycle_5fdetector_5fgpio_5firqhandler_19',['cycle_detector_GPIO_IRQHandler',['../cycle__detector_8c.html#a55b67948e50b2a193e80b8de72b3bec0',1,'cycle_detector_GPIO_IRQHandler():&#160;cycle_detector.c'],['../cycle__detector_8h.html#a55b67948e50b2a193e80b8de72b3bec0',1,'cycle_detector_GPIO_IRQHandler():&#160;cycle_detector.c']]],
+  ['cycle_5fdetector_5finit_20',['cycle_detector_init',['../cycle__detector_8c.html#a80b2866efc6971635af7023d247f8dca',1,'cycle_detector_init():&#160;cycle_detector.c'],['../cycle__detector_8h.html#a80b2866efc6971635af7023d247f8dca',1,'cycle_detector_init():&#160;cycle_detector.c']]],
+  ['cycle_5flimits_5ft_21',['cycle_limits_t',['../structcycle__limits__t.html',1,'']]],
+  ['cycle_5ft_22',['cycle_t',['../structcycle__t.html',1,'']]],
+  ['cycles_5fnum_23',['cycles_num',['../structhandler__cycle__lmits__t.html#acbf0272825b22313990b9b42517b7993',1,'handler_cycle_lmits_t']]]
+];

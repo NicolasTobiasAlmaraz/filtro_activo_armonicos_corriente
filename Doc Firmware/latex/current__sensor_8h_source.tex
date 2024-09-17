@@ -1,0 +1,59 @@
+\doxysection{current\+\_\+sensor.\+h}
+\hypertarget{current__sensor_8h_source}{}\label{current__sensor_8h_source}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/current\_sensor/current\_sensor.h@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/current\_sensor/current\_sensor.h}}
+\mbox{\hyperlink{current__sensor_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#ifndef\ CURRENT\_SENSOR\_H\_}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ CURRENT\_SENSOR\_H\_}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ Dependencies}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{active__current__harmonics__filter_8h}{active\_current\_harmonics\_filter.h}}"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00019\ \textcolor{comment}{//\ Public\ Defines}}
+\DoxyCodeLine{00020\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ Public\ Data\ Structures\ and\ Types}}
+\DoxyCodeLine{00024\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026a6d00187f474665f290621a0e6c0cce52}{CALIBRATE\_OK}},\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026a5dd3752ef2858b51214883f41fda6bdd}{CALIBRATE\_ERROR}},\ \ \ \ \ }
+\DoxyCodeLine{00032\ \}\mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}{status\_calibration\_t}};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2a70ad92b652fff3aaa20208f97dc87964}{SAMPLING\_IN\_PROGRESS}},\ \ \ }
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2a2a3cb89c0deb6fd7b69209c3e3452d50}{SAMPLING\_COMPLETED}},\ \ \ \ \ \ \ }
+\DoxyCodeLine{00040\ \}\mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}{status\_sampling\_t}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00043\ \textcolor{comment}{//\ Public\ Function\ Declarations}}
+\DoxyCodeLine{00044\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00049\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{current__sensor_8h_a151b1c6a85460e6b6802ec3443610c53}{current\_sensor\_init}}();}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{current__sensor_8h_a336bc1b9b7678e85ea72da14d847f563}{current\_sensor\_start\_sampling}}();}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00061\ \mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}{status\_sampling\_t}}\ \mbox{\hyperlink{current__sensor_8h_a526e80066c73cd8a42b48f55c2b518bf}{current\_sensor\_get\_sampling\_status}}();}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00067\ \mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}{status\_calibration\_t}}\ \mbox{\hyperlink{current__sensor_8h_ad7b56b5dc651d4eb11721746bd168fa6}{current\_sensor\_get\_calibration\_status}}();}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00073\ uint16\_t\ \mbox{\hyperlink{current__sensor_8h_acfb93d89683b45db29447ad4e687007f}{current\_sensor\_get\_offset}}();}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00079\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{current__sensor_8h_a52b126ff4b0d7836ec64a7145be056df}{current\_sensor\_get\_average\_cycle}}(\mbox{\hyperlink{structcycle__t}{cycle\_t}}\ *buffer);}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00084\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{current__sensor_8h_ab6f21ddc809efae84f222b946ff24eec}{current\_sensor\_Timer\_IRQHandler}}();}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00089\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{current__sensor_8h_a49ac92ccc31832ff18d72493a2b62b34}{current\_sensor\_ADC\_DMA\_IRQHandler}}();}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00094\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{current__sensor_8h_a314f7dafbc23ae454ff8028566095269}{current\_sensor\_api\_set\_new\_cycle}}();}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

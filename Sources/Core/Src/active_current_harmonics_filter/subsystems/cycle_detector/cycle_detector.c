@@ -1,7 +1,9 @@
 /**
  * @file cycle_detector.c
  * @author Nicolás Almaraz
- * @brief Zero-cross detection handling
+ * @brief Cycle Detection Handling
+ * 
+ * This API handles the cycle detection and estimate the period of the electrical line.
  */
 
 //======================================

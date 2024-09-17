@@ -1,7 +1,7 @@
 /**
- * @file data_processing_api.c
+ * @file active_current_harmonics_filter.c
  * @author Nicolás Almaraz
- * @brief This API resolves the data processing
+ * @brief Main module
  */
 
 //======================================
