@@ -1,5 +1,5 @@
 /**
- * @file zero_cross.c
+ * @file cycle_detector.c
  * @author Nicolás Almaraz
  * @brief Zero-cross detection handling
  */

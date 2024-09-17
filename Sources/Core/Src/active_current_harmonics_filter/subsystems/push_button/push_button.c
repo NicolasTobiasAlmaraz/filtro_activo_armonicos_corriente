@@ -1,5 +1,5 @@
 /**
- * @file push_button_driver.c
+ * @file push_button.c
  * @author Nicolás Almaraz
  * @brief User Push Button Processing
  */
@@ -13,7 +13,7 @@
 //======================================
 // Private Defines
 //======================================
-#define TIME_DEBOUNCE 30000 //30ms
+#define TIME_DEBOUNCE 30000 //!< Debouncing time [us]
 
 //======================================
 // Private Data Structures and Types
@@ -34,7 +34,7 @@
 //======================================
 // Public Function Implementations
 //======================================
-void user_button_GPIO_IRQHandler() {
+void push_button_GPIO_IRQHandler() {
 	//Check debounce timeout
 	status_timer_t timeout = timer_api_check_timer(TIMER_DEBOUNCE_BUTTON);
 

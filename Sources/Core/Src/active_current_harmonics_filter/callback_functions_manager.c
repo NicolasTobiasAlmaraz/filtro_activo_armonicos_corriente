@@ -41,7 +41,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 			cycle_detector_GPIO_IRQHandler();
 			break;
 		case USER_BUTTON_Pin:
-			user_button_GPIO_IRQHandler();
+			push_button_GPIO_IRQHandler();
 			break;
 	}
 }

@@ -30,6 +30,6 @@
  * @biref Function Callback
  * This callback must be called in the button interrupt
  */
-void user_button_GPIO_IRQHandler();
+void push_button_GPIO_IRQHandler();
 
 #endif /* SRC_MY_APP_PUSH_BUTTON_PUSH_BUTTON_DRIVER_H_ */
