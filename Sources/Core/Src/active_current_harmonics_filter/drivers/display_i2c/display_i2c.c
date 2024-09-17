@@ -1,5 +1,5 @@
 /**
- * @file LCDI2C.c
+ * @file display_i2c.c
  * @brief LCD Display Driver with I2C bridge
  * @author Nicolas Almaraz
  */
@@ -12,12 +12,7 @@
 //======================================
 // Private Defines
 //======================================
-
-/**
- * @brief I2C address of the LCD display.
- * This address depends on how the A0 pin of the LCD is configured.
- */
-#define ADDR 0x4E
+#define ADDR 0x4E	//!< I2C address of the LCD display (depends of A0)
 
 //======================================
 // Private Structures and Data Types
@@ -30,7 +25,7 @@
 //======================================
 // STM32 Handlers
 //======================================
-extern I2C_HandleTypeDef hi2c1;  //!< I2C peripheral handler used
+extern I2C_HandleTypeDef hi2c1;  //!< I2C peripheral handler (declared on main.c)
 
 //======================================
 // Private Function Declarations
@@ -38,15 +33,12 @@ extern I2C_HandleTypeDef hi2c1;  //!< I2C peripheral handler used
 
 /**
  * @brief Sends a command to the LCD display.
- * This function sends configuration commands to the display,
- * such as mode adjustment, power on/off, etc.
  * @param cmd Command to send.
  */
-static void display_driver_send_cmd (char cmd);
+static void m_send_cmd (char cmd);
 
 /**
  * @brief Sends data to the LCD display.
- * This function is used to send characters to be displayed on the LCD.
  * @param data Data (character) to send.
  */
 static void display_driver_send_data (char data);
@@ -55,7 +47,7 @@ static void display_driver_send_data (char data);
 // Private Function Implementations
 //======================================
 
-void display_driver_send_cmd (char cmd) {
+void m_send_cmd (char cmd) {
     char _U, _L;
     uint8_t _T[4];
 
@@ -93,7 +85,7 @@ void display_driver_send_data (char data) {
 // Public Function Implementations
 //======================================
 
-void display_driver_clear (void) {
+void display_i2c_clear (void) {
     display_driver_send_data(0x00); //!< Set cursor to the start of the display
 
     for (int i = 0; i < 100; i++) {
@@ -101,39 +93,39 @@ void display_driver_clear (void) {
     }
 }
 
-void display_driver_init () {
+void display_i2c_init () {
     // 4-bit initialization sequence
     HAL_Delay(50);              //!< Stabilization wait
-    display_driver_send_cmd(0x30);          //!< Initialization command
+    m_send_cmd(0x30);          //!< Initialization command
     HAL_Delay(5);
-    display_driver_send_cmd(0x30);
+    m_send_cmd(0x30);
     HAL_Delay(1);
-    display_driver_send_cmd(0x30);
+    m_send_cmd(0x30);
     HAL_Delay(10);
-    display_driver_send_cmd(0x20);          //!< Set to 4-bit mode
+    m_send_cmd(0x20);          //!< Set to 4-bit mode
     HAL_Delay(10);
 
     // Additional LCD configurations
-    display_driver_send_cmd(0x28);          // LCD 4-bit mode, 2-line configuration
+    m_send_cmd(0x28);          // LCD 4-bit mode, 2-line configuration
     HAL_Delay(1);
-    display_driver_send_cmd(0x08);          // Turn off the display
+    m_send_cmd(0x08);          // Turn off the display
     HAL_Delay(1);
-    display_driver_send_cmd(0x01);          // Clear the display
+    m_send_cmd(0x01);          // Clear the display
     HAL_Delay(1);
     HAL_Delay(1);
-    display_driver_send_cmd(0x06);          // Input mode: auto increment, no shift
+    m_send_cmd(0x06);          // Input mode: auto increment, no shift
     HAL_Delay(1);
-    display_driver_send_cmd(0x0C);          // Turn on the display, no cursor, no blinking
+    m_send_cmd(0x0C);          // Turn on the display, no cursor, no blinking
 }
 
-void display_driver_send_string(char *str) {
+void display_i2c_send_string(char *str) {
     // Send each character of the string
     while (*str) {
         display_driver_send_data(*str++);
     }
 }
 
-void display_driver_set_cursor(uint8_t row, uint8_t column) {
+void display_i2c_set_cursor(uint8_t row, uint8_t column) {
     uint8_t cursor;
 
     // Determine the cursor address based on the row and column
@@ -153,5 +145,5 @@ void display_driver_set_cursor(uint8_t row, uint8_t column) {
     }
 
     // Send the command to set the cursor position
-    display_driver_send_cmd(0x80 | cursor);
+    m_send_cmd(0x80 | cursor);
 }
