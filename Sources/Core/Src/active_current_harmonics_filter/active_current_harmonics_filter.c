@@ -65,7 +65,7 @@ void m_check_stop_button() {
 		m_state = STATE_STAND_BY;
 
 		//Disable Injection
-		inject_simulator_api_set_enable(false);
+		inject_simulator_set_enable(false);
 
 		//Set display "Stand By Mode"
 		display_set_msg_stand_by();
@@ -88,7 +88,7 @@ void my_system_init() {
 
 	//Init inject simulator
 	inject_simulator_init();
-	inject_simulator_api_set_enable(false); //Force disabled
+	inject_simulator_set_enable(false); //Force disabled
 
 	//Display Init
 	display_init();
@@ -143,7 +143,7 @@ void my_system_state_machine() {
 				m_state = STATE_SAMPLING;
 				display_set_template_working();
 				current_sensor_start_sampling();
-				inject_simulator_api_set_enable(true);
+				inject_simulator_set_enable(true);
 			}
 			break;
 

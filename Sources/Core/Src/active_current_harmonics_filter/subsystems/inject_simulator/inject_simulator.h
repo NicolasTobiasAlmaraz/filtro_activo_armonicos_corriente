@@ -54,9 +54,9 @@ void inject_simulator_set_waveform(cycle_t cycle);
 
 /**
  * @brief Enable or disable the injection
- * @param enable true: Enable -- false: Disable
+ * @param enable (true: Enable) -- (false: Disable)
  */
-void inject_simulator_api_set_enable(bool enable);
+void inject_simulator_set_enable(bool enable);
 
 /**
  * @brief Notifies the API that a new cycle has started
