@@ -20,7 +20,7 @@
 #define SAMPLING_PERIOD_US 		50		//fs = 20kHz -> TS = 50 useg
 #define CYCLES_TO_PROCESS		10		//Processing 10 cycles
 #define SETTING_TIME_US 		5000000 //5 seg
-#define LEN_MAX             	500		//Max samples on 50Hz cycle
+#define LEN_MAX             	450		//Max samples on 50Hz cycle
 
 //======================================
 // Public Data Structures and Types

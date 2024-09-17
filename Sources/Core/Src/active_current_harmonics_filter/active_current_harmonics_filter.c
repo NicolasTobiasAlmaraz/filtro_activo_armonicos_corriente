@@ -157,7 +157,7 @@ void my_system_state_machine() {
 				m_state = STATE_PROCESSING;
 				cycle_t average_cycle;
 				current_sensor_get_average_cycle(&average_cycle);
-				signal_analyzer_api_set_signal_to_analyze(average_cycle, m_zero_offset); //Llega mal el avg cycle
+				signal_analyzer_set_signal_to_analyze(average_cycle, m_zero_offset); //Llega mal el avg cycle
 			}
 			break;
 
@@ -166,16 +166,16 @@ void my_system_state_machine() {
 			m_check_stop_button();
 
 			//Processing
-			status_processing_t status_proc = signal_analyzer_api_analyze_loop();
+			status_processing_t status_proc = signal_analyzer_state_machine();
 			if(status_proc!=PROCESSING_COMPLETED)
 				break;
 
 			//Update display
-			uint16_t thd = signal_analyzer_api_get_thd();
+			uint16_t thd = signal_analyzer_get_thd();
 			display_update_THD(thd);
 
 			//Update DAC signal
-			cycle_t sig_to_inject = signal_analyzer_api_get_cycle_to_inject();
+			cycle_t sig_to_inject = signal_analyzer_get_cycle_to_inject();
 			inject_simulator_set_waveform(sig_to_inject);
 
 			//Start timer to wait setting time

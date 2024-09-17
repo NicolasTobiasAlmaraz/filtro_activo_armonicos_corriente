@@ -1,12 +1,14 @@
 /**
  * @file signal_analyzer.h
  * @author Nicolás Almaraz
- * @brief Main signal processing to obtain THD and ic(t)
+ * @brief Header file for main signal processing to obtain THD and correction waveform.
+ *
+ * This API processes a `cycle_t` signal to obtain the Total Harmonic Distortion (THD)
+ * and the correction waveform needed to compensate for harmonics.
  */
 
-
-#ifndef SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_
-#define SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_
+#ifndef SIGNAL_ANALYZER_H_
+#define SIGNAL_ANALYZER_H_
 
 //======================================
 // Dependencies
@@ -20,10 +22,14 @@
 //======================================
 // Public Structures and Data Types
 //======================================
+
+/**
+ * @brief Status of the signal processing.
+ */
 typedef enum {
-	PROCESSING_IN_PROGRESS,
-	PROCESSING_COMPLETED,
-}status_processing_t;
+    PROCESSING_IN_PROGRESS, //!< Signal processing is ongoing
+    PROCESSING_COMPLETED,   //!< Signal processing is complete
+} status_processing_t;
 
 //======================================
 // Global Variables
@@ -34,28 +40,28 @@ typedef enum {
 //======================================
 
 /**
- * @brief Set parameters to analyze
- * @param cycles average_cycle
- * @param zero_offset Value of ADC when the sensor measures 0A
+ * @brief Sets parameters for signal analysis.
+ * @param ave_cycle Average cycle to analyze
+ * @param zero_offset ADC value when the sensor measures 0A
  */
-void signal_analyzer_api_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_offset);
+void signal_analyzer_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_offset);
 
 /**
- * @brief Analyzes the signal setted with signal_analyzer_api_set_signal_to_analyze()
- * @retval Status of analyzes (Completed / In progress)
+ * @brief Processes the signal set with `signal_analyzer_set_signal_to_analyze()`.
+ * @retval Status of processing (Completed or In Progress)
  */
-status_processing_t signal_analyzer_api_analyze_loop();
+status_processing_t signal_analyzer_state_machine();
 
 /**
- * @brief Retrieves the Total Harmonic Distortion (THD)
- * @retval THD [%]
+ * @brief Retrieves the Total Harmonic Distortion (THD) value.
+ * @retval THD in percentage [%]
  */
-uint16_t signal_analyzer_api_get_thd();
+uint16_t signal_analyzer_get_thd();
 
 /**
- * @brief Retrieves the injected current
+ * @brief Retrieves the correction waveform to inject.
  * @retval Cycle to inject
  */
-cycle_t signal_analyzer_api_get_cycle_to_inject();
+cycle_t signal_analyzer_get_cycle_to_inject();
 
-#endif /* SRC_MY_APP_SIGNAL_ANALYZER_SIGNAL_ANALYZER_H_ */
+#endif /* SIGNAL_ANALYZER_H_ */

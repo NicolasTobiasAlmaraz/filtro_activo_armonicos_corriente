@@ -1,7 +1,10 @@
 /**
- * @file current_sensor.h
+ * @file signal_analyzer.c
  * @author Nicolás Almaraz
- * @brief Main signal processing to obtain THD and current to inject
+ * @brief Header file for main signal processing to obtain THD and correction waveform.
+ *
+ * This API processes a `cycle_t` signal to obtain the Total Harmonic Distortion (THD)
+ * and the correction waveform needed to compensate for harmonics.
  */
 
 //======================================
@@ -13,7 +16,6 @@
 #include "arm_math.h"
 
 #include "active_current_harmonics_filter.h"
-
 #include "signal_analyzer.h"
 
 
@@ -32,26 +34,27 @@
 typedef struct {
     float32_t amplitude;	//!< Amplitude [mA]
     float32_t period_us;	//!< Frequency [Hz]
-    float32_t phase_us;		//!< Phase [rad]
+    float32_t phase_us;		//!< Phase [us]
 } sine_t;
 
+/**
+ * @brief States for processing
+ */
 typedef enum {
-	STATE_AVERAGE_POWER,
-	STATE_FFT,
-	STATE_FUND_POWER,
-	STATE_THD,
-	STATE_SIGNAL_TO_INJECT,
-	STATE_PROCESSING_COMPLETED,
+	STATE_FFT,					//!< Calculating FFT for obtain fundamental and THD
+	STATE_SIGNAL_TO_INJECT,		//!< Calculating signal to inject
+	STATE_PROCESSING_COMPLETED,	//!< Processing completed
 } state_processing_t;
 
 //======================================
 // Private Variables
 //======================================
-static cycle_t g_ave_cycle;
-static uint16_t g_zero_offset;
-static cycle_t g_inject_cycle;
-static uint16_t g_thd;
-static state_processing_t g_state = STATE_AVERAGE_POWER;
+static cycle_t m_ave_cycle; 					//!< Signal to analyze (one period)
+static uint16_t m_zero_offset; 					//!< Calibration offset
+static cycle_t m_inject_cycle; 					//!< Cycle to inject for harmonic compensation
+static uint16_t m_thd; 							//!< THD of the average cycle
+static state_processing_t m_state = STATE_FFT; 	//!< State
+
 
 //======================================
 // Private Function Declarations
@@ -63,34 +66,34 @@ static state_processing_t g_state = STATE_AVERAGE_POWER;
  * @param zero_offset This is the offset
  * @retval Returns the characteristic values of the fundamental harmonic (amplitude, frequency, and phase)
  */
-static sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset);
+static sine_t m_calculate_fft(cycle_t cycle, uint16_t zero_offset);
 
 /**
  * @brief Calculate signal to inject
  * @param fundamental The desired current signal in the line
  * @param ave_cycle One cycle of the current waveform
  * @param zero_offset Offset
- *
  * @retval The signal to inject at each "start of cycle" interrupt
  *
  * inject_cycle = fundamental - distorted_cycle
  *
  */
-static cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset);
+static cycle_t m_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset);
 
 /**
- * @brief Apply Flat Top Window to the vector data
- * @param data ptr to the data
- * @note data will be modified
- * @param len length of the vector
+ * @brief Applies Flat Top Window to the vector data
+ * @param data Pointer to the data
+ * @note The data will be modified
+ * @param len Length of the vector
+ * @retval norm Normalization coefficient
  */
-float32_t signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len);
+float32_t m_flat_top_window(float32_t *data, uint32_t len);
 
 //======================================
 // Private Function Implementations
 //======================================
 
-float32_t signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t len) {
+float32_t m_flat_top_window(float32_t *data, uint32_t len) {
 	float32_t correction_factor = 0;
 	for (uint32_t n = 0; n < len; n++) {
         float32_t w = 1.0f - 1.93f * cosf(2.0f * M_PI * n / (len - 1)) +
@@ -103,10 +106,13 @@ float32_t signal_analyzer_api_apply_flat_top_window(float32_t *data, uint32_t le
 	return correction_factor / len;
 }
 
-
-
-//todo: Dividir esta funcion en varias asi no ocupo el proc por tanto tiempo
-sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
+/*
+ * todo:
+ * Dividir esta funcion en varias
+ * asi no ocupo el proc por tanto tiempo
+ * sin atender el resto de cosas
+ */
+sine_t m_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
     float32_t *fft_output = NULL;
     float32_t *fft_input = NULL;
     float32_t *magnitude = NULL;
@@ -166,7 +172,7 @@ sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
 	}
 
     //Apply a flat top window for better accuracy in amplitude
-    float32_t correction = signal_analyzer_api_apply_flat_top_window(fft_input, padded_len);
+    float32_t correction = m_flat_top_window(fft_input, padded_len);
 
     // Calculate FFT
     uint8_t ifftFlag = 0;
@@ -192,7 +198,7 @@ sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
     }
 
     // Calculate THD in base of the harmonics (k*F0)
-    g_thd = 100*(harm_power / fund_power);
+    m_thd = 100*(harm_power / fund_power);
 
     // Free memory
     free(fft_output);
@@ -202,7 +208,7 @@ sine_t signal_analyzer_api_calculate_fft(cycle_t cycle, uint16_t zero_offset) {
     return fundamental;
 }
 
-cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset) {
+cycle_t m_calculate_injection(sine_t fundamental, cycle_t ave_cycle, uint16_t zero_offset) {
     // Save the cycle length to inject
     uint32_t len = ave_cycle.len;
 
@@ -216,7 +222,11 @@ cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_
     // Remember...
     // inject_cycle = fundamental_cycle - distorted_cycle
     cycle_t cycle_to_inject;
-    for(uint32_t i = 0; i < len; i++) {
+    for(uint32_t i = 0; i < LEN_MAX; i++) {
+    	if(i >= len) {
+    		cycle_to_inject.buffer[i] = m_zero_offset;
+    		continue;
+    	}
         cycle_to_inject.buffer[i] = (uint16_t) (ptr_fund[i] - ave_cycle.buffer[i]);
     }
 
@@ -231,45 +241,48 @@ cycle_t signal_analyzer_api_calculate_injection(sine_t fundamental, cycle_t ave_
 // Public Function Implementations
 //======================================
 
-void signal_analyzer_api_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_offset) {
-	g_ave_cycle = ave_cycle;
-	g_zero_offset = zero_offset;
-	g_state = STATE_AVERAGE_POWER;
+void signal_analyzer_set_signal_to_analyze(cycle_t ave_cycle, uint16_t zero_offset) {
+	m_ave_cycle = ave_cycle;
+	m_zero_offset = zero_offset;
+	m_state = STATE_FFT;
 }
 
-status_processing_t signal_analyzer_api_analyze_loop() {
+status_processing_t signal_analyzer_state_machine() {
     static sine_t fundamental;
     /**
      * Some operations take too much time,
      * So I divide them into a state machine to proceed in stages
      * and refresh the rest of the functionalities within the main loop
      */
-    switch(g_state) {
+    switch(m_state) {
 		default:
 		case STATE_FFT:
-    		fundamental = signal_analyzer_api_calculate_fft(g_ave_cycle, g_zero_offset);
-    		g_state = STATE_SIGNAL_TO_INJECT;
+			//Calculate fundamental component
+			//Calculate THD
+    		fundamental = m_calculate_fft(m_ave_cycle, m_zero_offset);
+    		m_state = STATE_SIGNAL_TO_INJECT;
     		break;
 
     	case STATE_SIGNAL_TO_INJECT:
-    		g_inject_cycle = signal_analyzer_api_calculate_injection(fundamental, g_ave_cycle, g_zero_offset);
-    		g_state = STATE_PROCESSING_COMPLETED;
+    		//Calculate signal to inject
+    		m_inject_cycle = m_calculate_injection(fundamental, m_ave_cycle, m_zero_offset);
+    		m_state = STATE_PROCESSING_COMPLETED;
     		break;
 
     	case STATE_PROCESSING_COMPLETED:
     		break;
     }
-    if(g_state != STATE_PROCESSING_COMPLETED)
+    if(m_state != STATE_PROCESSING_COMPLETED)
     	return PROCESSING_IN_PROGRESS;
     else
     	return PROCESSING_COMPLETED;
 }
 
-cycle_t signal_analyzer_api_get_cycle_to_inject(void) {
-    return g_inject_cycle;
+cycle_t signal_analyzer_get_cycle_to_inject(void) {
+    return m_inject_cycle;
 }
 
-uint16_t signal_analyzer_api_get_thd(void) {
-    return g_thd;
+uint16_t signal_analyzer_get_thd(void) {
+    return m_thd;
 }
 
