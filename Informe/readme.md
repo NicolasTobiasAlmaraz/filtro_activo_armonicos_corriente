@@ -200,7 +200,7 @@ El ángulo entre la potencia activa y la potencia reactiva se denomina φ. Usand
 <div style="text-align: center;">
     <table style="margin: 0 auto;">
         <tr>
-            <td><img src="https://latex.codecogs.com/svg.latex?\cos(\phi)%20=%20\frac{P}{S}" alt="Ecuación 1.1"/></td>
+            <td><img src="img/ecuacion1.1.png" alt="Ecuación 1.1" height="50"/></td>
             <td>(1.1)</td>
         </tr>
     </table>
@@ -269,7 +269,7 @@ La potencia de los armónicos se caracteriza mediante el THD (Total Harmonic Dis
 <div style="text-align: center;">
     <table style="margin: 0 auto;">
         <tr>
-            <td><img src="https://latex.codecogs.com/svg.latex?\text{THD}%20=100%  %20\frac{\sum_{i=1}^{N}%20P_i}{P_0}" alt="Ecuación 1.2"/></td>
+            <td><img src="img/ecuacion1.2.png" alt="Ecuación 1.2" height="50"/></td>
             <td>(1.2)</td>
         </tr>
     </table>
@@ -283,7 +283,7 @@ Estas potencias pueden relacionarse mediante el triángulo de potencias de la Fi
 <div style="text-align: center;">
     <table style="margin: 0 auto;">
         <tr>
-            <td><img src="https://latex.codecogs.com/svg.latex?\text{THD}%20=100% %20\frac{\sum_{i=1}^{N}%20P_i}{P_0}=100% \frac{D}{\sqrt{P^2 + Q^2}}" alt="Ecuación 1.3"/></td>
+            <td><img src="img/ecuacion1.3.png" alt="Ecuación 1.3" height="50"/></td>
             <td>(1.3)</td>
         </tr>
     </table>
@@ -295,7 +295,7 @@ La Figura 1.3 muestra el triángulo de potencias completo, que considera todas l
 <div style="text-align: center;">
     <table style="margin: 0 auto;">
         <tr>
-            <td><img src="https://latex.codecogs.com/svg.latex?\text{S}^2 = \text{P}^2 + \text{Q}^2 + \text{D}^2" alt="Ecuación 1.4"/></td>
+            <td><img src="img/ecuacion1.4.png" alt="Ecuación 1.4" height="25"/></td>
             <td>(1.4)</td>
         </tr>
     </table>
@@ -306,7 +306,7 @@ El factor de potencia (FP) se define como la relación entre P y S:
 <div style="text-align: center;">
     <table style="margin: 0 auto;">
         <tr>
-            <td><img src="https://latex.codecogs.com/svg.latex?\text{FP} = \frac{P}{S}" alt="Ecuación 1.5"/></td>
+            <td><img src="img/ecuacion1.5.png" alt="Ecuación 1.5" height="50"/></td>
             <td>(1.5)</td>
         </tr>
     </table>
@@ -333,7 +333,7 @@ Los filtros activos de armónicos de corriente se conectan en paralelo a las car
 <div style="text-align: center;">
     <table style="margin: 0 auto;">
         <tr>
-            <td><img src="https://latex.codecogs.com/svg.latex?\text{Corriente de linea} =\text{Corriente correctora}+ \text{Corriente de carga}" alt="Ecuación 1.6"/></td>
+            <td><img src="img/ecuacion1.6.png" alt="Ecuación 1.6" height="25"/></td>
             <td>(1.6)</td>
         </tr>
     </table>
