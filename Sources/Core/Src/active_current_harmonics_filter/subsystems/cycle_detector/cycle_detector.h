@@ -1,7 +1,7 @@
 /**
- * @file zero_cross.h
+ * @file cycle_detector.h
  * @author Nicolás Almaraz
- * @brief Zero-cross detection handling
+ * @brief Cycle Detection handling
  */
 
 #ifndef CYCLE_DETECTOR_H_
@@ -30,13 +30,13 @@
 /**
  * @brief Initializes zero-cross detection
  */
-void cycle_detector_api_init();
+void cycle_detector_init();
 
 /**
- * @brief Calculates the average period of 220V 50Hz line
- * retval period_us
+ * @brief Calculates the average period of electrical installation
+ * @retval period_us
  */
-uint32_t cycle_detector_api_get_period();
+uint32_t cycle_detector_get_period();
 
 /**
  * @brief This function must be called on cycle detector interrupt

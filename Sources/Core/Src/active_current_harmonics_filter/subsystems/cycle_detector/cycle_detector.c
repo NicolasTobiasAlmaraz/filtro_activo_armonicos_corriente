@@ -18,8 +18,9 @@
 //======================================
 // Private Defines
 //======================================
-#define TIME_CYCLE_DETECTION_US 19000	//19ms
-#define LEN_MED_MOV				100   	//100 cycles to estimate the period
+#define TIME_CYCLE_DETECTION_US 19000 	//!< Debouncing time for cycle detection [us].
+#define LEN_MED_MOV 100 				//!< Number of cycles used to estimate the period.
+
 
 //======================================
 // Private Data Structures and Types
@@ -28,9 +29,8 @@
 //======================================
 // Private Variables
 //======================================
-static uint32_t g_samples[LEN_MED_MOV];
-static uint32_t g_index=0;
-
+static uint32_t m_samples[LEN_MED_MOV];	//!< Array with durations of each period [us].
+static uint32_t m_index = 0; 			//!< Iterator for the array.
 
 //======================================
 // Private Function Declarations
@@ -39,16 +39,16 @@ static uint32_t g_index=0;
 /**
  * @brief Appends a new period
  */
-static void cycle_detector_api_append_period(uint32_t period);
+static void m_append_period(uint32_t period);
 
 //======================================
 // Private Function Implementations
 //======================================
 
-void cycle_detector_api_append_period(uint32_t period) {
-	g_samples[g_index] = period;
-	g_index++;
-	g_index %= LEN_MED_MOV;
+void m_append_period(uint32_t period) {
+	m_samples[m_index] = period;
+	m_index++;
+	m_index %= LEN_MED_MOV;
 }
 
 
@@ -57,16 +57,16 @@ void cycle_detector_api_append_period(uint32_t period) {
 // Public Function Implementations
 //======================================
 
-void cycle_detector_api_init() {
+void cycle_detector_init() {
 	for(uint32_t i=0; i<LEN_MED_MOV ; i++) {
-		g_samples[i]=0;
+		m_samples[i]=0;
 	}
 }
 
-uint32_t cycle_detector_api_get_period() {
+uint32_t cycle_detector_get_period() {
 	uint32_t suma = 0;
 	for(uint32_t i=0; i<LEN_MED_MOV ; i++) {
-		suma += g_samples[i];
+		suma += m_samples[i];
 	}
 	return (uint32_t) suma / LEN_MED_MOV;
 }
@@ -98,5 +98,5 @@ void cycle_detector_GPIO_IRQHandler() {
 	uint32_t current_time = timer_api_get_ticks();
 	uint32_t period = current_time - time_mem;
 	time_mem = current_time;
-	cycle_detector_api_append_period(period);
+	m_append_period(period);
 }

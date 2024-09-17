@@ -81,7 +81,7 @@ void my_system_init() {
 	timer_api_init();
 
 	//Init Cycle detector
-	cycle_detector_api_init();
+	cycle_detector_init();
 
 	//Init current sensor
 	current_sensor_init();
