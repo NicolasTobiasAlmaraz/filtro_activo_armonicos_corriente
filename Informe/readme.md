@@ -9,14 +9,16 @@
             <td style="text-align: center;">
                 <strong>UNIVERSIDAD DE BUENOS AIRES</strong><br>
                 Facultad de Ingeniería<br>
-                Curso Online Gratuito de Sistemas Embebidos by ARM Book<br>
-                <img src="img/logoUBA.png" width="300"/>
+                Curso Online de Sistemas Embebidos<br>
+		by ARM Book<br>
+                <img src="img/logoUBA.png" width="600"/>
             </td>
             <td style="text-align: center;">
                 <strong>UNIVERSIDAD TECNOLÓGICA NACIONAL</strong><br>
                 Facultad Regional Buenos Aires<br>
                 R5051 Electrónica de Potencia<br>
-                <img src="img/logoUTN.png" width="275"/>
+		Carrera de Grado de Ing. Electrónica<br>
+                <img src="img/logoUTN.png" width="550"/>
             </td>
         </tr>
     </table>
@@ -368,7 +370,7 @@ Para el procesamiento digital de señales es importante tener presente algunas e
 El controlador DMA es el encargado de transportar los datos de los periféricos a la memoria (o viceversa) sin la intervención del procesador. En la Figura 1.14 puede verse un esquema de cómo se utiliza.
 
 <div style="text-align: center;">
-    <img src="img/figura1.14.png" width="600"/>
+    <img src="img/figura1.14.png" width="400"/>
 	
 ***Figura 1.14**: Principio de funcionamiento del controlador DMA.*
 </div>
@@ -525,7 +527,7 @@ Finalmente, en las Figuras 3.6 y 3.7 se adjuntan las simulaciones temporales y f
 Como interfaz de usuario para el monitoreo se utiliza un Display de caracteres LCD de 4x20 caracteres controlado por una interfaz I2C PCF8574. En la Figura 3.8 se muestra un ejemplar.
 
 <div style="text-align: center;">
-    <img src="img/figura3.8.png" width="600"/>
+    <img src="img/figura3.8.png" width="400"/>
 
 ***Figura 3.8:** Display de caracteres LCD 4x20 con controlador adaptador I2C-Paralelo PCF8574.*
 </div>
@@ -642,7 +644,7 @@ Por lo tanto, esta API tendrá funciones específicas para dar comienzo al muest
 En la Figura 3.13 se muestra la máquina de estados correspondiente al proceso de tomar muestras hasta llenar el buffer.
 
 <div style="text-align: center;">
-    <img src="img/figura3.13.png" width="600"/>
+    <img src="img/figura3.13.png" width="450"/>
 
 ***Figura 3.13:**  Máquina de estados de “current_sensor”.*
 </div>
@@ -667,7 +669,7 @@ Este módulo se encarga de actualizar el valor de tensión de salida del DAC. Es
 Para cumplir con el objetivo, se diseñó la máquina de estados de la Figura 3.14. Esta contempla diferentes casos y permite la deshabilitación o habilitación del proceso de inyección.
 
 <div style="text-align: center;">
-    <img src="img/figura3.14.png" width="800"/>
+    <img src="img/figura3.14.png" width="600"/>
 
 ***Figura 3.14:** Máquina de estados de “inject_simulator”.*
 </div>
@@ -693,7 +695,7 @@ En la Figura 4.1 se puede ver una imagen del prototipo conseguido y en la Figura
 </div>
 
 <div style="text-align: center;">
-    <img src="img/figura4.2.png" width="1500"/>
+    <img src="img/figura4.2.png" width="1800"/>
 
 ***Figura 4.2:** Identificación de las partes principales en el prototipo.*
 </div>
@@ -838,7 +840,7 @@ En el siguiente enlace se encuentra un video con un análisis de configuración 
 
 ## Anexo 2: Notebook FFT
 En el siguiente enlace se encuentra un Notebook haciendo uso de la función FFT explicando sus limitaciones y cuidados frente al Spectral Leakage:
-link (cuando haga el marge lo pongo, por ahora está en la carpeta Notebooks/)
+[Anexo 2](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo2.ipynb)
 
 
 ## Anexo 3: STM32 F429ZI
@@ -856,12 +858,13 @@ En el siguiente enlace se encuentra el sitio oficial de ST Electronics con el ID
 En el siguiente enlace se encuentra el enlace a la hoja de datos del sensor ACS712-5A: https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf 
 
 ## Anexo 7: Validación del módulo de firmware signal_analyzer
-Notebook: link (cuando haga el marge lo pongo, por ahora está en la carpeta Notebooks/)
+En el siguiente enlace se encuentra un Notebook con una verificación de lo que se procesa en current_sensro y signal_analyzer:
+[Anexo 7](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo7.ipynb)
 
 ## Anexo 8: Códigos fuente y Documentación
 Códigos fuente: link (cuando haga el marge lo pongo, por ahora está en la carpeta Sources/)
 
-Documentación del código fuente: [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/f0b310a257695a51c3d5514fda7a39055b74244a/Doc%20Firmware/html/index.html)
+Documentación del código fuente: [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
 
 Video de Funcionamiento:
 
