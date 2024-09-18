@@ -10,41 +10,35 @@ Este proyecto fue realizado en un marco académico como ***Trabajo Práctico Fin
 Nicolás Almaraz
 
 ## Anteproyecto
-El anteproyecto se encuentra en el directorio
 
-```
-Anteproyecto/
-```
+[Anteproyecto](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Anteproyecto)
 
 ## Informe de Ingeniería
-El informe de ingeniería se encuentra en el directorio
-```
-Informe/
-```
-Allí hay una sólida documentación de la totalidad del proyecto.
 
-Este informe tiene algunos Notebook anidados cuya ubicación es en la carpeta
-```
-Notebooks/
-```
+[Informe](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Informe)
 
-En el siguiente enlace encontrarán un video para contextualizar el marco teórico de electrónica de potencia:
-<a href="https://www.youtube.com/watch?v=d_W_DLnTHeg">
-  <img src="https://img.youtube.com/vi/d_W_DLnTHeg/0.jpg?timestamp=1" alt="Introduccion Teorica" width="500"/>
-</a>
 
-## Códigos de implementación del sistema embebido
-Los códigos fuente del sistema embebido se encuentran en el directorio
-```
-Sources/
-```
+## Sistema embebido
 
-El sistema embebido está preparado para trabajar con STM32Cube IDE.
+[Códigos Fuente](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Sources)
 
-Por otro lado, la documentación Doxygen específica del firmware se encuentra en el siguiente enlace: [Documentacion de Firmware](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/f0b310a257695a51c3d5514fda7a39055b74244a/Doc%20Firmware/html/index.html)
+[Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
 
-En el siguiente enlace encontrarán un video de funcionamiento:
+## Videos
 
-<a href="https://www.youtube.com/watch?v=SaUtxi-bsFg&t=262s&ab_channel=NicolasAlmaraz">
-  <img src="https://img.youtube.com/vi/SaUtxi-bsFg/0.jpg?timestamp=1" alt="Video de Funcionamiento" width="500"/>
-</a>
+<table>
+  <tr>
+    <td>
+      <a href="https://www.youtube.com/watch?v=d_W_DLnTHeg">
+        <img src="https://img.youtube.com/vi/d_W_DLnTHeg/0.jpg" alt="Video de Introducción Teórica" width="300">
+      </a>
+      <p>Video de Introducción Teórica</p>
+    </td>
+    <td>
+      <a href="https://www.youtube.com/watch?v=SaUtxi-bsFg&lc=Ugy0l7aQObMK8iRjLyR4AaABAg&ab_channel=NicolasAlmaraz">
+        <img src="https://img.youtube.com/vi/SaUtxi-bsFg/0.jpg" alt="Video de Funcionamiento" width="300">
+      </a>
+      <p>Video de Funcionamiento</p>
+    </td>
+  </tr>
+</table>
