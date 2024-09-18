@@ -26,7 +26,7 @@ Se tiene un Display LCD para visulizar medición de THD.
   </tr>
 </table>
 
-## Documentación
+## Documentación Firmware
 [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
 
 ## Directorios
@@ -78,5 +78,6 @@ Se tiene un Display LCD para visulizar medición de THD.
 ## Diagrama Modularización
 ![image](https://github.com/user-attachments/assets/1cc70c7a-63f9-454d-b883-44be9710dacb)
 
-## Placa de Desarrollo
-STM32 Nucleo F429ZI
+## Diagrama de Hardware
+![image](https://github.com/user-attachments/assets/eaa57089-106b-4097-932e-7dc243836390)
+
