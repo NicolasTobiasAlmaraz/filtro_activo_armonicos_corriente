@@ -21,9 +21,8 @@
 
 # Filtro Activo de Armonicos de Corriente
 
-En el presente repositorio encontrarán el desarrollo de un filtro activo de armónicos de corrinete.
+En el presente repositorio encontrarán el desarrollo de un ***filtro activo de armónicos de corrinete***.
 Este proyecto fue realizado en un marco académico como ***Trabajo Práctico Final*** del ***Curso Online de Sistemas Embebidos*** organizado por ARM Book de FIUBA en conjunto con el ***Trabajo Práctico Final*** de la asignatura ***Electrónica de Potencia*** de la carrera de grado de Ingeniería Electrónica en UTN FRBA. 
-
 
 ## Autor: 
 Nicolás Almaraz
