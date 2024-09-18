@@ -359,7 +359,7 @@ Los filtros activos de armónicos de corriente se conectan en paralelo a las car
 ## 1.4 Estado del arte
 En el mercado, la mayoría de los compensadores activos son trifásicos debido a que los problemas relacionados con cargas reactivas y armónicos significativos suelen estar asociados con aplicaciones industriales. Ejemplos incluyen máquinas con motores de gran tamaño, variadores de frecuencia, arranques suaves, y fuentes switching de altas potencias.
 
-Varios fabricantes desarrollan este tipo de dispositivos, entre ellos, las empresas Schneider y Circutor, entre otras. Los productos de Circutor, por ejemplo, están equipados con pantallas TFT táctiles que permiten diversas configuraciones (Ver el Anexo 1). Entre las características destacadas se encuentran:
+Varios fabricantes desarrollan este tipo de dispositivos, entre ellos, las empresas Schneider y Circutor, entre otras. Los productos de Circutor, por ejemplo, están equipados con pantallas TFT táctiles que permiten diversas configuraciones (Ver el [Anexo 1](#anexo-1-review-de-productos-circutor)). Entre las características destacadas se encuentran:
 * La capacidad de operar en lazo abierto o en lazo cerrado, dependiendo de la ubicación de las pinzas amperimétricas.
 * La opción de compensar o no la potencia reactiva Q. La justificación técnica para esta opción es que, dado que Q generalmente es mucho mayor a D, compensar puede requerir una etapa de potencia significativamente robusta.
 
@@ -381,7 +381,7 @@ Cuando se realizan proyectos que implican DSP, es decir, procesar una señal en 
 
 
 ### 1.5.2 FFT
-La FFT (Transformada Rápida de Fourier) es un algoritmo que resuelve una DFT (Discrete Fourier Transform). Para su utilización se tiene un vector de entrada y uno de salida de igual longitud. Este algoritmo es de suma utilidad para pasar del dominio temporal al frecuencial y viceversa. Tiene ciertas limitaciones y consideraciones a la hora de implementarlo. Para entender la operatoria y problemas a considerar se desarrolló el Anexo 2, un documento Notebook, en el que se realizan simulaciones con FFT.
+La FFT (Transformada Rápida de Fourier) es un algoritmo que resuelve una DFT (Discrete Fourier Transform). Para su utilización se tiene un vector de entrada y uno de salida de igual longitud. Este algoritmo es de suma utilidad para pasar del dominio temporal al frecuencial y viceversa. Tiene ciertas limitaciones y consideraciones a la hora de implementarlo. Para entender la operatoria y problemas a considerar se desarrolló el [Anexo 2](#anexo-2-notebook-fft), un documento Notebook, en el que se realizan simulaciones con FFT.
 
 # 2 Introducción específica
 
@@ -438,20 +438,20 @@ La FFT (Transformada Rápida de Fourier) es un algoritmo que resuelve una DFT (D
 | Flujo alternativo | No cambia lo mostrado en la pantalla  |
 
 ## 2.4 Kit de Desarrollo STM32 Nucleo-F429ZI
-Para la implementación de la solución se utiliza un kit de desarrollo STM32 Nucleo-F429ZI. El microcontrolador del kit es lo suficientemente potente como para realizar todas las operaciones DSP en un tiempo razonable. En el Anexo 3 se adjunta la hoja de datos y reference manual del microcontrolador.
+Para la implementación de la solución se utiliza un kit de desarrollo STM32 Nucleo-F429ZI. El microcontrolador del kit es lo suficientemente potente como para realizar todas las operaciones DSP en un tiempo razonable. En el [Anexo 3](#anexo-3-stm32-f429zi) se adjunta la hoja de datos y reference manual del microcontrolador.
 
 ## 2.5 Biblioteca de ARM CMSIS - DSP
 Debido a que hay que realizar operaciones matemáticas y de una complejidad considerable, es importante hacer un uso eficiente del procesador. Para lo cual, es necesario la utilización de la biblioteca CMSIS-DSP, esta es la biblioteca oficial de ARM para hacer un uso eficiente de la ALU y unidad DSP del microcontrolador.
 	
 Esto significa que esta librería utiliza las instrucciones assembler de manera optimizada para conseguir el resultado deseado en la menor cantidad de tiempo posible. Su uso es muy importante para no sobrecargar al procesador.
 	
-Esta biblioteca es del tipo estática, es decir, no se tiene acceso al código fuente, pero sí a su archivo cabecera y documentación para entender cómo utilizarla. En el anexo 4 se adjunta el enlace a la página oficial.
+Esta biblioteca es del tipo estática, es decir, no se tiene acceso al código fuente, pero sí a su archivo cabecera y documentación para entender cómo utilizarla. En el [Anexo 4](#anexo-4-biblioteca-cmsis-dsp) se adjunta el enlace a la página oficial.
 
 ## 2.6 STM32Cube IDE
-Como IDE de desarrollo se utilizó el STM32Cube IDE ya que brinda más facilidades a la hora de configurar periféricos específicos del microcontrolador utilizado, por ejemplo el controlador DMA o la inclusión de bibliotecas estáticas. En el Anexo 5 se adjunta el enlace al sitio oficial.
+Como IDE de desarrollo se utilizó el STM32Cube IDE ya que brinda más facilidades a la hora de configurar periféricos específicos del microcontrolador utilizado, por ejemplo el controlador DMA o la inclusión de bibliotecas estáticas. En el [Anexo 5](#anexo-5-stm32cube-ide) se adjunta el enlace al sitio oficial.
 
 ## 2.7 Sensor de corriente ACS712-5A
-Para implementar la medición de corriente se utiliza un sensor ACS712-5A (en el Anexo 6 se adjunta la hoja de datos). Este es un sensor de corriente por efecto Hall que entrega una tensión proporcional a la corriente que circula entre los bornes “P+” y “P-” (“Load +” y “Load -”). Cabe destacar que este sensor tiene aislada la etapa de entrada de la etapa de salida. En la Figura 2.1 puede verse el chip ACS712-5A. Este sensor permite la medición de corrientes de +/- 5 A. Su alimentación es de 5V y tiene una sensibilidad de 180 mV/A.
+Para implementar la medición de corriente se utiliza un sensor ACS712-5A (en el [Anexo 6](#anexo-6-acs712-5a) se adjunta la hoja de datos). Este es un sensor de corriente por efecto Hall que entrega una tensión proporcional a la corriente que circula entre los bornes “P+” y “P-” (“Load +” y “Load -”). Cabe destacar que este sensor tiene aislada la etapa de entrada de la etapa de salida. En la Figura 2.1 puede verse el chip ACS712-5A. Este sensor permite la medición de corrientes de +/- 5 A. Su alimentación es de 5V y tiene una sensibilidad de 180 mV/A.
 
 <div style="text-align: center;">
     <img src="img/figura2.1.png" width="1000"/>
@@ -748,7 +748,7 @@ En la Figura 4.6 se observa el ciclo promedio obtenido a partir del análisis de
 </div>
 
 ### 4.3.2 signal_analyzer
-En el Anexo 7 se adjunta un Notebook donde se analizan las señales obtenidas con el microcontrolador y una comparación con una simulación computacional hecha con Python. En resumen, los resultados obtenidos con el microcontrolador son muy similares a los calculados en la simulación.
+En el [Anexo 7](#anexo-7-validación-del-módulo-de-firmware-signal_analyzer) se adjunta un Notebook donde se analizan las señales obtenidas con el microcontrolador y una comparación con una simulación computacional hecha con Python. En resumen, los resultados obtenidos con el microcontrolador son muy similares a los calculados en la simulación.
 
 ### 4.3.3 display
 Para verificar el correcto funcionamiento, se probaron los diferentes mensajes que la aplicación necesita. Por ejemplo, en la Figura 4.7 uno de ellos.
@@ -782,7 +782,7 @@ Cabe destacar que como canal adicional se pone la señal cuadrada que es el dete
 
 Como se puede ver la señal es una senoidal pura.
 
-Para más información puede revisarse el Anexo 8 que contiene el repositorio con el código de implementación y su respectiva documentación generada con Doxygen donde se explica en detalle cada parte del código. Por ejemplo, funciones, estructuras, defines, etc.
+Para más información puede revisarse el [Anexo 8](#anexo-8-códigos-fuente-y-documentación) que contiene el repositorio con el código de implementación y su respectiva documentación generada con Doxygen donde se explica en detalle cada parte del código. Por ejemplo, funciones, estructuras, defines, etc.
 En este mismo anexo, también hay un video donde se muestra el funcionamiento del sistema. 
 
 
@@ -840,7 +840,7 @@ En el siguiente enlace se encuentra un video con un análisis de configuración 
 
 ## Anexo 2: Notebook FFT
 En el siguiente enlace se encuentra un Notebook haciendo uso de la función FFT explicando sus limitaciones y cuidados frente al Spectral Leakage:
-[Anexo 2](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo2.ipynb)
+[Anexo 2](https://nbviewer.org/github/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo2.ipynb)
 
 
 ## Anexo 3: STM32 F429ZI
@@ -859,7 +859,7 @@ En el siguiente enlace se encuentra el enlace a la hoja de datos del sensor ACS7
 
 ## Anexo 7: Validación del módulo de firmware signal_analyzer
 En el siguiente enlace se encuentra un Notebook con una verificación de lo que se procesa en current_sensro y signal_analyzer:
-[Anexo 7](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo7.ipynb)
+[Anexo 7](https://nbviewer.org/github/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo7.ipynb)
 
 ## Anexo 8: Códigos fuente y Documentación
 *Códigos fuente:* [Códigos Fuente](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Sources)
