@@ -52,16 +52,19 @@ Este fenómeno trae múltiples desventajas técnicas desde el punto de vista de 
 
 En resumen, por todas estas razones, las cargas no lineales deterioran el transformador del proveedor de energía (por ejemplo, EDESUR) y contaminan el suministro a los demás usuarios (por ejemplo, los vecinos de mí cuadra). Debido a esto es que el proveedor de energía eléctrica cobra multas por tener bajo FP. Cabe destacar que todo esto es muy relevante a nivel industrial y no es tan crítico a nivel doméstico.
 
-![alt text](<img/ej1.jpg>)
+<div style="text-align: center;">
+    <img src="img/ej1.jpg" width="500"/>
 
-*Imagen 1: Carga no lineal*
-
+***Imagen 1:** Carga no lineal**
+<div/>
+  
 #### Funcionamiento
+<div style="text-align: center;">
+    <img src="img/ej2.jpg" width="500"/>
 
-![alt text](<img/ej2.jpg>)
-
-*Imagen 2: Funcionamiento conceptual*
-
+***Imagen 2:**  Funcionamiento conceptual**
+<div/>
+  
 Para solucionar todos estos problemas detallados en la sección anterior se utilizan filtros activos de armónicos de corriente. En la *Imagen 2* se puede ver el principio de funcionamiento adoptado para implementar el proyecto (existen otros esquemas más eficientes pero más complejos).
 
 *1 - Medición de corriente*
@@ -125,9 +128,12 @@ Sin embargo, el objetivo será entonces, medir la señal de corriente de línea,
 
 En la *Imagen 3* podemos ver de manera simplificada las señales de entrada y salida del sistema:
 
-![alt text](<img/diag_bloq.jpg>)
+<div style="text-align: center;">
+    <img src="img/diag_bloq.jpg" width="500"/>
 
-*Imagen 3: Diagrama de señales de entrada y salida*
+***Imagen 3:** Diagrama de señales de entrada y salida**
+<div/>
+
 
 Entradas:
 - Circuito detector de ciclos
@@ -140,8 +146,12 @@ Salidas:
 ### Testeo
 Para verificar el correcto funcionamiento propongo hacer el ensayo que se muestra en la *Imagen 4*:
 
-![alt text](<img/test.jpg>)
+<div style="text-align: center;">
+    <img src="img/test.jpg" width="500"/>
 
+***Imagen 4:** Verificación de funcionamiento**
+<div/>
+  
 La manera de testear al sistema es midiendo las formas de onda de entrada y salida con un osciloscopio:
 - CH1: Corriente de linea: I(t)
 - CH2: Corriente a inyectar: IC(t)
@@ -178,39 +188,51 @@ Por otro lado, hay que añadirle un filtro para evitar aliasing al momento de to
 
 En la *Imagen 8* e *Imagen 9* se pueden ver las simulaciones en tiempo y en frecuencia para una señal de corriente de 5A.
 
-![alt text](<img/acond_sens_corr_t.png>)
+<div style="text-align: center;">
+    <img src="img/acond_sens_corr_t.png" width="800"/>
 
-*Imagen 8: Respuesta temporal para entrada de 5A*
+***Imagen 8:** Respuesta temporal para entrada de 5A*
+<div/>
 
-![alt text](<img/acond_sens_corr_f.png>)
+<div style="text-align: center;">
+    <img src="img/acond_sens_corr_f.png" width="800"/>/>
 
-*Imagen 9: Respuesta en frecuencia para entrada de 5A*
+***Imagen 9:** Respuesta en frecuencia para entrada de 5A*
+<div/>
 
 #### Circuito Detector de Ciclos
 Este circuito entrega 3.3 V cuando llega cuando la tensión de línea está en el semi-ciclo positivo y 0 V cuando está en el negativo. En la *Imagen 10* se ve el circuito y en la *Imagen 11* las señales de entrada (línea) y salida (tensión lógica).
 Cabe destacar que la lógica está aislada de la línea mediante un opto-acoplador.
 
-![alt text](<img/detect_ciclos.png>)
+<div style="text-align: center;">
+    <img src="img/detect_ciclos.png"/>
 
-*Imagen 10: Circuito de detección de ciclos*
+***Imagen 10:** Circuito de detección de ciclos*
+<div/>
 
-![alt text](<img/detect_ciclos_t.png>)
+<div style="text-align: center;">
+    <img src="img/detect_ciclos_t.png" width="800"/>/>
 
-*Imagen 11: Formas de onda de entrada (tensión de línea) y salida (tensión lógica)*
+***Imagen 11:** Formas de onda de entrada (tensión de línea) y salida (tensión lógica)*
+<div/>
 
 #### Circuito Display
-Para el display se utiliza el esquema de la *Imagen 12*
+Para el Display LCD se utiliza el esquema de la *Imagen 12*
 
-![alt text](<img/display.png>)
+<div style="text-align: center;">
+    <img src="img/display.png" width="600"/>
 
-*Imagen 12: Display*
+***Imagen 12:** Display LCD*
+<div/>
 
 #### Filtro Interpolación DAC
 Para el DAC simplemente voy a utilizar un circuito RC para suavizar las altas frecuencias producidas por la cuantización en la señal de salida (*Imagen 13*)
 
-![alt text](<img/dac.png>)
+<div style="text-align: center;">
+    <img src="img/dac.png" width="300"/>
 
-*Imagen 13: DAC*
+***Imagen 13:** Filtro de Interpolación del DAC*
+<div/>
 
 Cabe destacar que esta salida es provisoria. En el proyecto final la salida no será DAC sino que será PWM y controlarán a la etapa de potencia que se encarga de transformar la señal PWM a corriente consumida en la línea.
 
