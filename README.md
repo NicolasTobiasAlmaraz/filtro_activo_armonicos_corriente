@@ -1,10 +1,29 @@
+<div style="text-align: center;">
+    <table style="margin: 0 auto; border-collapse: collapse;">
+        <tr>
+            <td style="text-align: center;">
+                <strong>UNIVERSIDAD DE BUENOS AIRES</strong><br>
+                Facultad de Ingeniería<br>
+                Curso Online de Sistemas Embebidos<br>
+		by ARM Book<br>
+                <img src="Informe/img/logoUBA.png" width="600"/>
+            </td>
+            <td style="text-align: center;">
+                <strong>UNIVERSIDAD TECNOLÓGICA NACIONAL</strong><br>
+                Facultad Regional Buenos Aires<br>
+                R5051 Electrónica de Potencia<br>
+		Carrera de Grado de Ing. Electrónica<br>
+                <img src="Informe/img/logoUTN.png" width="550"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
 # Filtro Activo de Armonicos de Corriente
 
 En el presente repositorio encontrarán el desarrollo de un filtro activo de armónicos de corrinete.
+Este proyecto fue realizado en un marco académico como ***Trabajo Práctico Final*** del ***Curso Online de Sistemas Embebidos*** organizado por ARM Book de FIUBA en conjunto con el ***Trabajo Práctico Final*** de la asignatura ***Electrónica de Potencia*** de la carrera de grado de Ingeniería Electrónica en UTN FRBA. 
 
-En los diferentes directorios encontrarán toda la documentación correspondiente.
-
-Este proyecto fue realizado en un marco académico como ***Trabajo Práctico Final*** del ***Curso Online Gratuito de Sistemas Embebidos*** en conjunto con el ***Trabajo Práctico Final*** de la asignatura ***Electrónica de Potencia*** de la carrera de grado de Ingeniería Electrónica en UTN FRBA. 
 
 ## Autor: 
 Nicolás Almaraz
@@ -42,3 +61,4 @@ Nicolás Almaraz
     </td>
   </tr>
 </table>
+
