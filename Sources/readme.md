@@ -71,5 +71,5 @@ Se tiene un Display LCD para visulizar medición de THD.
 ## Diagrama Modularización
 ![image](https://github.com/user-attachments/assets/1cc70c7a-63f9-454d-b883-44be9710dacb)
 
-## Development Kit
+## Placa de Desarrollo
 STM32 Nucleo F429ZI
