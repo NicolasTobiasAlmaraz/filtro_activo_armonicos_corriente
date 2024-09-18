@@ -12,6 +12,13 @@ Se tiene un Display LCD para visulizar medición de THD.
   <img src="https://img.youtube.com/vi/SaUtxi-bsFg/0.jpg?timestamp=1" alt="Video de Funcionamiento" width="500"/>
 </a>
 
+## Video de Introducción Teórica:
+
+<a href="https://www.youtube.com/watch?v=d_W_DLnTHeg">
+  <img src="https://img.youtube.com/vi/d_W_DLnTHeg/0.jpg?timestamp=1" alt="Introduccion Teorica" width="500"/>
+</a>
+
+
 ## Documentación
 [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
 
