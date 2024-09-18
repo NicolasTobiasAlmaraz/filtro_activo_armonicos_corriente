@@ -7,17 +7,24 @@ Nicolás Almaraz
 Simulador de Filtro Activo de Armonicos de Corriente. Lee señal del sensor de corriente y saca vía DAC la señal que se debería inyectar en la línea para quitarle los armónicos.
 Se tiene un Display LCD para visulizar medición de THD.
 
-## Video de Funcionamiento:
-<a href="https://www.youtube.com/watch?v=SaUtxi-bsFg&t=262s&ab_channel=NicolasAlmaraz">
-  <img src="https://img.youtube.com/vi/SaUtxi-bsFg/0.jpg?timestamp=1" alt="Video de Funcionamiento" width="500"/>
-</a>
+## Videos
 
-## Video de Introducción Teórica:
-
-<a href="https://www.youtube.com/watch?v=d_W_DLnTHeg">
-  <img src="https://img.youtube.com/vi/d_W_DLnTHeg/0.jpg?timestamp=1" alt="Introduccion Teorica" width="500"/>
-</a>
-
+<table>
+  <tr>
+    <td>
+      <a href="https://www.youtube.com/watch?v=d_W_DLnTHeg">
+        <img src="https://img.youtube.com/vi/d_W_DLnTHeg/0.jpg" alt="Video de Introducción Teórica" width="300">
+      </a>
+      <p>Video de Introducción Teórica</p>
+    </td>
+    <td>
+      <a href="https://www.youtube.com/watch?v=SaUtxi-bsFg&lc=Ugy0l7aQObMK8iRjLyR4AaABAg&ab_channel=NicolasAlmaraz">
+        <img src="https://img.youtube.com/vi/SaUtxi-bsFg/0.jpg" alt="Video de Funcionamiento" width="300">
+      </a>
+      <p>Video de Funcionamiento</p>
+    </td>
+  </tr>
+</table>
 
 ## Documentación
 [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
