@@ -1,0 +1,123 @@
+\doxysection{C\+:/\+Users/\+User/\+Desktop/filtro\+\_\+activo\+\_\+armonicos\+\_\+corriente/\+Sources/\+Core/\+Src/active\+\_\+current\+\_\+harmonics\+\_\+filter/subsystems/signal\+\_\+analyzer/signal\+\_\+analyzer.h File Reference}
+\hypertarget{signal__analyzer_8h}{}\label{signal__analyzer_8h}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/signal\_analyzer/signal\_analyzer.h@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/signal\_analyzer/signal\_analyzer.h}}
+
+
+Header file for main signal processing to obtain THD and correction waveform.  
+
+
+{\ttfamily \#include "{}active\+\_\+current\+\_\+harmonics\+\_\+filter.\+h"{}}\newline
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3}{status\+\_\+processing\+\_\+t}} \{ \mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3aee6ce3345e23964a21b0297102d2a63d}{PROCESSING\+\_\+\+IN\+\_\+\+PROGRESS}}
+, \mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3aa31d2ce998486039cb3507c89f93c0f7}{PROCESSING\+\_\+\+COMPLETED}}
+ \}
+\begin{DoxyCompactList}\small\item\em Status of the signal processing. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{signal__analyzer_8h_aef73f1d67024417dd284eff4c37ba542}{signal\+\_\+analyzer\+\_\+set\+\_\+signal\+\_\+to\+\_\+analyze}} (\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}} ave\+\_\+cycle, uint16\+\_\+t zero\+\_\+offset)
+\begin{DoxyCompactList}\small\item\em Sets parameters for signal analysis. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3}{status\+\_\+processing\+\_\+t}} \mbox{\hyperlink{signal__analyzer_8h_a89b6343474525d0c05297bb588dabf2a}{signal\+\_\+analyzer\+\_\+state\+\_\+machine}} ()
+\begin{DoxyCompactList}\small\item\em Processes the signal set with {\ttfamily \doxylink{signal__analyzer_8h_aef73f1d67024417dd284eff4c37ba542}{signal\+\_\+analyzer\+\_\+set\+\_\+signal\+\_\+to\+\_\+analyze()}}. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{signal__analyzer_8h_a68e5fe4de0eb52c4952ca06c45dbeeea}{signal\+\_\+analyzer\+\_\+get\+\_\+thd}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the Total Harmonic Distortion (THD) value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}} \mbox{\hyperlink{signal__analyzer_8h_a15aa7983028fc272fcc2729c6a80a6bc}{signal\+\_\+analyzer\+\_\+get\+\_\+cycle\+\_\+to\+\_\+inject}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the correction waveform to inject. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for main signal processing to obtain THD and correction waveform. 
+
+\begin{DoxyAuthor}{Author}
+Nicolás Almaraz 
+\end{DoxyAuthor}
+This API processes a {\ttfamily \doxylink{structcycle__t}{cycle\+\_\+t}} signal to obtain the Total Harmonic Distortion (THD) and the correction waveform needed to compensate for harmonics. 
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3}\index{signal\_analyzer.h@{signal\_analyzer.h}!status\_processing\_t@{status\_processing\_t}}
+\index{status\_processing\_t@{status\_processing\_t}!signal\_analyzer.h@{signal\_analyzer.h}}
+\doxysubsubsection{\texorpdfstring{status\_processing\_t}{status\_processing\_t}}
+{\footnotesize\ttfamily \label{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3} 
+enum \mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3}{status\+\_\+processing\+\_\+t}}}
+
+
+
+Status of the signal processing. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PROCESSING\_IN\_PROGRESS@{PROCESSING\_IN\_PROGRESS}!signal\_analyzer.h@{signal\_analyzer.h}}\index{signal\_analyzer.h@{signal\_analyzer.h}!PROCESSING\_IN\_PROGRESS@{PROCESSING\_IN\_PROGRESS}}}\Hypertarget{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3aee6ce3345e23964a21b0297102d2a63d}\label{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3} 
+PROCESSING\+\_\+\+IN\+\_\+\+PROGRESS&Signal processing is ongoing. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PROCESSING\_COMPLETED@{PROCESSING\_COMPLETED}!signal\_analyzer.h@{signal\_analyzer.h}}\index{signal\_analyzer.h@{signal\_analyzer.h}!PROCESSING\_COMPLETED@{PROCESSING\_COMPLETED}}}\Hypertarget{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3aa31d2ce998486039cb3507c89f93c0f7}\label{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3} 
+PROCESSING\+\_\+\+COMPLETED&Signal processing is complete. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{signal__analyzer_8h_a15aa7983028fc272fcc2729c6a80a6bc}\index{signal\_analyzer.h@{signal\_analyzer.h}!signal\_analyzer\_get\_cycle\_to\_inject@{signal\_analyzer\_get\_cycle\_to\_inject}}
+\index{signal\_analyzer\_get\_cycle\_to\_inject@{signal\_analyzer\_get\_cycle\_to\_inject}!signal\_analyzer.h@{signal\_analyzer.h}}
+\doxysubsubsection{\texorpdfstring{signal\_analyzer\_get\_cycle\_to\_inject()}{signal\_analyzer\_get\_cycle\_to\_inject()}}
+{\footnotesize\ttfamily \label{signal__analyzer_8h_a15aa7983028fc272fcc2729c6a80a6bc} 
+\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}} signal\+\_\+analyzer\+\_\+get\+\_\+cycle\+\_\+to\+\_\+inject (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the correction waveform to inject. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em Cycle} & to inject \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{signal__analyzer_8h_a68e5fe4de0eb52c4952ca06c45dbeeea}\index{signal\_analyzer.h@{signal\_analyzer.h}!signal\_analyzer\_get\_thd@{signal\_analyzer\_get\_thd}}
+\index{signal\_analyzer\_get\_thd@{signal\_analyzer\_get\_thd}!signal\_analyzer.h@{signal\_analyzer.h}}
+\doxysubsubsection{\texorpdfstring{signal\_analyzer\_get\_thd()}{signal\_analyzer\_get\_thd()}}
+{\footnotesize\ttfamily \label{signal__analyzer_8h_a68e5fe4de0eb52c4952ca06c45dbeeea} 
+uint16\+\_\+t signal\+\_\+analyzer\+\_\+get\+\_\+thd (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the Total Harmonic Distortion (THD) value. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em THD} & in percentage \mbox{[}\%\mbox{]} \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{signal__analyzer_8h_aef73f1d67024417dd284eff4c37ba542}\index{signal\_analyzer.h@{signal\_analyzer.h}!signal\_analyzer\_set\_signal\_to\_analyze@{signal\_analyzer\_set\_signal\_to\_analyze}}
+\index{signal\_analyzer\_set\_signal\_to\_analyze@{signal\_analyzer\_set\_signal\_to\_analyze}!signal\_analyzer.h@{signal\_analyzer.h}}
+\doxysubsubsection{\texorpdfstring{signal\_analyzer\_set\_signal\_to\_analyze()}{signal\_analyzer\_set\_signal\_to\_analyze()}}
+{\footnotesize\ttfamily \label{signal__analyzer_8h_aef73f1d67024417dd284eff4c37ba542} 
+void signal\+\_\+analyzer\+\_\+set\+\_\+signal\+\_\+to\+\_\+analyze (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}}}]{ave\+\_\+cycle}{, }\item[{uint16\+\_\+t}]{zero\+\_\+offset}{}\end{DoxyParamCaption})}
+
+
+
+Sets parameters for signal analysis. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ave\+\_\+cycle} & Average cycle to analyze \\
+\hline
+{\em zero\+\_\+offset} & ADC value when the sensor measures 0A \\
+\hline
+\end{DoxyParams}
+\Hypertarget{signal__analyzer_8h_a89b6343474525d0c05297bb588dabf2a}\index{signal\_analyzer.h@{signal\_analyzer.h}!signal\_analyzer\_state\_machine@{signal\_analyzer\_state\_machine}}
+\index{signal\_analyzer\_state\_machine@{signal\_analyzer\_state\_machine}!signal\_analyzer.h@{signal\_analyzer.h}}
+\doxysubsubsection{\texorpdfstring{signal\_analyzer\_state\_machine()}{signal\_analyzer\_state\_machine()}}
+{\footnotesize\ttfamily \label{signal__analyzer_8h_a89b6343474525d0c05297bb588dabf2a} 
+\mbox{\hyperlink{signal__analyzer_8h_a36f4151521b9276378c12a0b63bfb8c3}{status\+\_\+processing\+\_\+t}} signal\+\_\+analyzer\+\_\+state\+\_\+machine (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Processes the signal set with {\ttfamily \doxylink{signal__analyzer_8h_aef73f1d67024417dd284eff4c37ba542}{signal\+\_\+analyzer\+\_\+set\+\_\+signal\+\_\+to\+\_\+analyze()}}. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em Status} & of processing (Completed or In Progress) \\
+\hline
+\end{DoxyRetVals}
+Some operations take too much time, So I divide them into a state machine to proceed in stages and refresh the rest of the functionalities within the main loop

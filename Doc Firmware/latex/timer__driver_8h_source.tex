@@ -1,0 +1,55 @@
+\doxysection{timer\+\_\+driver.\+h}
+\hypertarget{timer__driver_8h_source}{}\label{timer__driver_8h_source}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/drivers/timer\_driver/timer\_driver.h@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/drivers/timer\_driver/timer\_driver.h}}
+\mbox{\hyperlink{timer__driver_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#ifndef\ TIMER\_DRIVER\_H\_}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ TIMER\_DRIVER\_H\_}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//\ Dependencies}}
+\DoxyCodeLine{00012\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ Public\ Defines}}
+\DoxyCodeLine{00018\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00021\ \textcolor{comment}{//\ Public\ Data\ Structures\ and\ Types}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ TIMER\_SAMPLING,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//<!\ Timer\ for\ sampling}}
+\DoxyCodeLine{00029\ \ \ \ \ TIMER\_DISPLAY,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//<!\ Timer\ for\ display}}
+\DoxyCodeLine{00030\ \ \ \ \ TIMER\_SETTING,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//<!\ Timer\ for\ setting\ time}}
+\DoxyCodeLine{00031\ \ \ \ \ TIMER\_DEBOUNCE\_BUTTON,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//<!\ Timer\ for\ debounce\ button}}
+\DoxyCodeLine{00032\ \ \ \ \ TIMER\_DEBOUNCE\_CYCLES\_DETECTION,\ \ \ \ \textcolor{comment}{//<!\ Timer\ for\ debounce\ cycles}}
+\DoxyCodeLine{00033\ \}\ \mbox{\hyperlink{timer__driver_8h_ab46c323c4f73f2150385fead53055392}{timer\_id\_t}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ TIMER\_RUNNING,\ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//<!\ Running}}
+\DoxyCodeLine{00040\ \ \ \ \ TIMER\_FINISHED,\ \ \ \ \ \ \ \ \ \textcolor{comment}{//<!\ Stopped}}
+\DoxyCodeLine{00041\ \ \ \ \ TIMER\_NOT\_CONFIGURED,\ \ \ \textcolor{comment}{//<!\ Not\ configured}}
+\DoxyCodeLine{00042\ \}\ \mbox{\hyperlink{timer__driver_8h_ac5e83695011f9824e29281afc5216490}{status\_timer\_t}};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00045\ \textcolor{comment}{//\ Global\ Variables}}
+\DoxyCodeLine{00046\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00049\ \textcolor{comment}{//\ Public\ Function\ Declarations}}
+\DoxyCodeLine{00050\ \textcolor{comment}{//======================================}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{timer__driver_8h_a440c4f98d4bfe31b57c098a6c21900ab}{timer\_driver\_init}}();}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00062\ \mbox{\hyperlink{timer__driver_8h_ac5e83695011f9824e29281afc5216490}{status\_timer\_t}}\ \mbox{\hyperlink{timer__driver_8h_ac98faf13c2285794abbb11d0a6edf762}{timer\_driver\_check\_timer}}(\mbox{\hyperlink{timer__driver_8h_ab46c323c4f73f2150385fead53055392}{timer\_id\_t}}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00069\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{timer__driver_8h_a2a3109b33ad44627188a5920d27b6baf}{timer\_driver\_start}}(\mbox{\hyperlink{timer__driver_8h_ab46c323c4f73f2150385fead53055392}{timer\_id\_t}}\ \textcolor{keywordtype}{id},\ uint32\_t\ time\_us);}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00074\ uint32\_t\ \mbox{\hyperlink{timer__driver_8h_ab06a38c61b88076eec21f4de735c3f79}{timer\_driver\_get\_ticks}}();}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ SRC\_MY\_APP\_TIMER\_API\_TIMER\_API\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

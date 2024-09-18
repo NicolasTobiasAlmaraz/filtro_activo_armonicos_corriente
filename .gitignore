@@ -1,0 +1,11 @@
+# Ignorar archivos de Eclipse
+.settings/
+Debug/
+*.launch
+
+# Ignorar el proyecto vscode
+.vscode
+
+# Ignorar otros archivos generales
+*.log
+*.tmp

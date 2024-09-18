@@ -1,0 +1,68 @@
+\doxysection{C\+:/\+Users/\+User/\+Desktop/filtro\+\_\+activo\+\_\+armonicos\+\_\+corriente/\+Sources/\+Core/\+Src/active\+\_\+current\+\_\+harmonics\+\_\+filter/active\+\_\+current\+\_\+harmonics\+\_\+filter.h File Reference}
+\hypertarget{active__current__harmonics__filter_8h}{}\label{active__current__harmonics__filter_8h}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/active\_current\_harmonics\_filter.h@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/active\_current\_harmonics\_filter.h}}
+
+
+Header of the main module.  
+
+
+{\ttfamily \#include "{}main.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em This structure contains current samples for a 50Hz cycle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{active__current__harmonics__filter_8h_a5c11f66d62052237b2147f9945763920}\label{active__current__harmonics__filter_8h_a5c11f66d62052237b2147f9945763920} 
+\#define {\bfseries SAMPLING\+\_\+\+FREQUENCY\+\_\+\+HZ}~20000
+\item 
+\Hypertarget{active__current__harmonics__filter_8h_aee6f277892227c70a59c554e7bc66540}\label{active__current__harmonics__filter_8h_aee6f277892227c70a59c554e7bc66540} 
+\#define {\bfseries SAMPLING\+\_\+\+PERIOD\+\_\+\+US}~50
+\item 
+\Hypertarget{active__current__harmonics__filter_8h_afeeb196f9a0f27d674c6c5e7732bb61b}\label{active__current__harmonics__filter_8h_afeeb196f9a0f27d674c6c5e7732bb61b} 
+\#define {\bfseries CYCLES\+\_\+\+TO\+\_\+\+PROCESS}~10
+\item 
+\Hypertarget{active__current__harmonics__filter_8h_a66fa5f8202880287e8f4009af304561a}\label{active__current__harmonics__filter_8h_a66fa5f8202880287e8f4009af304561a} 
+\#define {\bfseries SETTING\+\_\+\+TIME\+\_\+\+US}~5000000
+\item 
+\Hypertarget{active__current__harmonics__filter_8h_a61b74f2dc771ef513065f17ef86fa632}\label{active__current__harmonics__filter_8h_a61b74f2dc771ef513065f17ef86fa632} 
+\#define {\bfseries LEN\+\_\+\+MAX}~450
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{active__current__harmonics__filter_8h_a4f00911822b1a88de4d76afa30874748}\label{active__current__harmonics__filter_8h_a4f00911822b1a88de4d76afa30874748} 
+void {\bfseries my\+\_\+system\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Initialize the system. \end{DoxyCompactList}\item 
+\Hypertarget{active__current__harmonics__filter_8h_aabcae36e9db25e3cff5f2492027f41a7}\label{active__current__harmonics__filter_8h_aabcae36e9db25e3cff5f2492027f41a7} 
+void {\bfseries my\+\_\+system\+\_\+state\+\_\+machine} ()
+\begin{DoxyCompactList}\small\item\em System state machine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{active__current__harmonics__filter_8h_a3b62952b7b20728124fa9ba842cee5d8}{my\+\_\+system\+\_\+set\+\_\+user\+\_\+button}} ()
+\begin{DoxyCompactList}\small\item\em Handles the event triggered by the user pressing the button. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header of the main module. 
+
+\begin{DoxyAuthor}{Author}
+Nicolás Almaraz 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{active__current__harmonics__filter_8h_a3b62952b7b20728124fa9ba842cee5d8}\index{active\_current\_harmonics\_filter.h@{active\_current\_harmonics\_filter.h}!my\_system\_set\_user\_button@{my\_system\_set\_user\_button}}
+\index{my\_system\_set\_user\_button@{my\_system\_set\_user\_button}!active\_current\_harmonics\_filter.h@{active\_current\_harmonics\_filter.h}}
+\doxysubsubsection{\texorpdfstring{my\_system\_set\_user\_button()}{my\_system\_set\_user\_button()}}
+{\footnotesize\ttfamily \label{active__current__harmonics__filter_8h_a3b62952b7b20728124fa9ba842cee5d8} 
+void my\+\_\+system\+\_\+set\+\_\+user\+\_\+button (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Handles the event triggered by the user pressing the button. 
+
+This function should be called when the user presses the button to perform the necessary actions in the system. It ensures the button press is registered and processed according to the system\textquotesingle{}s logic.
+
+\begin{DoxyNote}{Note}
+This function does not perform debouncing, so it should be called from an ISR or a task where debouncing has been managed. 
+\end{DoxyNote}

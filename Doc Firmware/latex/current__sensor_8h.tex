@@ -1,0 +1,173 @@
+\doxysection{C\+:/\+Users/\+User/\+Desktop/filtro\+\_\+activo\+\_\+armonicos\+\_\+corriente/\+Sources/\+Core/\+Src/active\+\_\+current\+\_\+harmonics\+\_\+filter/subsystems/current\+\_\+sensor/current\+\_\+sensor.h File Reference}
+\hypertarget{current__sensor_8h}{}\label{current__sensor_8h}\index{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/current\_sensor/current\_sensor.h@{C:/Users/User/Desktop/filtro\_activo\_armonicos\_corriente/Sources/Core/Src/active\_current\_harmonics\_filter/subsystems/current\_sensor/current\_sensor.h}}
+
+
+Implements the functionalities for current sensor reading.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}active\+\_\+current\+\_\+harmonics\+\_\+filter.\+h"{}}\newline
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}{status\+\_\+calibration\+\_\+t}} \{ \mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026a6d00187f474665f290621a0e6c0cce52}{CALIBRATE\+\_\+\+OK}}
+, \mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026a5dd3752ef2858b51214883f41fda6bdd}{CALIBRATE\+\_\+\+ERROR}}
+ \}
+\begin{DoxyCompactList}\small\item\em Status code of the calibration process. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}{status\+\_\+sampling\+\_\+t}} \{ \mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2a70ad92b652fff3aaa20208f97dc87964}{SAMPLING\+\_\+\+IN\+\_\+\+PROGRESS}}
+, \mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2a2a3cb89c0deb6fd7b69209c3e3452d50}{SAMPLING\+\_\+\+COMPLETED}}
+ \}
+\begin{DoxyCompactList}\small\item\em Status code of the sampling process. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{current__sensor_8h_a151b1c6a85460e6b6802ec3443610c53}\label{current__sensor_8h_a151b1c6a85460e6b6802ec3443610c53} 
+void {\bfseries current\+\_\+sensor\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Initializes the current measurements API. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{current__sensor_8h_a336bc1b9b7678e85ea72da14d847f563}{current\+\_\+sensor\+\_\+start\+\_\+sampling}} ()
+\begin{DoxyCompactList}\small\item\em Starts a new ADC conversion using the DMA Controller every 50 microseconds. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}{status\+\_\+sampling\+\_\+t}} \mbox{\hyperlink{current__sensor_8h_a526e80066c73cd8a42b48f55c2b518bf}{current\+\_\+sensor\+\_\+get\+\_\+sampling\+\_\+status}} ()
+\begin{DoxyCompactList}\small\item\em Returns the status of the sampling (in progress or completed) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}{status\+\_\+calibration\+\_\+t}} \mbox{\hyperlink{current__sensor_8h_ad7b56b5dc651d4eb11721746bd168fa6}{current\+\_\+sensor\+\_\+get\+\_\+calibration\+\_\+status}} ()
+\begin{DoxyCompactList}\small\item\em Evaluates a correct zero offset value in base of the last DMA Transfer samples. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{current__sensor_8h_acfb93d89683b45db29447ad4e687007f}{current\+\_\+sensor\+\_\+get\+\_\+offset}} ()
+\begin{DoxyCompactList}\small\item\em Returns the calibration offset for the sensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{current__sensor_8h_a52b126ff4b0d7836ec64a7145be056df}{current\+\_\+sensor\+\_\+get\+\_\+average\+\_\+cycle}} (\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}} \texorpdfstring{$\ast$}{*}buffer)
+\begin{DoxyCompactList}\small\item\em Returns the average cycle in base of the last DMA Transfer samples. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8h_ab6f21ddc809efae84f222b946ff24eec}\label{current__sensor_8h_ab6f21ddc809efae84f222b946ff24eec} 
+void {\bfseries current\+\_\+sensor\+\_\+\+Timer\+\_\+\+IRQHandler} ()
+\begin{DoxyCompactList}\small\item\em This function must be called on Timer Interrupt Callback. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8h_a49ac92ccc31832ff18d72493a2b62b34}\label{current__sensor_8h_a49ac92ccc31832ff18d72493a2b62b34} 
+void {\bfseries current\+\_\+sensor\+\_\+\+ADC\+\_\+\+DMA\+\_\+\+IRQHandler} ()
+\begin{DoxyCompactList}\small\item\em This function must be called on ADC DMA Conversion Complete Callback. \end{DoxyCompactList}\item 
+\Hypertarget{current__sensor_8h_a314f7dafbc23ae454ff8028566095269}\label{current__sensor_8h_a314f7dafbc23ae454ff8028566095269} 
+void {\bfseries current\+\_\+sensor\+\_\+api\+\_\+set\+\_\+new\+\_\+cycle} ()
+\begin{DoxyCompactList}\small\item\em This function must be called when a new Cycle starts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implements the functionalities for current sensor reading. 
+
+\begin{DoxyAuthor}{Author}
+Nicolás Almaraz 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}\index{current\_sensor.h@{current\_sensor.h}!status\_calibration\_t@{status\_calibration\_t}}
+\index{status\_calibration\_t@{status\_calibration\_t}!current\_sensor.h@{current\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{status\_calibration\_t}{status\_calibration\_t}}
+{\footnotesize\ttfamily \label{current__sensor_8h_a9c3d78575db42ec474bc658735ace026} 
+enum \mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}{status\+\_\+calibration\+\_\+t}}}
+
+
+
+Status code of the calibration process. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CALIBRATE\_OK@{CALIBRATE\_OK}!current\_sensor.h@{current\_sensor.h}}\index{current\_sensor.h@{current\_sensor.h}!CALIBRATE\_OK@{CALIBRATE\_OK}}}\Hypertarget{current__sensor_8h_a9c3d78575db42ec474bc658735ace026a6d00187f474665f290621a0e6c0cce52}\label{current__sensor_8h_a9c3d78575db42ec474bc658735ace026} 
+CALIBRATE\+\_\+\+OK&Calibration successful. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CALIBRATE\_ERROR@{CALIBRATE\_ERROR}!current\_sensor.h@{current\_sensor.h}}\index{current\_sensor.h@{current\_sensor.h}!CALIBRATE\_ERROR@{CALIBRATE\_ERROR}}}\Hypertarget{current__sensor_8h_a9c3d78575db42ec474bc658735ace026a5dd3752ef2858b51214883f41fda6bdd}\label{current__sensor_8h_a9c3d78575db42ec474bc658735ace026} 
+CALIBRATE\+\_\+\+ERROR&Calibration error. \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}\index{current\_sensor.h@{current\_sensor.h}!status\_sampling\_t@{status\_sampling\_t}}
+\index{status\_sampling\_t@{status\_sampling\_t}!current\_sensor.h@{current\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{status\_sampling\_t}{status\_sampling\_t}}
+{\footnotesize\ttfamily \label{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2} 
+enum \mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}{status\+\_\+sampling\+\_\+t}}}
+
+
+
+Status code of the sampling process. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SAMPLING\_IN\_PROGRESS@{SAMPLING\_IN\_PROGRESS}!current\_sensor.h@{current\_sensor.h}}\index{current\_sensor.h@{current\_sensor.h}!SAMPLING\_IN\_PROGRESS@{SAMPLING\_IN\_PROGRESS}}}\Hypertarget{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2a70ad92b652fff3aaa20208f97dc87964}\label{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2} 
+SAMPLING\+\_\+\+IN\+\_\+\+PROGRESS&Sampling in progress. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SAMPLING\_COMPLETED@{SAMPLING\_COMPLETED}!current\_sensor.h@{current\_sensor.h}}\index{current\_sensor.h@{current\_sensor.h}!SAMPLING\_COMPLETED@{SAMPLING\_COMPLETED}}}\Hypertarget{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2a2a3cb89c0deb6fd7b69209c3e3452d50}\label{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2} 
+SAMPLING\+\_\+\+COMPLETED&Samples ready for processing. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{current__sensor_8h_a52b126ff4b0d7836ec64a7145be056df}\index{current\_sensor.h@{current\_sensor.h}!current\_sensor\_get\_average\_cycle@{current\_sensor\_get\_average\_cycle}}
+\index{current\_sensor\_get\_average\_cycle@{current\_sensor\_get\_average\_cycle}!current\_sensor.h@{current\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_get\_average\_cycle()}{current\_sensor\_get\_average\_cycle()}}
+{\footnotesize\ttfamily \label{current__sensor_8h_a52b126ff4b0d7836ec64a7145be056df} 
+void current\+\_\+sensor\+\_\+get\+\_\+average\+\_\+cycle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcycle__t}{cycle\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{buffer}{}\end{DoxyParamCaption})}
+
+
+
+Returns the average cycle in base of the last DMA Transfer samples. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em cycle} & Average cycle. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{current__sensor_8h_ad7b56b5dc651d4eb11721746bd168fa6}\index{current\_sensor.h@{current\_sensor.h}!current\_sensor\_get\_calibration\_status@{current\_sensor\_get\_calibration\_status}}
+\index{current\_sensor\_get\_calibration\_status@{current\_sensor\_get\_calibration\_status}!current\_sensor.h@{current\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_get\_calibration\_status()}{current\_sensor\_get\_calibration\_status()}}
+{\footnotesize\ttfamily \label{current__sensor_8h_ad7b56b5dc651d4eb11721746bd168fa6} 
+\mbox{\hyperlink{current__sensor_8h_a9c3d78575db42ec474bc658735ace026}{status\+\_\+calibration\+\_\+t}} current\+\_\+sensor\+\_\+get\+\_\+calibration\+\_\+status (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Evaluates a correct zero offset value in base of the last DMA Transfer samples. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em status} & Status of the calibration process. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{current__sensor_8h_acfb93d89683b45db29447ad4e687007f}\index{current\_sensor.h@{current\_sensor.h}!current\_sensor\_get\_offset@{current\_sensor\_get\_offset}}
+\index{current\_sensor\_get\_offset@{current\_sensor\_get\_offset}!current\_sensor.h@{current\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_get\_offset()}{current\_sensor\_get\_offset()}}
+{\footnotesize\ttfamily \label{current__sensor_8h_acfb93d89683b45db29447ad4e687007f} 
+uint16\+\_\+t current\+\_\+sensor\+\_\+get\+\_\+offset (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the calibration offset for the sensor. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em offset} & Calibration offset value. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{current__sensor_8h_a526e80066c73cd8a42b48f55c2b518bf}\index{current\_sensor.h@{current\_sensor.h}!current\_sensor\_get\_sampling\_status@{current\_sensor\_get\_sampling\_status}}
+\index{current\_sensor\_get\_sampling\_status@{current\_sensor\_get\_sampling\_status}!current\_sensor.h@{current\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_get\_sampling\_status()}{current\_sensor\_get\_sampling\_status()}}
+{\footnotesize\ttfamily \label{current__sensor_8h_a526e80066c73cd8a42b48f55c2b518bf} 
+\mbox{\hyperlink{current__sensor_8h_a635b3d3f73d5a7246ab421fdbf8d33a2}{status\+\_\+sampling\+\_\+t}} current\+\_\+sensor\+\_\+get\+\_\+sampling\+\_\+status (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the status of the sampling (in progress or completed) 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em status} & Status of the sampling process. \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{current__sensor_8h_a336bc1b9b7678e85ea72da14d847f563}\index{current\_sensor.h@{current\_sensor.h}!current\_sensor\_start\_sampling@{current\_sensor\_start\_sampling}}
+\index{current\_sensor\_start\_sampling@{current\_sensor\_start\_sampling}!current\_sensor.h@{current\_sensor.h}}
+\doxysubsubsection{\texorpdfstring{current\_sensor\_start\_sampling()}{current\_sensor\_start\_sampling()}}
+{\footnotesize\ttfamily \label{current__sensor_8h_a336bc1b9b7678e85ea72da14d847f563} 
+void current\+\_\+sensor\+\_\+start\+\_\+sampling (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Starts a new ADC conversion using the DMA Controller every 50 microseconds. 
+
+\begin{DoxyNote}{Note}
+Check the end of conversion with the {\ttfamily current\+\_\+sensor\+\_\+get\+\_\+status()} function. 
+\end{DoxyNote}
