@@ -862,18 +862,12 @@ En el siguiente enlace se encuentra un Notebook con una verificación de lo que 
 [Anexo 7](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo7.ipynb)
 
 ## Anexo 8: Códigos fuente y Documentación
-Códigos fuente: link (cuando haga el marge lo pongo, por ahora está en la carpeta Sources/)
+*Códigos fuente:* [Códigos Fuente](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Sources)
 
-Documentación del código fuente: [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
+*Documentación del código fuente:* [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
 
-Video de Funcionamiento:
+*Video de Funcionamiento:*
 
 <a href="https://www.youtube.com/watch?v=SaUtxi-bsFg&t=262s&ab_channel=NicolasAlmaraz">
   <img src="https://img.youtube.com/vi/SaUtxi-bsFg/0.jpg?timestamp=1" alt="Video de Funcionamiento" width="500"/>
-</a>
-
-Video de Introducción Teórica:
-
-<a href="https://www.youtube.com/watch?v=d_W_DLnTHeg">
-  <img src="https://img.youtube.com/vi/d_W_DLnTHeg/0.jpg?timestamp=1" alt="Introduccion Teorica" width="500"/>
 </a>
