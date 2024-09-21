@@ -33,7 +33,7 @@ Este proyecto fue realizado en un marco académico como ***Trabajo Práctico Fin
 
 ## Informe de Ingeniería
 
-📘 [Informe](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Informe)
+📘 [Informe](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Informe%20Ingenieria)
 
 
 ## Sistema embebido
