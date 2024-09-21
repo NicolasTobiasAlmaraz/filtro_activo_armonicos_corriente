@@ -6,14 +6,14 @@
                 Facultad de Ingeniería<br>
                 Curso Online de Sistemas Embebidos<br>
 		by ARM Book<br>
-                <img src="Informe/img/logoUBA.png" width="600"/>
+                <img src="Informe Ingenieria/img/logoUBA.png" width="300"/>
             </td>
             <td style="text-align: center;">
                 <strong>UNIVERSIDAD TECNOLÓGICA NACIONAL</strong><br>
                 Facultad Regional Buenos Aires<br>
                 R5051 Electrónica de Potencia<br>
 		Carrera de Grado de Ing. Electrónica<br>
-                <img src="Informe/img/logoUTN.png" width="550"/>
+                <img src="Informe Ingenieria/img/logoUTN.png" width="275"/>
             </td>
         </tr>
     </table>
