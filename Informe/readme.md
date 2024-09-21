@@ -47,25 +47,25 @@ Quiero expresar mi más profundo agradecimiento a los docentes del Curso de Sist
 [1 Introducción general](#1-introducción-general)
    - [1.1 Contexto](#11-contexto)
    - [1.2 Tipos de cargas](#12-tipos-de-cargas)
-       - [1.1.2 Cargas LTI](#112-cargas-lti)
-           - [1.1.2.1 Características](#1121-características)
-           - [1.1.2.2 Triángulo de potencias](#1122-triángulo-de-potencias)
-           - [1.1.2.3 Problemas de la potencia reactiva](#1123-problemas-de-la-potencia-reactiva)
-       - [1.1.3 Cargas no LTI](#113-cargas-no-lti)
-           - [1.1.3.1 Características](#1131-características)
-           - [1.1.3.2 Medición de armónicos y THD](#1132-medición-de-armónicos-y-thd)
-           - [1.1.3.3 Triángulo de potencias y factor de potencia](#1133-triángulo-de-potencias-y-factor-de-potencia)
-           - [1.1.3.4 Problemas de la potencia de deformación](#1134-problemas-de-la-potencia-de-deformación)
+     - [1.1.2 Cargas Lineales e Invariantes en el Tiempo (LTI)](#112-cargas-lineales-e-invariantes-en-el-tiempo-lti)
+       - [1.1.2.1 Características](#1121-características)
+       - [1.1.2.2 Triángulo de potencias](#1122-triángulo-de-potencias)
+       - [1.1.2.3 Problemas de la potencia reactiva](#1123-problemas-de-la-potencia-reactiva)
+     - [1.1.3 Cargas No Lineales o Variantes en el Tiempo (No LTI)](#113-cargas-no-lineales-o-variantes-en-el-tiempo-no-lti)
+     	- [1.1.3.1 Características](#1131-características)
+        - [1.1.3.2 Medición de armónicos y Tasa de Distorsión Armónica Total (THD)](#1132-medición-de-armónicos-y-tasa-de-distorsión-armónica-total-thd)
+        - [1.1.3.3 Triángulo de potencias y factor de potencia](#1133-triángulo-de-potencias-y-factor-de-potencia)
+        - [1.1.3.4 Problemas de la potencia de deformación](#1134-problemas-de-la-potencia-de-deformación)
    - [1.3 Filtro Activo de Armónicos de Corriente](#13-filtro-activo-de-armónicos-de-corriente)
    - [1.4 Estado del arte](#14-estado-del-arte)
-   - [1.5 DSP](#15-dsp)
-       - [1.5.1 DMA](#151-dma)
-       - [1.5.2 FFT](#152-fft)
+   - [1.5 Procesamiento Digital de Señales (DSP)](#15-procesamiento-digital-de-señales-dsp)
+     - [1.5.1 Controlador de Acceso Directo a Memoria (DMA)](#151-controlador-de-acceso-directo-a-memoria-dma)
+     - [1.5.2 Transformada Rápida de Fourier (FFT)](#152-transformada-rápida-de-fourier-fft)
 
 [2 Introducción específica](#2-introducción-específica)
    - [2.1 Requisitos](#21-requisitos)
    - [2.2 Casos de uso](#22-casos-de-uso)
-   - [2.4 Kit de Desarrollo STM32 Nucleo-F429ZI](#24-kit-de-desarrollo-stm32-nucleo-f429zi)
+   - [2.4 Kit de Desarrollo STM32 Nucleo F429ZI](#24-kit-de-desarrollo-stm32-nucleo-f429zi)
    - [2.5 Biblioteca de ARM CMSIS - DSP](#25-biblioteca-de-arm-cmsis---dsp)
    - [2.6 STM32Cube IDE](#26-stm32cube-ide)
    - [2.7 Sensor de corriente ACS712-5A](#27-sensor-de-corriente-acs712-5a)
@@ -109,12 +109,13 @@ Quiero expresar mi más profundo agradecimiento a los docentes del Curso de Sist
 [7 Anexos](#7-anexos)
    - [Anexo 1: Review de productos Circutor](#anexo-1-review-de-productos-circutor)
    - [Anexo 2: Notebook FFT](#anexo-2-notebook-fft)
-   - [Anexo 3: STM32 Nucleo F429ZI](#anexo-3-stm32-f429zi)
+   - [Anexo 3: STM32 Nucleo F429ZI](#anexo-3-stm32-nucleo-f429zi)
    - [Anexo 4: Biblioteca CMSIS-DSP](#anexo-4-biblioteca-cmsis-dsp)
    - [Anexo 5: STM32Cube IDE](#anexo-5-stm32cube-ide)
    - [Anexo 6: ACS712-5A](#anexo-6-acs712-5a)
    - [Anexo 7: Validación del módulo de firmware signal_analyzer](#anexo-7-validación-del-módulo-de-firmware-signal_analyzer)
    - [Anexo 8: Códigos fuente y Documentación](#anexo-8-códigos-fuente-y-documentación)
+
 
 # 1 Introducción general
 
@@ -160,7 +161,7 @@ Para comprender cómo se generan las componentes indeseadas (Q y D) y los proble
 
 Cabe destacar que, técnica y económicamente, no es necesario implementar filtros activos de armónicos de corriente en instalaciones domiciliarias, ya que los efectos de Q y D no son significativos en este tipo de aplicaciones.
 
-### 1.1.2 Cargas LTI
+### 1.1.2 Cargas Lineales e Invariantes en el Tiempo (LTI)
 Dentro del contexto de las instalaciones eléctricas, las cargas LTI (lineales e invariantes en el tiempo) suelen ser componentes pasivos, como resistencias, capacitores e inductores. En un entorno ideal, también podrían incluirse los amplificadores operacionales ideales; sin embargo, estos no son relevantes en el marco de las instalaciones eléctricas.
 
 #### 1.1.2.1 Características
@@ -222,7 +223,7 @@ Este último caso es especialmente problemático, ya que significa que una parte
 
 Por estas razones, siempre se busca minimizar la potencia reactiva y maximizar la potencia activa. En un escenario ideal, cuando S = P, la potencia reactiva es Q = 0, lo que da como resultado un cos(φ) = 1.
 
-### 1.1.3 Cargas no LTI
+### 1.1.3 Cargas No Lineales o Variantes en el Tiempo (No LTI)
 
 Las cargas no LTI (cargas no lineales y/o variantes en el tiempo) son componentes cuya función transferencia no es lineal o cuyo comportamiento depende del tiempo. En el contexto de las instalaciones eléctricas, estas pueden incluir rectificadores, fuentes switching, variadores de frecuencia, inversores, arranques suaves, entre otros.
 
@@ -268,7 +269,7 @@ Los armónicos se representan en un diagrama espectral, como el mostrado en la F
 ***Figura 1.11**: Ejemplo señal módulo de la transformada de Fourier de una señal poli-armónica (corriente de una carga no lineal).*
 </div>
 
-#### 1.1.3.2 Medición de armónicos y THD
+#### 1.1.3.2 Medición de armónicos y Tasa de Distorsión Armónica Total (THD)
 La potencia de los armónicos se caracteriza mediante el THD (Total Harmonic Distortion). Este índice se calcula como el cociente entre la potencia de los armónicos y la potencia de la componente fundamental:
 
 <div style="text-align: center;">
@@ -363,10 +364,10 @@ Varios fabricantes desarrollan este tipo de dispositivos, entre ellos, las empre
 * La capacidad de operar en lazo abierto o en lazo cerrado, dependiendo de la ubicación de las pinzas amperimétricas.
 * La opción de compensar o no la potencia reactiva Q. La justificación técnica para esta opción es que, dado que Q generalmente es mucho mayor a D, compensar puede requerir una etapa de potencia significativamente robusta.
 
-## 1.5 DSP
+## 1.5 Procesamiento Digital de Señales (DSP)
 Para el procesamiento digital de señales es importante tener presente algunas estrategias y funcionamiento de algoritmos matemáticos para lograr una correcta performance y aprovechamiento del microcontrolador.
 
-### 1.5.1 DMA
+### 1.5.1 Controlador de Acceso Directo a Memoria (DMA)
 El controlador DMA es el encargado de transportar los datos de los periféricos a la memoria (o viceversa) sin la intervención del procesador. En la Figura 1.14 puede verse un esquema de cómo se utiliza.
 
 <div style="text-align: center;">
@@ -380,7 +381,7 @@ Desde el punto de vista de la implementación, en una línea de código se le da
 Cuando se realizan proyectos que implican DSP, es decir, procesar una señal en tiempo real, es importante optimizar al máximo el procesador para analizar la señal y minimizar la realización de otras tareas. Por ejemplo, sería una buena idea que las muestras que toma el ADC se almacenen en memoria directamente sin la necesidad de que el procesador se quede esperando a que una muestra esté lista. 
 
 
-### 1.5.2 FFT
+### 1.5.2 Transformada Rápida de Fourier (FFT)
 La FFT (Transformada Rápida de Fourier) es un algoritmo que resuelve una DFT (Discrete Fourier Transform). Para su utilización se tiene un vector de entrada y uno de salida de igual longitud. Este algoritmo es de suma utilidad para pasar del dominio temporal al frecuencial y viceversa. Tiene ciertas limitaciones y consideraciones a la hora de implementarlo. Para entender la operatoria y problemas a considerar se desarrolló el [Anexo 2](#anexo-2-notebook-fft), un documento Notebook, en el que se realizan simulaciones con FFT.
 
 # 2 Introducción específica
@@ -397,7 +398,7 @@ La FFT (Transformada Rápida de Fourier) es un algoritmo que resuelve una DFT (D
 | Aislamiento            | 1.1           | La lógica en todo momento debe estar aislada de la línea de 24 VCA                                                  |
 | Sincronización         | 2.1           | El sistema se sincroniza con la línea mediante un detector de ciclos                                                |
 | Sensado de corriente   | 3.1           | El sistema deberá tener un filtro anti-alias a la entrada (f0 = 5 kHz).                                             |
-| Sensado de corriente   | 3.2           | El ADC tomará muestras de corriente de línea con fs = 20 kHz (Ts = 50 us) por una ventana de 50 ciclos              |
+| Sensado de corriente   | 3.2           | El ADC tomará muestras de corriente de línea con fs = 20 kHz (Ts = 50 µs) por una ventana de 50 ciclos              |
 | Salida analógica       | 4.1           | La salida para mostrar la señal correctora será vía DAC                                                             |
 | Sistema de buffers     | 5.1           | Se tendrá un esquema double-buffering tanto para tomar muestras como para sacarlas                                  |
 | Procesamiento          | 6.1           | Se deberá calcular la componente fundamental de corriente                                                           |
@@ -437,7 +438,7 @@ La FFT (Transformada Rápida de Fourier) es un algoritmo que resuelve una DFT (D
 | Flujo normal      | Actualiza valor de THD mostrado       |
 | Flujo alternativo | No cambia lo mostrado en la pantalla  |
 
-## 2.4 Kit de Desarrollo STM32 Nucleo-F429ZI
+## 2.4 Kit de Desarrollo STM32 Nucleo F429ZI
 Para la implementación de la solución se utiliza un kit de desarrollo STM32 Nucleo-F429ZI. El microcontrolador del kit es lo suficientemente potente como para realizar todas las operaciones DSP en un tiempo razonable. En el [Anexo 3](#anexo-3-stm32-f429zi) se adjunta la hoja de datos y reference manual del microcontrolador.
 
 ## 2.5 Biblioteca de ARM CMSIS - DSP
@@ -482,7 +483,7 @@ La entrada de fase y neutro en este proyecto es una tensión senoidal de 9 VAC. 
 </div>
 
 ### 3.1.3 Detector de ciclos
-Se propone un esquema como el de la Figura 3.3. Este es un circuito encargado de detectar los ciclos de la tensión senoidal de entrada. En este caso, la tensión entre fase y neutro. El circuito entrega debe entregar 3.3 V cuando el semiciclo es positivo y 0 V cuando el semiciclo es negativo.
+Se propone un esquema como el de la Figura 3.3. Este es un circuito encargado de detectar los ciclos de la tensión senoidal de entrada. En este caso, la tensión entre fase y neutro. El circuito entrega debe entregar 3,3 V cuando el semiciclo es positivo y 0 V cuando el semiciclo es negativo.
 
 <div style="text-align: center;">
     <img src="img/figura3.3.png" width="700"/>
@@ -500,7 +501,7 @@ En la Figura 3.4 se puede ver una simulación del circuito.
 </div>
 
 ### 3.1.4 Acondicionamiento del sensor de corriente
-El sensor de corriente, si bien ya está acondicionado por el fabricante, hay que re-acondicionar la señal para que la señal de salida tenga una excursión de 0 V a 3.3 V (no hasta 5 V como viene de fábrica). Para ello se propone un circuito como el de la Figura 3.5.
+El sensor de corriente, si bien ya está acondicionado por el fabricante, hay que re-acondicionar la señal para que la señal de salida tenga una excursión de 0 V a 3,3 V (no hasta 5 V como viene de fábrica). Para ello se propone un circuito como el de la Figura 3.5.
 
 <div style="text-align: center;">
     <img src="img/figura3.5.png" width="600"/>
@@ -514,7 +515,7 @@ Finalmente, en las Figuras 3.6 y 3.7 se adjuntan las simulaciones temporales y f
 <div style="text-align: center;">
     <img src="img/figura3.6.png" width="700"/>
 
-***Figura 3.6:** Simulación del ajuste de las tensiones del acondicionamiento del sensor de corriente; Vi = 5 V, Vo = 3.3 Vp.*
+***Figura 3.6:** Simulación del ajuste de las tensiones del acondicionamiento del sensor de corriente; Vi = 5 V, Vo = 3,3 Vp.*
 </div>
 
 <div style="text-align: center;">
@@ -524,7 +525,7 @@ Finalmente, en las Figuras 3.6 y 3.7 se adjuntan las simulaciones temporales y f
 </div>
 
 ### 3.1.5 Display
-Como interfaz de usuario para el monitoreo se utiliza un Display de caracteres LCD de 4x20 caracteres controlado por una interfaz I2C PCF8574. En la Figura 3.8 se muestra un ejemplar.
+Como interfaz de usuario para el monitoreo se utiliza un Display de caracteres LCD de 4x20 caracteres controlado por una interfaz I2C PCF8574. En la Figura 3.8 se muestra el display y el controlador.
 
 <div style="text-align: center;">
     <img src="img/figura3.8.png" width="400"/>
@@ -686,12 +687,12 @@ Este módulo además estima la frecuencia de línea que están marcando los inic
 # 4 Ensayos y resultados
 
 ## 4.1 Prototipo
-En la Figura 4.1 se puede ver una imagen del prototipo conseguido y en la Figura 4.2 un contraste con el diagrama en bloques general identificando cada una de las partes principales.
+En la Figura 4.1 se puede ver una imagen del prototipo implementado y en la Figura 4.2 un contraste con el diagrama en bloques general identificando cada una de las partes principales.
 
 <div style="text-align: center;">
     <img src="img/figura4.1.png" width="700"/>
 
-***Figura 4.1:** Prototipo conseguido.*
+***Figura 4.1:** Prototipo del AHF.*
 </div>
 
 <div style="text-align: center;">
@@ -783,8 +784,7 @@ Cabe destacar que como canal adicional se pone la señal cuadrada que es el dete
 Como se puede ver la señal es una senoidal pura.
 
 Para más información puede revisarse el [Anexo 8](#anexo-8-códigos-fuente-y-documentación) que contiene el repositorio con el código de implementación y su respectiva documentación generada con Doxygen donde se explica en detalle cada parte del código. Por ejemplo, funciones, estructuras, defines, etc.
-En este mismo anexo, también hay un video donde se muestra el funcionamiento del sistema. 
-
+En este mismo anexo, también hay un video donde se muestra el funcionamiento del sistema. Cabe destacar que en la implementación que actualmente se encuentra en el repositorio tiene corregido el bug de los sobre-picos que se visualizan al inicio de los ciclos.
 
 ## 4.5 Cumplimiento de requisitos
 
@@ -798,7 +798,7 @@ En este mismo anexo, también hay un video donde se muestra el funcionamiento de
 | Aislamiento            | 1.1           | La lógica en todo momento debe estar aislada de la línea de 24 VCA                                                  | Sí                                                                                   |
 | Sincronización         | 2.1           | El sistema se sincroniza con la línea mediante un detector de ciclos                                                | Sí                                                                                   |
 | Sensado de corriente   | 3.1           | El sistema deberá tener un filtro anti-alias a la entrada (f0 = 5 kHz).                                             | Sí                                                                                   |
-| Sensado de corriente   | 3.2           | El ADC tomará muestras de corriente de línea con fs = 20 kHz (Ts = 50 us) por una ventana de 50 ciclos              | Sí                                                                                   |
+| Sensado de corriente   | 3.2           | El ADC tomará muestras de corriente de línea con fs = 20 kHz (Ts = 50 µs) por una ventana de 50 ciclos              | Sí                                                                                   |
 | Salida analógica       | 4.1           | La salida para mostrar la señal correctora será vía DAC                                                             | Sí                                                                                   |
 | Sistema de buffers     | 5.1           | Se tendrá un esquema double-buffering tanto para tomar muestras como para sacarlas                                  | No, se utiliza un método alternativo más limitado pero cumple con el objetivo del TP |
 | Procesamiento          | 6.1           | Se deberá calcular la componente fundamental de corriente                                                           | Sí                                                                                   |
@@ -843,7 +843,7 @@ En el siguiente enlace se encuentra un Notebook haciendo uso de la función FFT 
 [Anexo 2](https://nbviewer.org/github/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo2.ipynb)
 
 
-## Anexo 3: STM32 F429ZI
+## Anexo 3: STM32 Nucleo F429ZI
 En el siguiente enlace se encuentra el reference manual, data sheets y notas de aplicación relacionadas al microcontrolador y la placa Nucleo: https://www.st.com/en/evaluation-tools/nucleo-f429zi.html#documentation
 
 ## Anexo 4: Biblioteca CMSIS-DSP
@@ -858,7 +858,7 @@ En el siguiente enlace se encuentra el sitio oficial de ST Electronics con el ID
 En el siguiente enlace se encuentra el enlace a la hoja de datos del sensor ACS712-5A: https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf 
 
 ## Anexo 7: Validación del módulo de firmware signal_analyzer
-En el siguiente enlace se encuentra un Notebook con una verificación de lo que se procesa en current_sensro y signal_analyzer:
+En el siguiente enlace se encuentra un Notebook con una verificación de lo que se procesa en current_sensor y signal_analyzer:
 [Anexo 7](https://nbviewer.org/github/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Notebooks/anexo7.ipynb)
 
 ## Anexo 8: Códigos fuente y Documentación
