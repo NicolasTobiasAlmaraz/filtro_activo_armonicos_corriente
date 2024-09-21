@@ -256,7 +256,7 @@ Cabe destacar que la frecuencia fundamental es aquella que marca el período de 
 Además, es crucial recordar que el problema de potencia reactiva 𝑄 observado en las cargas LTI (es decir, el desfase entre tensión y corriente) también está presente en las cargas no LTI. Esto se puede observar en la Figura 1.10.
 
 <div style="text-align: center;">
-    <img src="img/figura1.10.png" width="300"/>
+    <img src="img/figura1.10.png" width="500"/>
 	
 ***Figura 1.10**: Señal de corriente no senoidal y con energía reactiva en la componente fundamental.*
 </div>
