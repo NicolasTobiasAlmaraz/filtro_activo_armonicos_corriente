@@ -25,22 +25,22 @@ En el presente repositorio encontrarán el desarrollo de un ***filtro activo de 
 Este proyecto fue realizado en un marco académico como ***Trabajo Práctico Final*** del ***Curso Online de Sistemas Embebidos*** organizado por ARM Book de FIUBA en conjunto con el ***Trabajo Práctico Final*** de la asignatura ***Electrónica de Potencia*** de la carrera de grado de Ingeniería Electrónica en UTN FRBA. 
 
 ## Autor: 
-Nicolás Almaraz
+🧑‍🎓 Nicolás Almaraz
 
 ## Anteproyecto
 
-[Anteproyecto](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Anteproyecto)
+🛠️ [Anteproyecto](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Anteproyecto)
 
 ## Informe de Ingeniería
 
-[Informe](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Informe)
+📘 [Informe](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Informe)
 
 
 ## Sistema embebido
 
-[Códigos Fuente](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Sources)
+💻 [Códigos Fuente](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Sources)
 
-[Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
+🔗 [Documentación Doxygen](https://rawcdn.githack.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/50b7d0af559790f539d4cfe7f90ac27d37ef2cf7/Doc%20Firmware/html/index.html)
 
 ## Videos
 
