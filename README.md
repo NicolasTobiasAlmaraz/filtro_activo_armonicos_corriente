@@ -29,11 +29,11 @@ Este proyecto fue realizado en un marco académico como ***Trabajo Práctico Fin
 
 ## Anteproyecto
 
-🛠️ [Anteproyecto](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Anteproyecto)
+🛠️ [Anteproyecto](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Anteproyecto/README.md)
 
 ## Informe de Ingeniería
 
-📘 [Informe](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/tree/main/Informe%20Ingenieria)
+📘 [Informe de Ingeniería](https://github.com/NicolasTobiasAlmaraz/filtro_activo_armonicos_corriente/blob/main/Informe%20Ingenieria/readme.md)
 
 
 ## Sistema embebido
